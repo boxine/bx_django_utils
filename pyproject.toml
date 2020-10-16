@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_py_utils'
-version = '0.0.1.dev0'
+version = "0.0.1.dev0"
 description = 'Various Python / Django utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
@@ -17,7 +17,7 @@ keywords=['django', 'utilities']
 readme='README.md'
 
 [tool.poetry.dependencies]
-python = '^3.8'
+python = '>=3.6,<4.0.0'
 django = '*'
 
 [tool.poetry.dev-dependencies]
