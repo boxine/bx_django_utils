@@ -13,6 +13,8 @@ classifiers = [
     'Intended Audience :: Developers',
 ]
 license = 'MIT'
+keywords=['django', 'utilities']
+readme='README.md'
 
 [tool.poetry.dependencies]
 python = '^3.8'
@@ -28,6 +30,10 @@ flake8 = '*'
 flynt = '*'
 autopep8 = '*'
 isort = '*'
+poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+
+[tool.poetry.scripts]
+publish = "bx_py_utils_tests.test_project.publish:publish"
 
 [build-system]
 requires = ['poetry>=0.12']
