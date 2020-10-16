@@ -1,0 +1,34 @@
+[tool.poetry]
+name = 'bx_py_utils'
+version = '0.0.1.dev0'
+description = 'Various Python / Django utility functions'
+authors = [
+    'Jens Diemer <jens.diemer@boxine.de>',
+    'Philipp Hagemeister <phihag@phihag.de>'
+]
+classifiers = [
+    'Development Status :: 1 - Planning',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Framework :: Django',
+    'Intended Audience :: Developers',
+]
+license = 'MIT'
+
+[tool.poetry.dependencies]
+python = '^3.8'
+django = '*'
+
+[tool.poetry.dev-dependencies]
+tox = '*'
+pytest = '*'
+pytest-randomly = '*'
+pytest-cov = '*'
+pytest-django = '*'
+flake8 = '*'
+flynt = '*'
+autopep8 = '*'
+isort = '*'
+
+[build-system]
+requires = ['poetry>=0.12']
+build-backend = 'poetry.masonry.api'

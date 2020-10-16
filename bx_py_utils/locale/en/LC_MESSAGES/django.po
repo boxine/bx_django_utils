@@ -1,0 +1,22 @@
+# Copyright (C) boxine.de
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bx_py_utils\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "ModelTimetrackingMixin.create_dt.help_text"
+msgstr "(will be set automatically)"
+
+msgid "ModelTimetrackingMixin.create_dt.verbose_name"
+msgstr "Create date"
+
+msgid "ModelTimetrackingMixin.update_dt.help_text"
+msgstr "(will be set automatically)"
+
+msgid "ModelTimetrackingMixin.update_dt.verbose_name"
+msgstr "Last update"
