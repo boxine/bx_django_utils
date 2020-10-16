@@ -1,13 +1,13 @@
 [tool.poetry]
 name = 'bx_py_utils'
-version = "0.0.1.dev0"
+version = "0.0.1"
 description = 'Various Python / Django utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
     'Philipp Hagemeister <phihag@phihag.de>'
 ]
 classifiers = [
-    'Development Status :: 1 - Planning',
+    'Development Status :: 3 - Alpha',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Framework :: Django',
     'Intended Audience :: Developers',
