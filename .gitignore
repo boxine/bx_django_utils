@@ -31,3 +31,4 @@ sdist/
 *.egg-info/
 .installed.cfg
 *.egg
+/publish.log
