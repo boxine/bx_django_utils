@@ -1,5 +1,4 @@
 import sys
-import textwrap
 
 
 TRACEBACK_MAX_CHARS = 100
@@ -12,7 +11,7 @@ DEFAULT_STOP_ON_FILE_PATH = (
 )
 
 
-def print_exc_plus(exc=None, stop_on_file_path=None):
+def print_exc_plus(exc=None, stop_on_file_path=None, max_chars=None):
     """ Print traceback information with a listing of all the local variables in each frame. """
     if exc is None:
         tb = sys.exc_info()[2]
@@ -31,6 +30,9 @@ def print_exc_plus(exc=None, stop_on_file_path=None):
 
     if stop_on_file_path is None:
         stop_on_file_path = DEFAULT_STOP_ON_FILE_PATH
+
+    if max_chars is None:
+        max_chars = TRACEBACK_MAX_CHARS
 
     print(' -' * 50, file=sys.stderr)
     print('Locals by frame, most recent call first:', file=sys.stderr)
@@ -58,7 +60,8 @@ def print_exc_plus(exc=None, stop_on_file_path=None):
                 # error we don't want.
                 value = repr(value)
 
-                value = textwrap.shorten(value, width=TRACEBACK_MAX_CHARS)
+                if len(value) + 3 > max_chars:
+                    value = f'{value[:max_chars-3]}...'
 
                 try:
                     print(value, file=sys.stderr)
