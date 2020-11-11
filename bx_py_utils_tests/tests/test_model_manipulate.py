@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from bx_py_utils.models.manipulate import create_or_update
 from bx_py_utils_tests.test_app.models import CreateOrUpdateTestModel
-from bx_py_utils_tests.tests.utils import MockDatetimeGenerator, parse_dt
+from bx_py_utils.test_utils.datetime import MockDatetimeGenerator, parse_dt
 
 
 class ModelManipulateTestCase(TestCase):
