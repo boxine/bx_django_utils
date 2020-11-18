@@ -1,3 +1,6 @@
+from typing import Iterable
+
+
 def dict_get(item, *keys):
     """
     >>> example={1: {2: 'X'}}
@@ -18,3 +21,18 @@ def dict_get(item, *keys):
         else:
             return None
     return item
+
+
+def pluck(obj: dict, keys: Iterable[str]):
+    """
+    Extract values from a dict, if they are present
+
+    >>> pluck({'a': 1, 'b': 2}, ['a', 'c'])
+    {'a': 1}
+    """
+    assert isinstance(obj, dict)
+    res = {}
+    for k in keys:
+        if k in obj:
+            res[k] = obj[k]
+    return res
