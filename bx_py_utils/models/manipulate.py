@@ -12,11 +12,14 @@ def create_or_update(*, ModelClass, lookup, **values):
 
      * Use update_fields and save only changed fields
      * return the information about changed field names.
+     * validate before save
     """
     assert isinstance(lookup, dict)
     instance = ModelClass.objects.filter(**lookup).first()
     if not instance:
-        instance = ModelClass.objects.create(**lookup, **values)
+        instance = ModelClass(**lookup, **values)
+        instance.full_clean(validate_unique=False)  # Don't create non-valid instances
+        instance.save()
         return instance, True, None
 
     updated_fields = []
@@ -26,6 +29,7 @@ def create_or_update(*, ModelClass, lookup, **values):
             updated_fields.append(key)
 
     if updated_fields:
+        instance.full_clean(validate_unique=False)  # Don't save new non-valid values
         instance.save(update_fields=updated_fields)
 
     return instance, False, updated_fields
