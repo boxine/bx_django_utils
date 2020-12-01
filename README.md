@@ -5,6 +5,12 @@ Various Python / Django utility functions
 ## Quickstart
 
 ```bash
+pip install bx_py_utils
+```
+
+To start developing e.g.:
+
+```bash
 ~$ git clone https://github.com/boxine/bx_py_utils.git
 ~$ cd bx_py_utils
 ~/bx_py_utils$ make
@@ -29,3 +35,7 @@ makemessages         Make and compile locales message files
 ## License
 
 [MIT](LICENSE). Patches welcome!
+
+## Links
+
+* https://pypi.org/project/bx-py-utils/
