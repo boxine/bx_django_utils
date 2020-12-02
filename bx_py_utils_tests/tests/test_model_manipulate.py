@@ -111,3 +111,36 @@ class ModelManipulateTestCase(TestCase):
                 name='foo',
                 slug='this is no Slug !'
             )
+
+    def test_disable_full_clean(self):
+        # Create a new entry without "full_clean()" call:
+        with AssertModelCleanCalled() as cm:
+            instance, created, updated_fields = create_or_update(
+                ModelClass=CreateOrUpdateTestModel,
+                lookup={'id': 1},
+                call_full_clean=False,
+                slug='This is not a valid slug!'
+            )
+            assert isinstance(instance, CreateOrUpdateTestModel)
+            assert instance.id == 1
+            assert instance.slug == 'This is not a valid slug!'
+            assert created is True
+            assert updated_fields is None
+        assert cm.called_cleans == []
+        assert len(cm.missing_cleans) == 1
+
+        # Change existing without "full_clean()" call:
+        with AssertModelCleanCalled() as cm:
+            instance, created, updated_fields = create_or_update(
+                ModelClass=CreateOrUpdateTestModel,
+                lookup={'id': 1},
+                call_full_clean=False,
+                slug='Also no valid slug!'
+            )
+            assert isinstance(instance, CreateOrUpdateTestModel)
+            assert instance.id == 1
+            assert instance.slug == 'Also no valid slug!'
+            assert created is False
+            assert updated_fields == ['slug']
+        assert cm.called_cleans == []
+        assert len(cm.missing_cleans) == 1

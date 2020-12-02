@@ -5,7 +5,7 @@
 """
 
 
-def create_or_update(*, ModelClass, lookup, **values):
+def create_or_update(*, ModelClass, lookup, call_full_clean=True, **values):
     """
     Create a new model instance or update a existing one
     Similar to django's own create_or_update() but:
@@ -18,7 +18,8 @@ def create_or_update(*, ModelClass, lookup, **values):
     instance = ModelClass.objects.filter(**lookup).first()
     if not instance:
         instance = ModelClass(**lookup, **values)
-        instance.full_clean(validate_unique=False)  # Don't create non-valid instances
+        if call_full_clean:
+            instance.full_clean(validate_unique=False)  # Don't create non-valid instances
         instance.save()
         return instance, True, None
 
@@ -29,7 +30,8 @@ def create_or_update(*, ModelClass, lookup, **values):
             updated_fields.append(key)
 
     if updated_fields:
-        instance.full_clean(validate_unique=False)  # Don't save new non-valid values
+        if call_full_clean:
+            instance.full_clean(validate_unique=False)  # Don't save new non-valid values
         instance.save(update_fields=updated_fields)
 
     return instance, False, updated_fields
