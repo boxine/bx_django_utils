@@ -30,7 +30,22 @@ pytest               Run pytest
 pytest-ci            Run pytest with CI settings
 publish              Release new version to PyPi
 makemessages         Make and compile locales message files
+start-dev-server     Start Django dev. server with the test project
+clean                Remove created files from the test project (e.g.: SQlite, static files)
 ```
+
+You can start the test project with the Django developing server, e.g.:
+```bash
+~/bx_py_utils$ make start-dev-server
+```
+This is a own manage command, that will create migrations files from our test app, migrate, collectstatic and create a super user if no user exists ;)
+
+If you like to start from stretch, just delete related test project files with:
+```bash
+~/bx_py_utils$ make clean
+```
+...and start the test server again ;)
+
 
 ## License
 

@@ -72,4 +72,10 @@ makemessages: ## Make and compile locales message files
 	./manage.sh makemessages --all
 	./manage.sh compilemessages --ignore=.tox
 
+start-dev-server: ## Start Django dev. server with the test project
+	./manage.sh run_testserver
+
+clean: ## Remove created files from the test project (e.g.: SQlite, static files)
+	git clean -dfX bx_py_utils_tests/
+
 .PHONY: help install lint fix pytest publish
