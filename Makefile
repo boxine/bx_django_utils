@@ -69,7 +69,7 @@ publish: ## Release new version to PyPi
 	poetry run publish
 
 makemessages: ## Make and compile locales message files
-	./manage.sh makemessages --all
+	./manage.sh makemessages --all --no-location --no-obsolete
 	./manage.sh compilemessages --ignore=.tox
 
 start-dev-server: ## Start Django dev. server with the test project
