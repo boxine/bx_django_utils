@@ -9,8 +9,7 @@
 !.coveralls.yml
 
 # from test projects:
-/static/
-/media/
+/bx_py_utils_tests/static/
 *.sqlite3
 
 # Coverage HTML Report files:
@@ -32,3 +31,4 @@ sdist/
 .installed.cfg
 *.egg
 /publish.log
+
