@@ -31,6 +31,8 @@ Please take a look into the sources and tests for deeper informations.
 * `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
 * `users` - Utilities around user/permission setup for tests
 
+### performance analysis
+* `dbperf.query_recorder.SQLQueryRecorder` - Context Manager that records SQL queries executed via the Django ORM
 
 ### misc
 
@@ -39,6 +41,7 @@ Please take a look into the sources and tests for deeper informations.
 * `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
 * `filename.filename2human_name()` - Convert filename to a capitalized name
 * `filename.clean_filename()` - Convert filename to ASCII only via slugify
+* `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
 
 
 ## developing
