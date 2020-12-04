@@ -31,6 +31,7 @@ flynt = '*'
 autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+django-debug-toolbar = "*"
 
 [tool.poetry.scripts]
 publish = "bx_py_utils_tests.test_project.publish:publish"
