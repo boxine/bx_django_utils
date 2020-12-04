@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'bx_py_utils',
+    'bx_py_utils.approve_workflow',
     'bx_py_utils_tests.test_app',
+    'bx_py_utils_tests.approve_workflow_test_app',
 ]
 
 MIDDLEWARE = [

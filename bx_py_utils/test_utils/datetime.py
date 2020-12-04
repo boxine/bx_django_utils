@@ -4,11 +4,13 @@ import datetime
 class MockDatetimeGenerator:
     """
     Helper to mock datetime now in tests.
+    Note: Don't mock a complete test method if you use the django's test client!
+
     e.g.:
 
     class FooBar(TestCase):
         @mock.patch.object(timezone, 'now', MockDatetimeGenerator())
-        def test_foobar(self):
+        def test_something_without_test_client(self):
             ...
     """
 

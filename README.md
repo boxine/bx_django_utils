@@ -18,6 +18,7 @@ Please take a look into the sources and tests for deeper informations.
 
 ### models utilities
 
+* `approve_workflow` - Base model/admin/form classes to implement a model with draft/approve versions workflow
 * `manipulate.create_or_update()` - Similar to django's `create_or_update()` with benefits
 * `timetracking.TimetrackingBaseModel()` - Base model with "create" and "last update" date time
 

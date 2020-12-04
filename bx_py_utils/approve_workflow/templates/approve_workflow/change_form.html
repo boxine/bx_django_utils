@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+{{ block.super }}
+<div class="submit-row">
+    {% if show_approve %}<input type="submit" value="{% trans 'Save and Approve' %}" name="_approve" class="extra_submit">{% endif %}
+</div>
+{% endblock %}
