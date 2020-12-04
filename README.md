@@ -26,7 +26,9 @@ Please take a look into the sources and tests for deeper informations.
 
 * `datetime.MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps
 * `datetime.parse_dt()` - Handy `datetime.strptime()` convert
+* `html_assertion.HtmlAssertionMixin` - Unittest mixin class with usefull assertments around Django test client tests
 * `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
+* `users` - Utilities around user/permission setup for tests
 
 
 ### misc
