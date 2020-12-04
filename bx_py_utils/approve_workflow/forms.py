@@ -8,6 +8,7 @@ class PublishAdminForm(forms.ModelForm):
     """
     Activate models REQUIRED_FIELDS_PUBLIC on approve
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
