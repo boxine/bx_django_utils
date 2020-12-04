@@ -3,6 +3,8 @@ from typing import Iterable
 
 def dict_get(item, *keys):
     """
+    nested dict `get()`
+
     >>> example={1: {2: 'X'}}
     >>> dict_get(example, 1, 2)
     'X'

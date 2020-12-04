@@ -2,11 +2,43 @@
 
 Various Python / Django utility functions
 
+
 ## Quickstart
 
 ```bash
 pip install bx_py_utils
 ```
+
+
+## Existing stuff
+
+Here only a simple list about existing utilities.
+Please take a look into the sources and tests for deeper informations.
+
+
+### models utilities
+
+* `manipulate.create_or_update()` - Similar to django's `create_or_update()` with benefits
+* `timetracking.TimetrackingBaseModel()` - Base model with "create" and "last update" date time
+
+
+### test utilities
+
+* `datetime.MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps
+* `datetime.parse_dt()` - Handy `datetime.strptime()` convert
+* `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
+
+
+### misc
+
+* `dict_utils.dict_get()` - nested dict `get()`
+* `dict_utils.pluck()` - Extract values from a dict, if they are present
+* `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
+* `filename.filename2human_name()` - Convert filename to a capitalized name
+* `filename.clean_filename()` - Convert filename to ASCII only via slugify
+
+
+## developing
 
 To start developing e.g.:
 
