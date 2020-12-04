@@ -115,3 +115,25 @@ STATIC_ROOT = BASE_DIR / 'static'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {name} {module}.{funcName} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {'console': {
+        'class': 'logging.StreamHandler',
+        'formatter': 'verbose'
+    }},
+    'loggers': {
+        'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django.auth': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+        'django.security': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+        'django.request': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+        'bx_py_utils': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+    },
+}
