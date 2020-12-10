@@ -30,9 +30,13 @@ Please take a look into the sources and tests for deeper informations.
 * `html_assertion.HtmlAssertionMixin` - Unittest mixin class with usefull assertments around Django test client tests
 * `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
 * `users` - Utilities around user/permission setup for tests
+* `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
+
 
 ### performance analysis
+
 * `dbperf.query_recorder.SQLQueryRecorder` - Context Manager that records SQL queries executed via the Django ORM
+
 
 ### misc
 
