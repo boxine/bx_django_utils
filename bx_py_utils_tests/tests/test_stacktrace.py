@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from bx_py_utils.stacktrace import get_stacktrace
 
 
@@ -25,7 +26,9 @@ class StacktraceTestCase(TestCase):
 
     def test_get_stacktrace_output(self):
         out = baz()
-        out = out[:-1]  # cut off last entry, it's from the test runner binary and can't be ignored by exclude_modules
+        # cut off last entry, it's from the test runner binary and can't be
+        # ignored by exclude_modules
+        out = out[:-1]
 
         expected = [
             ('foo', 'return get_stacktrace(exclude_modules=exclude_modules)'),
