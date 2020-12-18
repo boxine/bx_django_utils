@@ -33,13 +33,13 @@ update: check-poetry ## Update the dependencies as according to the pyproject.to
 
 lint: ## Run code formatters and linter
 	poetry run flynt --fail-on-change --line_length=${MAX_LINE_LENGTH} bx_py_utils
-	poetry run isort --check-only --recursive bx_py_utils
+	poetry run isort --check-only .
 	poetry run flake8 bx_py_utils
 
 fix-code-style: ## Fix code formatting
 	poetry run flynt --line_length=${MAX_LINE_LENGTH} bx_py_utils
 	poetry run autopep8 --ignore-local-config --max-line-length=${MAX_LINE_LENGTH} --aggressive --aggressive --in-place --recursive bx_py_utils
-	poetry run isort --apply --recursive bx_py_utils
+	poetry run isort .
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
