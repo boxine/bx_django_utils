@@ -22,6 +22,9 @@ Please take a look into the sources and tests for deeper informations.
 * `manipulate.create_or_update()` - Similar to django's `create_or_update()` with benefits
 * `timetracking.TimetrackingBaseModel()` - Base model with "create" and "last update" date time
 
+### data types
+
+* `data_types.gtin` - ModelField, FormField and validators for GTIN/UPC/EAN numbers, more info: [data_types/gtin/README.md](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/data_types/gtin/README.md)
 
 ### test utilities
 
