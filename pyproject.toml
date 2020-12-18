@@ -20,6 +20,7 @@ readme='README.md'
 [tool.poetry.dependencies]
 python = '>=3.6,<4.0.0'
 django = '*'
+python-stdnum = "*"  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
 tox = '*'
