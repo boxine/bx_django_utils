@@ -15,5 +15,11 @@ class CreateOrUpdateTestModel(TimetrackingBaseModel):
 
 class GtinFieldTestModel(models.Model):
     default_gtin = GtinModelField()  # accept default length: 12,13 and 14
-    all_gtin = GtinModelField(accepted_length=(8, 10, 12, 13, 14))
-    ean13 = GtinModelField(accepted_length=(13,))  # accept one length
+    all_gtin = GtinModelField(
+        blank=True,
+        accepted_length=(8, 10, 12, 13, 14)
+    )
+    ean13 = GtinModelField(
+        blank=True, null=True,
+        accepted_length=(13,)  # accept one length
+    )

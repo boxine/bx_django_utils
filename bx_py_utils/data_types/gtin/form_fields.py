@@ -14,7 +14,11 @@ class GtinFormField(forms.CharField):
 
     def clean(self, value):
         value = super().clean(value)
-        return compact(value)  # Convert to the minimal representation
+        if value:
+            value = compact(value)  # Convert to the minimal representation
+        return value
 
     def prepare_value(self, value):
-        return compact(value)  # Convert to the minimal representation
+        if value:
+            value = compact(value)  # Convert to the minimal representation
+        return value
