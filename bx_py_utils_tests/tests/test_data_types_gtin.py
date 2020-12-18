@@ -125,3 +125,23 @@ class GtinFieldTestModelTestCase(TestCase):
             instance.all_gtin = number
             with self.assertRaisesMessage(ValidationError, err_msg):
                 instance.full_clean()
+
+    def test_none_value(self):
+        instance = GtinFieldTestModel.objects.create(
+            default_gtin='692771981161',  # required
+            all_gtin='',  # blank=True, null=False
+            ean13=None,  # null=True, blank=True,
+        )
+        instance.full_clean()
+
+        all_gtin_form_field = instance._meta.get_field('all_gtin').formfield()
+        assert all_gtin_form_field.clean(None) == ''
+        assert all_gtin_form_field.clean('') == ''
+        assert all_gtin_form_field.prepare_value(None) is None
+        assert all_gtin_form_field.prepare_value('') == ''
+
+        ean13_form_field = instance._meta.get_field('ean13').formfield()
+        assert ean13_form_field.clean(None) is None
+        assert ean13_form_field.clean('') is None
+        assert ean13_form_field.prepare_value(None) is None
+        assert ean13_form_field.prepare_value('') == ''
