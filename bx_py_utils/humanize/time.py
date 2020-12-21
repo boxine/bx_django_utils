@@ -2,15 +2,16 @@ import datetime
 
 from django.utils.html import avoid_wrapping
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 
 TIMESINCE_CHUNKS = (
-    (60 * 60 * 24 * 365, 'years'),
-    (60 * 60 * 24 * 30, 'months'),
-    (60 * 60 * 24 * 7, 'weeks'),
-    (60 * 60 * 24, 'days'),
-    (60 * 60, 'hours'),
-    (60, 'minutes'),
+    (60 * 60 * 24 * 365, gettext_lazy('%.1f years')),
+    (60 * 60 * 24 * 30, gettext_lazy('%.1f months')),
+    (60 * 60 * 24 * 7, gettext_lazy('%.1f weeks')),
+    (60 * 60 * 24, gettext_lazy('%.1f days')),
+    (60 * 60, gettext_lazy('%.1f hours')),
+    (60, gettext_lazy('%.1f minutes')),
 )
 
 
@@ -53,12 +54,13 @@ def human_timedelta(t):
     if abs(t) < 60:
         return avoid_wrapping(_('%.1f seconds') % round(t, 1))
 
-    for seconds, name in TIMESINCE_CHUNKS:
+    for seconds, time_string in TIMESINCE_CHUNKS:
         count = t / seconds
         if abs(count) >= 1:
             count = round(count, 1)
             break
-    return avoid_wrapping(f'{count:.1f} {name}')
+
+    return avoid_wrapping(time_string % count)
 
 
 human_timedelta.is_safe = True

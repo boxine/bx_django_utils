@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_py_utils'
-version = "16"
+version = "17"
 description = 'Various Python / Django utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
