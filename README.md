@@ -41,13 +41,19 @@ Please take a look into the sources and tests for deeper informations.
 * `dbperf.query_recorder.SQLQueryRecorder` - Context Manager that records SQL queries executed via the Django ORM
 
 
+### humanize
+
+* `humanize.time.human_timedelta()` - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
+* `templatetags.humanize_time.human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
+* `filename.filename2human_name()` - Convert filename to a capitalized name
+* `filename.clean_filename()` - Convert filename to ASCII only via slugify
+
+
 ### misc
 
 * `dict_utils.dict_get()` - nested dict `get()`
 * `dict_utils.pluck()` - Extract values from a dict, if they are present
 * `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
-* `filename.filename2human_name()` - Convert filename to a capitalized name
-* `filename.clean_filename()` - Convert filename to ASCII only via slugify
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
 
 

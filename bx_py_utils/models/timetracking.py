@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from bx_py_utils.templatetags.humanize_time import human_duration
+
 
 class TimetrackingBaseModel(models.Model):
     """
@@ -22,6 +24,16 @@ class TimetrackingBaseModel(models.Model):
         verbose_name=_('ModelTimetrackingMixin.update_dt.verbose_name'),
         help_text=_('ModelTimetrackingMixin.update_dt.help_text')
     )
+
+    def human_create_dt(self):
+        return human_duration(self.create_dt)
+    human_create_dt.short_description = _('ModelTimetrackingMixin.create_dt.verbose_name')
+    human_create_dt.admin_order_field = 'create_dt'
+
+    def human_update_dt(self):
+        return human_duration(self.update_dt)
+    human_update_dt.short_description = _('ModelTimetrackingMixin.update_dt.verbose_name')
+    human_update_dt.admin_order_field = 'update_dt'
 
     def save(self, update_dt=True, **kwargs):
         if update_dt:
