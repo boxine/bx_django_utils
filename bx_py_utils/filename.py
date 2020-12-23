@@ -13,7 +13,16 @@ def filename2human_name(filename):
     'No File Extension'
     >>> filename2human_name('Hör_gut-zu!.aac')
     'Hör Gut Zu'
+
+    Only file names are allowed, no file path:
+
+    >>> filename2human_name('foo/bar.py')
+    Traceback (most recent call last):
+      ...
+    AssertionError: Not valid filename: 'foo/bar.py'
     """
+    assert Path(filename).name == filename, f'Not valid filename: {filename!r}'
+
     txt = filename.partition('.')[0]
     txt = slugify(txt, allow_unicode=True)
     txt = txt.replace('_', ' ').replace('-', ' ')
@@ -33,7 +42,16 @@ def clean_filename(filename):
     'testaou.exe'
     >>> clean_filename('nameäöü.extäöü')
     'nameaou.extaou'
+
+    Only file names are allowed, no file path:
+
+    >>> clean_filename('foo/bar.py')
+    Traceback (most recent call last):
+      ...
+    AssertionError: Not valid filename: 'foo/bar.py'
     """
+    assert Path(filename).name == filename, f'Not valid filename: {filename!r}'
+
     def convert(txt):
         txt = slugify(txt, allow_unicode=False)
         return txt.replace('-', '_')
