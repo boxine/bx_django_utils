@@ -53,7 +53,10 @@ Please take a look into the sources and tests for deeper informations.
 
 * `dict_utils.dict_get()` - nested dict `get()`
 * `dict_utils.pluck()` - Extract values from a dict, if they are present
+* `environ.cgroup_memory_usage()` - Get the memory usage of the current cgroup
 * `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
+* `iteration.chunk_iterable()` - Create chunks off of any iterable
+* `processify.processify()` - Will execute the decorated function in a separate process
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
 
 
