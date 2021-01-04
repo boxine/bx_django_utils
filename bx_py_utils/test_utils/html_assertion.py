@@ -40,6 +40,9 @@ class HtmlAssertionMixin:
         return html
 
     def assert_html_parts(self, response, parts, msg_prefix=''):
+        assert isinstance(parts, (tuple, list)), \
+            f'Invalid parts argument {parts!r} of type {type(parts).__name__}'
+
         msg_prefix, haystack = self.get_msg_prefix_and_haystack(response, msg_prefix=msg_prefix)
         for needle in parts:
             try:
@@ -70,6 +73,9 @@ class HtmlAssertionMixin:
                 raise
 
     def assert_parts_not_in_html(self, response, parts, msg_prefix=''):
+        assert isinstance(parts, (tuple, list)), \
+            f'Invalid parts argument {parts!r} of type {type(parts).__name__}'
+
         msg_prefix, haystack = self.get_msg_prefix_and_haystack(response, msg_prefix=msg_prefix)
         for needle in parts:
             self.assertNotIn(needle, haystack, msg=f'{msg_prefix} {needle!r} found!')
