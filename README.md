@@ -49,6 +49,11 @@ Please take a look into the sources and tests for deeper informations.
 * `filename.clean_filename()` - Convert filename to ASCII only via slugify
 
 
+### view utilities
+
+* `view_utils.dynamic_menu_urls.DynamicViewMenu()` - Register views to build a simple menu with sections
+
+
 ### misc
 
 * `dict_utils.dict_get()` - nested dict `get()`
