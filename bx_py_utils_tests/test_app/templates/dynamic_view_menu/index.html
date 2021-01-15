@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% for section in menu %}
+        <h2>{{ section.head_line }}</h2>
+        <ul>
+        {% for entry in section.entries %}
+            <li><a href="{% url entry.url_name %}">{{ entry.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
