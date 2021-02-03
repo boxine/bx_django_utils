@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
-from bx_py_utils.models.manipulate import create_or_update
+from bx_py_utils.models.manipulate import create, create_or_update
 from bx_py_utils.test_utils.datetime import MockDatetimeGenerator, parse_dt
 from bx_py_utils.test_utils.model_clean_assert import AssertModelCleanCalled
 from bx_py_utils_tests.test_app.models import CreateOrUpdateTestModel
@@ -144,3 +144,42 @@ class ModelManipulateTestCase(TestCase):
             assert updated_fields == ['slug']
         assert cm.called_cleans == []
         assert len(cm.missing_cleans) == 1
+
+    @mock.patch.object(timezone, 'now', MockDatetimeGenerator())
+    def test_create_or_update_without_lookup(self):
+        # create a new entry:
+
+        with AssertModelCleanCalled() as cm:
+            instance, created, updated_fields = create_or_update(
+                ModelClass=CreateOrUpdateTestModel,
+                lookup=None,
+                name='First entry',
+                slug='first'
+            )
+            assert isinstance(instance, CreateOrUpdateTestModel)
+            assert instance.pk is not None
+            assert instance.name == 'First entry'
+            assert instance.slug == 'first'
+            assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')
+            assert instance.update_dt == parse_dt('2001-01-01T00:00:00+0000')
+            assert created is True
+            assert updated_fields is None
+        cm.assert_no_missing_cleans()
+
+    @mock.patch.object(timezone, 'now', MockDatetimeGenerator())
+    def test_create(self):
+        # create a new entry:
+
+        with AssertModelCleanCalled() as cm:
+            instance = create(
+                ModelClass=CreateOrUpdateTestModel,
+                name='First entry',
+                slug='first'
+            )
+            assert isinstance(instance, CreateOrUpdateTestModel)
+            assert instance.pk is not None
+            assert instance.name == 'First entry'
+            assert instance.slug == 'first'
+            assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')
+            assert instance.update_dt == parse_dt('2001-01-01T00:00:00+0000')
+        cm.assert_no_missing_cleans()
