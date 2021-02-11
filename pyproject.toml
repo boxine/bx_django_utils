@@ -23,6 +23,8 @@ django = '*'
 python-stdnum = "*"  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
+boto3 = "*"  # needed for e.g.: bx_py_utils/aws/ stuff!
+requests-mock = "*"
 tox = '*'
 pytest = '*'
 pytest-randomly = '*'

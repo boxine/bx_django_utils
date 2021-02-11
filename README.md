@@ -55,6 +55,13 @@ Please take a look into the sources and tests for deeper informations.
 * `view_utils.dynamic_menu_urls.DynamicViewMenu()` - Register views to build a simple menu with sections
 
 
+### AWS stuff
+
+* `bx_py_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
+* `bx_py_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
+* `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
+
+
 ### misc
 
 * `dict_utils.dict_get()` - nested dict `get()`
