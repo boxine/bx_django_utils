@@ -34,6 +34,7 @@ Please take a look into the sources and tests for deeper informations.
 * `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
 * `users` - Utilities around user/permission setup for tests
 * `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
+* `AssertQueries()` - Context manager with different checks of made database queries
 
 
 ### performance analysis
