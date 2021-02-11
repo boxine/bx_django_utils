@@ -63,6 +63,7 @@ Please take a look into the sources and tests for deeper informations.
 * `iteration.chunk_iterable()` - Create chunks off of any iterable
 * `processify.processify()` - Will execute the decorated function in a separate process
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
+* `anonymize.anonymize()` - Anonymize a string (With special handling of email addresses)
 
 
 ## developing
