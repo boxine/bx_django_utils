@@ -60,6 +60,7 @@ Please take a look into the sources and tests for deeper informations.
 * `bx_py_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
 * `bx_py_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
 * `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
+* `bx_py_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
 
 
 ### misc
