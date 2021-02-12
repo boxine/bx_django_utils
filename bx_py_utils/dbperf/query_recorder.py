@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pprint import saferepr
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 from django.db import connections
 
@@ -110,13 +110,18 @@ class SQLQueryRecorder:
     """
     running = None
 
-    def __init__(self, databases: Optional[List[str]] = None):
+    def __init__(self,
+                 databases: Optional[List[str]] = None,
+                 collect_stacktrace: Optional[Callable] = None
+                 ):
         self.logger = Logger()
 
         if databases:
             self.databases = [db for db in connections.all() if db.alias in databases]
         else:
             self.databases = connections.all()
+
+        self.collect_stacktrace = collect_stacktrace
 
     def __enter__(self):
         for connection in self.databases:
@@ -128,10 +133,16 @@ class SQLQueryRecorder:
             connection._recording_chunked_cursor = connection.chunked_cursor
 
             def cursor():
-                return RecordingCursorWrapper(connection._recording_cursor(), connection, self.logger)
+                return RecordingCursorWrapper(
+                    connection._recording_cursor(), connection, self.logger,
+                    collect_stacktrace=self.collect_stacktrace
+                )
 
             def chunked_cursor():
-                return RecordingCursorWrapper(connection._recording_chunked_cursor(), connection, self.logger)
+                return RecordingCursorWrapper(
+                    connection._recording_chunked_cursor(), connection, self.logger,
+                    collect_stacktrace=self.collect_stacktrace
+                )
 
             connection.cursor = cursor
             connection.chunked_cursor = chunked_cursor
