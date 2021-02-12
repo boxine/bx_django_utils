@@ -1,5 +1,7 @@
 from django.contrib.messages import get_messages
 
+from bx_py_utils.test_utils.assertion import assert_equal
+
 
 class HtmlAssertionMixin:
     """
@@ -8,7 +10,11 @@ class HtmlAssertionMixin:
 
     def assert_messages(self, response, expected_messages):
         current_messages = [m.message for m in get_messages(response.wsgi_request)]
-        self.assertCountEqual(current_messages, expected_messages)
+        assert_equal(
+            current_messages,
+            expected_messages,
+            msg='Messages are not equal:'
+        )
 
     def get_msg_prefix_and_haystack(self, response, msg_prefix):
         haystack = response.content.decode('utf-8')
