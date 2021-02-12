@@ -39,6 +39,7 @@ class ClientSideCertManagerTestCase(SimpleTestCase):
             with ClientSideCertManager(
                 tls_cert_secret_name='the_cert',
                 tls_key_secret_name='the_key',
+                region_name='eu-central-1'
             ) as cert_manager:
                 with requests_mock.mock() as m:
                     m.get('https://foo.tld/bar/', json=mocked_response)

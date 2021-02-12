@@ -17,6 +17,7 @@ class ClientSideCertManager:
         with ClientSideCertManager(
             tls_cert_secret_name='foo',
             tls_key_secret_name='bar',
+            region_name='eu-central-1'
         ) as cert_manager:
             response = requests.get(
                 'https://foo.tld/bar/',
@@ -24,11 +25,11 @@ class ClientSideCertManager:
             )
     """
 
-    def __init__(self, tls_cert_secret_name, tls_key_secret_name):
+    def __init__(self, *, tls_cert_secret_name, tls_key_secret_name, region_name):
         self._tls_cert_secret_name = tls_cert_secret_name
         self._tls_key_secret_name = tls_key_secret_name
 
-        self._secrets_manager = SecretsManager()
+        self._secrets_manager = SecretsManager(region_name=region_name)
         self._tls_cert_file = None
         self._tls_key_file = None
 
