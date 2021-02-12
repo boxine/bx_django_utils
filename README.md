@@ -35,12 +35,12 @@ Please take a look into the sources and tests for deeper informations.
 * `users` - Utilities around user/permission setup for tests
 * `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
 * `AssertQueries()` - Context manager with different checks of made database queries
-
+* `assert_json_requests_mock()` - Check the requests history of `requests_mock.mock()`
+* `assert_equal()` - Compare objects with a nice ndiff
 
 ### performance analysis
 
 * `dbperf.query_recorder.SQLQueryRecorder` - Context Manager that records SQL queries executed via the Django ORM
-
 
 ### humanize
 
@@ -48,7 +48,7 @@ Please take a look into the sources and tests for deeper informations.
 * `templatetags.humanize_time.human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
 * `filename.filename2human_name()` - Convert filename to a capitalized name
 * `filename.clean_filename()` - Convert filename to ASCII only via slugify
-
+* `pformat()` - Better `pretty-print-format` using JSON with fallback to `pprint.pformat()`
 
 ### view utilities
 
