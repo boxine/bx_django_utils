@@ -4,6 +4,7 @@ from difflib import unified_diff
 from typing import List, Optional
 
 from bx_py_utils.dbperf.query_recorder import SQLQueryRecorder
+from bx_py_utils.stacktrace import StacktraceAfter
 
 
 def counter_diff(c1, c2, fromfile=None, tofile=None):
@@ -19,6 +20,11 @@ def counter_diff(c1, c2, fromfile=None, tofile=None):
         fromfile=fromfile,
         tofile=tofile
     ))
+
+
+DEFAULT_AFTER_MODULES = (
+    'django.db',
+)
 
 
 class AssertQueries(SQLQueryRecorder):
@@ -41,6 +47,13 @@ class AssertQueries(SQLQueryRecorder):
         bx_py_utils_tests/tests/test_assert_queries.py
     """
 
+    def __init__(self, databases=None, after_modules=None):
+        if after_modules is None:
+            after_modules = DEFAULT_AFTER_MODULES
+
+        collect_stacktrace = StacktraceAfter(after_modules=after_modules)
+        super().__init__(databases=databases, collect_stacktrace=collect_stacktrace)
+
     def count_table_names(self):
         table_name_count = Counter()
         for db, query in self.logger._queries:
@@ -54,10 +67,18 @@ class AssertQueries(SQLQueryRecorder):
 
     @property
     def query_info(self):
-        return '\n'.join(
-            '%d. %s' % (i, query['sql'])
-            for i, (db, query) in enumerate(self.logger._queries, start=1)
-        )
+        parts = []
+        for i, (db, query) in enumerate(self.logger._queries, start=1):
+            stacktrace = query['stacktrace']
+            frameinfo = stacktrace[-1]
+
+            parts.append(
+                f'{i:>3}. {query["sql"]}\n'
+                f'    {frameinfo.filename} {frameinfo.line} {frameinfo.func!r}\n'
+                f'    {frameinfo.code!r}\n'
+            )
+
+        return '\n'.join(parts)
 
     def build_error_message(self, msg):
         return (

@@ -1,9 +1,16 @@
 from collections import Counter
+from unittest import mock
 
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 
+from bx_py_utils import stacktrace
 from bx_py_utils.test_utils.assert_queries import AssertQueries
+
+
+def make_database_queries(count=1):
+    for i in range(count):
+        Permission.objects.all().first()
 
 
 class AssertQueriesTestCase(TestCase):
@@ -74,42 +81,67 @@ class AssertQueriesTestCase(TestCase):
 
         # duplicated + similar
 
-        with self.assertRaises(AssertionError) as err:
-            with AssertQueries() as queries:
-                Permission.objects.all().first()
-                Permission.objects.all().first()
+        with self.assertRaises(AssertionError) as err, \
+                AssertQueries() as queries:
+            Permission.objects.all().first()  # Query 1
+            Permission.objects.all().first()  # Query 2
             queries.assert_duplicated_queries(duplicated=True, similar=True)
         msg = str(err.exception)
         assert 'There are 1 duplicated and 1 similar queries.\n' in msg
         assert 'Captured queries were:\n' in msg
+
         assert '1. SELECT "auth_permission"' in msg
+        assert 'bx_py_utils_tests/tests/test_assert_queries.py' in msg
+        assert "'test_assert_duplicated_queries'\n" in msg
+        assert "Permission.objects.all().first()  # Query 1" in msg
+
         assert '2. SELECT "auth_permission"' in msg
+        assert "Permission.objects.all().first()  # Query 2" in msg
+
+        # no duplicated, but similar
+
+        with self.assertRaises(AssertionError) as err, \
+                AssertQueries() as queries:
+            Permission.objects.exclude(name='query 3').first()
+            Permission.objects.exclude(name='query 4').first()
+            queries.assert_duplicated_queries(duplicated=True, similar=True)
+        msg = str(err.exception)
+        assert 'There are 0 duplicated and 1 similar queries.\n' in msg
+        assert 'Captured queries were:\n' in msg
+        assert '1. SELECT "auth_permission"' in msg
+        assert "Permission.objects.exclude(name='query 3').first()" in msg
+        assert '2. SELECT "auth_permission"' in msg
+        assert "Permission.objects.exclude(name='query 4').first()" in msg
 
         # only duplicated
 
-        with self.assertRaises(AssertionError) as err:
-            with AssertQueries() as queries:
-                Permission.objects.all().first()
-                Permission.objects.all().first()
+        with self.assertRaises(AssertionError) as err, \
+                AssertQueries() as queries:
+            Permission.objects.all().first()  # Query 5
+            Permission.objects.all().first()  # Query 6
             queries.assert_duplicated_queries(duplicated=True, similar=False)
         msg = str(err.exception)
         assert 'There are 1 duplicated queries.\n' in msg
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
+        assert "Permission.objects.all().first()  # Query 5" in msg
         assert '2. SELECT "auth_permission"' in msg
+        assert "Permission.objects.all().first()  # Query 6" in msg
 
         # only similar
 
-        with self.assertRaises(AssertionError) as err:
-            with AssertQueries() as queries:
-                Permission.objects.all().first()
-                Permission.objects.all().first()
+        with self.assertRaises(AssertionError) as err, \
+                AssertQueries() as queries:
+            Permission.objects.exclude(name='query 7').first()
+            Permission.objects.exclude(name='query 8').first()
             queries.assert_duplicated_queries(duplicated=False, similar=True)
         msg = str(err.exception)
         assert 'There are 1 similar queries.\n' in msg
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
+        assert "Permission.objects.exclude(name='query 7').first()" in msg
         assert '2. SELECT "auth_permission"' in msg
+        assert "Permission.objects.exclude(name='query 8').first()" in msg
 
     def test_assert_query_count(self):
         queries = self.get_instance()

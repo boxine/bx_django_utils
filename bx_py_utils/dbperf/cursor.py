@@ -22,10 +22,15 @@ class RecordingCursorWrapper:
     to the provided logger before delegating them to the wrapped cursor.
     """
 
-    def __init__(self, cursor, db, logger):
+    def __init__(self, cursor, db, logger, collect_stacktrace=None):
         self.cursor = cursor
         self.db = db
         self.logger = logger  # must implement 'record' method
+
+        if collect_stacktrace is None:
+            self.get_stacktrace = get_stacktrace
+        else:
+            self.get_stacktrace = collect_stacktrace
 
     def __getattr__(self, attr):
         return getattr(self.cursor, attr)
@@ -83,8 +88,7 @@ class RecordingCursorWrapper:
                 _params_decoded = ''  # object not JSON serializable, we have to live with that
 
             sql = str(sql)  # is sometimes an object, e.g. psycopg Composed, so ensure string
-            stacktrace = get_stacktrace()
-            stacktrace.reverse()
+            stacktrace = self.get_stacktrace()
 
             self.logger.record(**{
                 'alias': getattr(self.db, 'alias', 'default'),

@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from bx_py_utils.stacktrace import get_stacktrace
+from bx_py_utils.stacktrace import get_stacktrace, iter_frameinfo
+from bx_py_utils.test_utils.assertion import assert_equal
 
 
 def foo():
@@ -10,6 +11,7 @@ def foo():
         'pluggy',
         '_pytest',
         'pytest',
+        'runpy',
     )
     return get_stacktrace(exclude_modules=exclude_modules)
 
@@ -24,26 +26,39 @@ def baz():
 
 class StacktraceTestCase(TestCase):
 
+    def test_iter_frameinfo_offset(self):
+        result = [func for file, line, func, code in iter_frameinfo()]
+        assert result[0] == 'test_iter_frameinfo_offset'
+
+    def test_get_stacktrace(self):
+        stacktrace = get_stacktrace(tidy=False)
+        last_frame = stacktrace[-1]
+        assert last_frame.func == 'test_get_stacktrace'
+        assert last_frame.code == 'stacktrace = get_stacktrace(tidy=False)'
+
     def test_get_stacktrace_output(self):
         out = baz()
-        # cut off last entry, it's from the test runner binary and can't be
-        # ignored by exclude_modules
-        out = out[:-1]
+
+        if out[0].func == '<module>':
+            # cut off first entry, it's from the test runner binary and can't be
+            # ignored by exclude_modules
+            out = out[1:]
 
         expected = [
-            ('foo', 'return get_stacktrace(exclude_modules=exclude_modules)'),
-            ('bar', 'return foo()'),
-            ('baz', 'return bar()'),
             ('test_get_stacktrace_output', 'out = baz()'),
+            ('baz', 'return bar()'),
+            ('bar', 'return foo()'),
+            ('foo', 'return get_stacktrace(exclude_modules=exclude_modules)'),
         ]
-
-        # for file, line, func, text, locals_ in out:
-        for frameinfo, expected in zip(out, expected):
+        current_info = []
+        for frameinfo in out:
             # only make rough assertions on file, line and locals_, they are too volatile
             assert isinstance(frameinfo.filename, str)
             assert len(frameinfo.filename) > 0
             assert isinstance(frameinfo.line, int)
 
-            expected_func, expected_code = expected
-            assert frameinfo.func == expected_func
-            assert frameinfo.code == expected_code
+            current_info.append(
+                (frameinfo.func, frameinfo.code)
+            )
+
+        assert_equal(current_info, expected)
