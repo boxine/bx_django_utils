@@ -6,7 +6,7 @@ class SecretsManager:
     Access AWS Secrets Manager values
     """
 
-    def __init__(self, region_name=None):
+    def __init__(self, *, region_name):
         session = boto3.session.Session()
         self.client = session.client(
             service_name='secretsmanager',
