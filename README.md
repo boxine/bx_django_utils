@@ -73,6 +73,7 @@ Please take a look into the sources and tests for deeper informations.
 * `processify.processify()` - Will execute the decorated function in a separate process
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
 * `anonymize.anonymize()` - Anonymize a string (With special handling of email addresses)
+* `hash_utils.url_safe_hash()` - Generate URL safe hashes
 
 
 ## developing
