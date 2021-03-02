@@ -6,7 +6,7 @@ from typing import Union
 
 def _write_json(obj, snapshot_file):
     with snapshot_file.open('w') as snapshot_handle:
-        json.dump(got, snapshot_handle, ensure_ascii=False, indent=4, sort_keys=True)
+        json.dump(obj, snapshot_handle, ensure_ascii=False, indent=4, sort_keys=True)
 
 
 def assert_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got: Union[dict, list]):
