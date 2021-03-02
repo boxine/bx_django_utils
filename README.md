@@ -37,6 +37,7 @@ Please take a look into the sources and tests for deeper informations.
 * `AssertQueries()` - Context manager with different checks of made database queries
 * `assert_json_requests_mock()` - Check the requests history of `requests_mock.mock()`
 * `assert_equal()` - Compare objects with a nice ndiff
+* `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file)
 
 ### performance analysis
 
