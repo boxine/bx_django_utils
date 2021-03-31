@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from django.utils.text import slugify
@@ -42,15 +43,14 @@ def clean_filename(filename):
     'testaou.exe'
     >>> clean_filename('nameäöü.extäöü')
     'nameaou.extaou'
-
-    Only file names are allowed, no file path:
-
-    >>> clean_filename('foo/bar.py')
-    Traceback (most recent call last):
-      ...
-    AssertionError: Not valid filename: 'foo/bar.py'
+    >>> clean_filename('g/a\\\\rba:g"\\'e.ext')
+    'g_arba_g__e.ext'
     """
-    assert Path(filename).name == filename, f'Not valid filename: {filename!r}'
+
+    # Strip out path characters
+    filename = re.sub(r'[/:\"\']', '_', filename)
+
+    assert Path(filename).name == filename, f'Invalid filename: {filename!r}'
 
     def convert(txt):
         txt = slugify(txt, allow_unicode=False)
