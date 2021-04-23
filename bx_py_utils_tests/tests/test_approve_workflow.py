@@ -308,7 +308,6 @@ class BaseApproveModelAdminTestCase(HtmlAssertionMixin, TestCase):
         response = self.client.get(url)
         assert response.status_code == 200
         self.assert_html_parts(response, parts=(
-            '<title>Change approve test model | Django site admin</title>',
             '<input type="submit" value="Save and Approve" name="_approve" class="extra_submit">',
             'value="v1"',
             'value="relation one v1"',
@@ -371,7 +370,6 @@ class BaseApproveModelAdminTestCase(HtmlAssertionMixin, TestCase):
             },
         )
         self.assert_html_parts(response, parts=(
-            '<title>Change approve test model | Django site admin</title>',
             '<input type="submit" value="Save and Approve" name="_approve" class="extra_submit">',
             '<li>This field is required.</li>',
             'value="v3"',
