@@ -1,0 +1,13 @@
+{
+  config {
+    accepts 
+    locales 
+    maxBytes 
+    maxChapters 
+    maxSeconds 
+    paypalClientId 
+    ssoEnabled 
+    stageWarning 
+    unicodeLocales 
+  }
+}

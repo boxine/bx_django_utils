@@ -1,0 +1,2269 @@
+{
+  config {
+    accepts 
+    locales 
+    maxBytes 
+    maxChapters 
+    maxSeconds 
+    paypalClientId 
+    ssoEnabled 
+    stageWarning 
+    unicodeLocales 
+  }
+  contentTokens {
+    edges {
+      cursor 
+      node {
+        assignedTo {
+          householdId 
+          id 
+          imageUrl 
+          name 
+        }
+        authors {
+          name 
+        }
+        campaign 
+        categoryId 
+        chapters {
+          seconds 
+          title 
+        }
+        description 
+        genre {
+          id 
+          title 
+        }
+        geoipError {
+          allowedCountryCodes 
+          allowedCountryNames 
+          geoipCountryCode 
+          geoipCountryName 
+        }
+        id 
+        minAge 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        subtitle 
+        thumbnail 
+        title 
+        token 
+      }
+    }
+    pageInfo {
+      endCursor 
+      hasNextPage 
+      hasPreviousPage 
+      startCursor 
+    }
+    totalCount 
+  }
+  frontpage {
+    contentTonies {
+      authors {
+        name 
+      }
+      chapters {
+        name 
+      }
+      coverUrl 
+      description 
+      genre {
+        id 
+        title 
+      }
+      householdId 
+      id 
+      imageUrl 
+      lock 
+      minAge 
+      permissions {
+        displayName 
+        membershipId 
+        permission 
+        profileImage 
+      }
+      secondsPresent 
+      series {
+        group {
+          id 
+          name 
+          thumbnail 
+        }
+        id 
+        name 
+        shopUrl 
+        slug 
+        subSeriesName 
+      }
+      title 
+      tune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+    }
+    creativeTonies {
+      associatedContentTokens {
+        assignedTo {
+          householdId 
+          id 
+          imageUrl 
+          name 
+        }
+        authors {
+          name 
+        }
+        campaign 
+        categoryId 
+        chapters {
+          seconds 
+          title 
+        }
+        description 
+        genre {
+          id 
+          title 
+        }
+        geoipError {
+          allowedCountryCodes 
+          allowedCountryNames 
+          geoipCountryCode 
+          geoipCountryName 
+        }
+        id 
+        minAge 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        subtitle 
+        thumbnail 
+        title 
+        token 
+      }
+      chapters {
+        file 
+        id 
+        seconds 
+        title 
+        transcoding 
+      }
+      chaptersPresent 
+      chaptersRemaining 
+      householdId 
+      id 
+      imageUrl 
+      live 
+      name 
+      permissions {
+        displayName 
+        membershipId 
+        permission 
+        profileImage 
+      }
+      private 
+      secondsPresent 
+      secondsRemaining 
+      suitableTunes {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+      suitableTunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        myTune {
+          assignCountCurrent 
+          assignCountRemaining 
+          assignedTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          id 
+          suitableTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+        }
+        relatedTunesItems {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      transcoding 
+      transcodingErrors {
+        deletedChapters {
+          seconds 
+          title 
+        }
+        message 
+        reason 
+      }
+      tune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+    }
+    tonieboxes {
+      accelerometerEnabled 
+      householdId 
+      id 
+      imageUrl 
+      itemId 
+      ledLevel 
+      maxHeadphoneVolume 
+      maxVolume 
+      name 
+      tapDirection 
+    }
+    tunesItems {
+      authors {
+        name 
+      }
+      compatibleTonies {
+        coverUrl 
+        householdId 
+        householdName 
+        id 
+        imageUrl 
+        title 
+        tonieType 
+        tuneId 
+      }
+      contentInfo {
+        chapters {
+          seconds 
+          title 
+        }
+        seconds 
+      }
+      description 
+      episodeNumber 
+      genre {
+        id 
+        title 
+      }
+      id 
+      minAge 
+      myTune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+      relatedTunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      retailPrice {
+        amount 
+        centAmount 
+        currency 
+      }
+      salesId 
+      series {
+        group {
+          id 
+          name 
+          thumbnail 
+        }
+        id 
+        name 
+        shopUrl 
+        slug 
+        subSeriesName 
+      }
+      thumbnail 
+      title 
+      tonieShopUrl 
+    }
+    tunesSeries {
+      group {
+        id 
+        name 
+        thumbnail 
+      }
+      id 
+      name 
+      shopUrl 
+      slug 
+      subSeriesName 
+      tunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+    }
+  }
+  geoip {
+    canBuyTunes 
+    country 
+    region 
+  }
+  households {
+    access 
+    canLeave 
+    contentTonies {
+      authors {
+        name 
+      }
+      chapters {
+        name 
+      }
+      coverUrl 
+      description 
+      genre {
+        id 
+        title 
+      }
+      householdId 
+      id 
+      imageUrl 
+      lock 
+      minAge 
+      permissions {
+        displayName 
+        membershipId 
+        permission 
+        profileImage 
+      }
+      secondsPresent 
+      series {
+        group {
+          id 
+          name 
+          thumbnail 
+        }
+        id 
+        name 
+        shopUrl 
+        slug 
+        subSeriesName 
+      }
+      suitableTunes {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+      suitableTunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        myTune {
+          assignCountCurrent 
+          assignCountRemaining 
+          assignedTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          id 
+          suitableTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+        }
+        relatedTunesItems {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      title 
+      tune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+    }
+    creativeTonies {
+      associatedContentTokens {
+        assignedTo {
+          householdId 
+          id 
+          imageUrl 
+          name 
+        }
+        authors {
+          name 
+        }
+        campaign 
+        categoryId 
+        chapters {
+          seconds 
+          title 
+        }
+        description 
+        genre {
+          id 
+          title 
+        }
+        geoipError {
+          allowedCountryCodes 
+          allowedCountryNames 
+          geoipCountryCode 
+          geoipCountryName 
+        }
+        id 
+        minAge 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        subtitle 
+        thumbnail 
+        title 
+        token 
+      }
+      chapters {
+        file 
+        id 
+        seconds 
+        title 
+        transcoding 
+      }
+      chaptersPresent 
+      chaptersRemaining 
+      householdId 
+      id 
+      imageUrl 
+      live 
+      name 
+      permissions {
+        displayName 
+        membershipId 
+        permission 
+        profileImage 
+      }
+      private 
+      secondsPresent 
+      secondsRemaining 
+      suitableTunes {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+      suitableTunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        myTune {
+          assignCountCurrent 
+          assignCountRemaining 
+          assignedTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          id 
+          suitableTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+        }
+        relatedTunesItems {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      transcoding 
+      transcodingErrors {
+        deletedChapters {
+          seconds 
+          title 
+        }
+        message 
+        reason 
+      }
+      tune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        item {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+    }
+    foreignCreativeTonieContent 
+    id 
+    image 
+    invitations {
+      email 
+      id 
+      itype 
+    }
+    memberships {
+      canDelete 
+      canEdit 
+      displayName 
+      email 
+      firstName 
+      id 
+      isSelf 
+      lastName 
+      mtype 
+      permissions {
+        creativeTonie {
+          householdId 
+          id 
+          imageUrl 
+          live 
+          name 
+          private 
+          suitableTunes {
+            assignCountCurrent 
+            assignCountRemaining 
+            assignedTonies {
+              coverUrl 
+              householdId 
+              householdName 
+              id 
+              imageUrl 
+              title 
+              tonieType 
+              tuneId 
+            }
+            id 
+            item {
+              authors {
+                name 
+              }
+              compatibleTonies {
+                coverUrl 
+                householdId 
+                householdName 
+                id 
+                imageUrl 
+                title 
+                tonieType 
+                tuneId 
+              }
+              contentInfo {
+                chapters {
+                  seconds 
+                  title 
+                }
+                seconds 
+              }
+              description 
+              episodeNumber 
+              genre {
+                id 
+                title 
+              }
+              id 
+              minAge 
+              retailPrice {
+                amount 
+                centAmount 
+                currency 
+              }
+              salesId 
+              series {
+                group {
+                  id 
+                  name 
+                  thumbnail 
+                }
+                id 
+                name 
+                shopUrl 
+                slug 
+                subSeriesName 
+              }
+              thumbnail 
+              title 
+              tonieShopUrl 
+            }
+            suitableTonies {
+              coverUrl 
+              householdId 
+              householdName 
+              id 
+              imageUrl 
+              title 
+              tonieType 
+              tuneId 
+            }
+          }
+          suitableTunesItems {
+            authors {
+              name 
+            }
+            compatibleTonies {
+              coverUrl 
+              householdId 
+              householdName 
+              id 
+              imageUrl 
+              title 
+              tonieType 
+              tuneId 
+            }
+            contentInfo {
+              chapters {
+                seconds 
+                title 
+              }
+              seconds 
+            }
+            description 
+            episodeNumber 
+            genre {
+              id 
+              title 
+            }
+            id 
+            minAge 
+            myTune {
+              assignCountCurrent 
+              assignCountRemaining 
+              assignedTonies {
+                coverUrl 
+                householdId 
+                householdName 
+                id 
+                imageUrl 
+                title 
+                tonieType 
+                tuneId 
+              }
+              id 
+              suitableTonies {
+                coverUrl 
+                householdId 
+                householdName 
+                id 
+                imageUrl 
+                title 
+                tonieType 
+                tuneId 
+              }
+            }
+            relatedTunesItems {
+              authors {
+                name 
+              }
+              compatibleTonies {
+                coverUrl 
+                householdId 
+                householdName 
+                id 
+                imageUrl 
+                title 
+                tonieType 
+                tuneId 
+              }
+              contentInfo {
+                chapters {
+                  seconds 
+                  title 
+                }
+                seconds 
+              }
+              description 
+              episodeNumber 
+              genre {
+                id 
+                title 
+              }
+              id 
+              minAge 
+              retailPrice {
+                amount 
+                centAmount 
+                currency 
+              }
+              salesId 
+              series {
+                group {
+                  id 
+                  name 
+                  thumbnail 
+                }
+                id 
+                name 
+                shopUrl 
+                slug 
+                subSeriesName 
+              }
+              thumbnail 
+              title 
+              tonieShopUrl 
+            }
+            retailPrice {
+              amount 
+              centAmount 
+              currency 
+            }
+            salesId 
+            series {
+              group {
+                id 
+                name 
+                thumbnail 
+              }
+              id 
+              name 
+              shopUrl 
+              slug 
+              subSeriesName 
+            }
+            thumbnail 
+            title 
+            tonieShopUrl 
+          }
+          transcodingErrors {
+            deletedChapters {
+              seconds 
+              title 
+            }
+            message 
+            reason 
+          }
+          tune {
+            assignCountCurrent 
+            assignCountRemaining 
+            assignedTonies {
+              coverUrl 
+              householdId 
+              householdName 
+              id 
+              imageUrl 
+              title 
+              tonieType 
+              tuneId 
+            }
+            id 
+            item {
+              authors {
+                name 
+              }
+              compatibleTonies {
+                coverUrl 
+                householdId 
+                householdName 
+                id 
+                imageUrl 
+                title 
+                tonieType 
+                tuneId 
+              }
+              contentInfo {
+                chapters {
+                  seconds 
+                  title 
+                }
+                seconds 
+              }
+              description 
+              episodeNumber 
+              genre {
+                id 
+                title 
+              }
+              id 
+              minAge 
+              retailPrice {
+                amount 
+                centAmount 
+                currency 
+              }
+              salesId 
+              series {
+                group {
+                  id 
+                  name 
+                  thumbnail 
+                }
+                id 
+                name 
+                shopUrl 
+                slug 
+                subSeriesName 
+              }
+              thumbnail 
+              title 
+              tonieShopUrl 
+            }
+            suitableTonies {
+              coverUrl 
+              householdId 
+              householdName 
+              id 
+              imageUrl 
+              title 
+              tonieType 
+              tuneId 
+            }
+          }
+        }
+        permission 
+      }
+      profileImage 
+    }
+    name 
+    ownerName 
+    tonieboxes {
+      accelerometerEnabled 
+      householdId 
+      id 
+      imageUrl 
+      itemId 
+      ledLevel 
+      maxHeadphoneVolume 
+      maxVolume 
+      name 
+      tapDirection 
+    }
+  }
+  invitations {
+    householdImage 
+    householdName 
+    itype 
+    token 
+  }
+  me {
+    acceptedTermsOfUse 
+    anyPublicContentTokens 
+    authCode 
+    canBuyTunes 
+    country 
+    creativeTonieShopUrl 
+    daysRemaining 
+    email 
+    firstName 
+    hasAnyCreativeTonies 
+    isBetaTester 
+    isEduUser 
+    isVerified 
+    lastName 
+    locale 
+    notificationCount 
+    ownsTunes 
+    profileImage 
+    region 
+    requiresVerificationToUpload 
+    sex 
+    tracking 
+    unicodeLocale 
+    uuid 
+  }
+  minAgeGroups {
+    id 
+    label 
+    minAges 
+  }
+  myTunes {
+    assignCountCurrent 
+    assignCountRemaining 
+    assignedTonies {
+      coverUrl 
+      householdId 
+      householdName 
+      id 
+      imageUrl 
+      title 
+      tonieType 
+      tuneId 
+    }
+    id 
+    item {
+      authors {
+        name 
+      }
+      compatibleTonies {
+        coverUrl 
+        householdId 
+        householdName 
+        id 
+        imageUrl 
+        title 
+        tonieType 
+        tuneId 
+      }
+      contentInfo {
+        chapters {
+          seconds 
+          title 
+        }
+        seconds 
+      }
+      description 
+      episodeNumber 
+      genre {
+        id 
+        title 
+      }
+      id 
+      minAge 
+      retailPrice {
+        amount 
+        centAmount 
+        currency 
+      }
+      salesId 
+      series {
+        group {
+          id 
+          name 
+          thumbnail 
+        }
+        id 
+        name 
+        shopUrl 
+        slug 
+        subSeriesName 
+      }
+      thumbnail 
+      title 
+      tonieShopUrl 
+    }
+    suitableTonies {
+      coverUrl 
+      householdId 
+      householdName 
+      id 
+      imageUrl 
+      title 
+      tonieType 
+      tuneId 
+    }
+  }
+  notifications {
+    householdId 
+    id 
+    invitationToken 
+    membershipId 
+    ntype 
+    read 
+    text 
+    timestamp 
+    tonieId 
+    tonieReason 
+  }
+  seriesGroups {
+    id 
+    name 
+    series {
+      id 
+      name 
+      slug 
+      subSeriesName 
+    }
+    thumbnail 
+  }
+  systemNotifications {
+    id 
+    translatedText 
+  }
+  tunesItems {
+    edges {
+      cursor 
+      node {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        myTune {
+          assignCountCurrent 
+          assignCountRemaining 
+          assignedTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          id 
+          suitableTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+        }
+        relatedTunesItems {
+          authors {
+            name 
+          }
+          compatibleTonies {
+            coverUrl 
+            householdId 
+            householdName 
+            id 
+            imageUrl 
+            title 
+            tonieType 
+            tuneId 
+          }
+          contentInfo {
+            chapters {
+              seconds 
+              title 
+            }
+            seconds 
+          }
+          description 
+          episodeNumber 
+          genre {
+            id 
+            title 
+          }
+          id 
+          minAge 
+          retailPrice {
+            amount 
+            centAmount 
+            currency 
+          }
+          salesId 
+          series {
+            group {
+              id 
+              name 
+              thumbnail 
+            }
+            id 
+            name 
+            shopUrl 
+            slug 
+            subSeriesName 
+          }
+          thumbnail 
+          title 
+          tonieShopUrl 
+        }
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+    }
+    pageInfo {
+      endCursor 
+      hasNextPage 
+      hasPreviousPage 
+      startCursor 
+    }
+    totalCount 
+  }
+  tunesPurchases {
+    id 
+    price {
+      amount 
+      centAmount 
+      currency 
+    }
+    tune {
+      assignCountCurrent 
+      assignCountRemaining 
+      assignedTonies {
+        coverUrl 
+        householdId 
+        householdName 
+        id 
+        imageUrl 
+        title 
+        tonieType 
+        tuneId 
+      }
+      id 
+      item {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      suitableTonies {
+        coverUrl 
+        householdId 
+        householdName 
+        id 
+        imageUrl 
+        title 
+        tonieType 
+        tuneId 
+      }
+    }
+    tunesItem {
+      authors {
+        name 
+      }
+      compatibleTonies {
+        coverUrl 
+        householdId 
+        householdName 
+        id 
+        imageUrl 
+        title 
+        tonieType 
+        tuneId 
+      }
+      contentInfo {
+        chapters {
+          seconds 
+          title 
+        }
+        seconds 
+      }
+      description 
+      episodeNumber 
+      genre {
+        id 
+        title 
+      }
+      id 
+      minAge 
+      myTune {
+        assignCountCurrent 
+        assignCountRemaining 
+        assignedTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        id 
+        suitableTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+      }
+      relatedTunesItems {
+        authors {
+          name 
+        }
+        compatibleTonies {
+          coverUrl 
+          householdId 
+          householdName 
+          id 
+          imageUrl 
+          title 
+          tonieType 
+          tuneId 
+        }
+        contentInfo {
+          chapters {
+            seconds 
+            title 
+          }
+          seconds 
+        }
+        description 
+        episodeNumber 
+        genre {
+          id 
+          title 
+        }
+        id 
+        minAge 
+        retailPrice {
+          amount 
+          centAmount 
+          currency 
+        }
+        salesId 
+        series {
+          group {
+            id 
+            name 
+            thumbnail 
+          }
+          id 
+          name 
+          shopUrl 
+          slug 
+          subSeriesName 
+        }
+        thumbnail 
+        title 
+        tonieShopUrl 
+      }
+      retailPrice {
+        amount 
+        centAmount 
+        currency 
+      }
+      salesId 
+      series {
+        group {
+          id 
+          name 
+          thumbnail 
+        }
+        id 
+        name 
+        shopUrl 
+        slug 
+        subSeriesName 
+      }
+      thumbnail 
+      title 
+      tonieShopUrl 
+    }
+  }
+  tunesSeries {
+    group {
+      id 
+      name 
+      thumbnail 
+    }
+    id 
+    name 
+    shopUrl 
+    slug 
+    subSeriesName 
+  }
+}

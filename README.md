@@ -63,6 +63,10 @@ Please take a look into the sources and tests for deeper informations.
 * `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
 * `bx_py_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
 
+### GraphQL
+
+* `graphql_introspection.introspection_query` Generate an introspection query to get an introspection doc.
+* `graphql_introspection.complete_query` Generate a full query for all fields from an introspection doc.
 
 ### misc
 

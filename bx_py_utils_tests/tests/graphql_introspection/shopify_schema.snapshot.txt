@@ -1,0 +1,2244 @@
+{
+  app {
+    apiKey 
+    appStoreAppUrl 
+    appStoreDeveloperUrl 
+    banner {
+      altText 
+      height 
+      id 
+      metafield {
+        createdAt 
+        description 
+        id 
+        key 
+        legacyResourceId 
+        namespace 
+        ownerType # Skipping enum
+        updatedAt 
+        value 
+        valueType # Skipping enum
+      }
+      metafields {
+        edges {
+          cursor 
+          node # Skipping already visited type
+        }
+        pageInfo {
+          hasNextPage 
+          hasPreviousPage 
+        }
+      }
+      originalSrc 
+      privateMetafield {
+        createdAt 
+        id 
+        key 
+        namespace 
+        updatedAt 
+        value 
+        valueType # Skipping enum
+      }
+      privateMetafields {
+        edges {
+          cursor 
+          node # Skipping already visited type
+        }
+        pageInfo # Skipping already visited type
+      }
+      transformedSrc 
+      width 
+    }
+    description 
+    developerName 
+    embedded 
+    failedRequirements {
+      action {
+        id 
+        title 
+        url 
+      }
+      message 
+    }
+    features 
+    feedback {
+      app # Skipping already visited type
+      link {
+        label 
+        translations {
+          key 
+          locale 
+          value 
+        }
+        url 
+      }
+      messages {
+        field 
+        message 
+      }
+    }
+    handle 
+    icon # Skipping already visited type
+    id 
+    installUrl 
+    installation {
+      accessScopes {
+        description 
+        handle 
+      }
+      activeSubscriptions {
+        createdAt 
+        currentPeriodEnd 
+        id 
+        lineItems {
+          id 
+          plan {
+            pricingDetails # Skipping union
+          }
+          usageRecords {
+            edges {
+              cursor 
+              node {
+                createdAt 
+                description 
+                id 
+                price {
+                  amount 
+                  currencyCode # Skipping enum
+                }
+                subscriptionLineItem # Skipping already visited type
+              }
+            }
+            pageInfo # Skipping already visited type
+          }
+        }
+        name 
+        returnUrl 
+        status # Skipping enum
+        test 
+        trialDays 
+      }
+      allSubscriptions {
+        edges {
+          cursor 
+          node # Skipping already visited type
+        }
+        pageInfo # Skipping already visited type
+      }
+      app # Skipping already visited type
+      credits {
+        edges {
+          cursor 
+          node {
+            amount # Skipping already visited type
+            createdAt 
+            description 
+            id 
+            test 
+          }
+        }
+        pageInfo # Skipping already visited type
+      }
+      id 
+      launchUrl 
+      oneTimePurchases {
+        edges {
+          cursor 
+          node {
+            createdAt 
+            id 
+            name 
+            price # Skipping already visited type
+            status # Skipping enum
+            test 
+          }
+        }
+        pageInfo # Skipping already visited type
+      }
+      publication {
+        app # Skipping already visited type
+        collectionPublicationsV3 {
+          edges {
+            cursor 
+            node {
+              isPublished 
+              publication # Skipping already visited type
+              publishDate 
+              publishable # Skipping interface
+            }
+          }
+          pageInfo # Skipping already visited type
+        }
+        collections {
+          edges {
+            cursor 
+            node {
+              availablePublicationCount 
+              description 
+              descriptionHtml 
+              feedback {
+                details # Skipping already visited type
+                summary 
+              }
+              handle 
+              hasProduct 
+              id 
+              image # Skipping already visited type
+              legacyResourceId 
+              metafield # Skipping already visited type
+              metafields # Skipping already visited type
+              privateMetafield # Skipping already visited type
+              privateMetafields # Skipping already visited type
+              products {
+                edges {
+                  cursor 
+                  node {
+                    availablePublicationCount 
+                    collections # Skipping already visited type
+                    createdAt 
+                    defaultCursor 
+                    description 
+                    descriptionHtml 
+                    featuredImage # Skipping already visited type
+                    featuredMedia # Skipping interface
+                    feedback # Skipping already visited type
+                    giftCardTemplateSuffix 
+                    handle 
+                    hasOnlyDefaultVariant 
+                    hasOutOfStockVariants 
+                    id 
+                    images {
+                      edges {
+                        cursor 
+                        node # Skipping already visited type
+                      }
+                      pageInfo # Skipping already visited type
+                    }
+                    inCollection 
+                    isGiftCard 
+                    legacyResourceId 
+                    media {
+                      edges {
+                        cursor 
+                        node # Skipping interface
+                      }
+                      pageInfo # Skipping already visited type
+                    }
+                    mediaCount 
+                    metafield # Skipping already visited type
+                    metafields # Skipping already visited type
+                    onlineStorePreviewUrl 
+                    onlineStoreUrl 
+                    options {
+                      id 
+                      name 
+                      position 
+                      translations # Skipping already visited type
+                      values 
+                    }
+                    priceRangeV2 {
+                      maxVariantPrice # Skipping already visited type
+                      minVariantPrice # Skipping already visited type
+                    }
+                    privateMetafield # Skipping already visited type
+                    privateMetafields # Skipping already visited type
+                    productType 
+                    publicationCount 
+                    publishedAt 
+                    publishedOnCurrentPublication 
+                    publishedOnPublication 
+                    requiresSellingPlan 
+                    resourcePublications # Skipping already visited type
+                    resourcePublicationsV2 {
+                      edges {
+                        cursor 
+                        node {
+                          isPublished 
+                          publication # Skipping already visited type
+                          publishDate 
+                          publishable # Skipping interface
+                        }
+                      }
+                      pageInfo # Skipping already visited type
+                    }
+                    sellingPlanGroupCount 
+                    seo {
+                      description 
+                      title 
+                    }
+                    status # Skipping enum
+                    storefrontId 
+                    tags 
+                    templateSuffix 
+                    title 
+                    totalInventory 
+                    totalVariants 
+                    tracksInventory 
+                    translations # Skipping already visited type
+                    unpublishedPublications {
+                      edges {
+                        cursor 
+                        node # Skipping already visited type
+                      }
+                      pageInfo # Skipping already visited type
+                    }
+                    updatedAt 
+                    variants {
+                      edges {
+                        cursor 
+                        node {
+                          availableForSale 
+                          barcode 
+                          compareAtPrice 
+                          createdAt 
+                          defaultCursor 
+                          deliveryProfile {
+                            activeMethodDefinitionsCount 
+                            default 
+                            id 
+                            legacyMode 
+                            locationsWithoutRatesCount 
+                            name 
+                            originLocationCount 
+                            productVariantsCountV2 {
+                              capped 
+                              count 
+                            }
+                            profileItems {
+                              edges {
+                                cursor 
+                                node {
+                                  product # Skipping already visited type
+                                  variants # Skipping already visited type
+                                }
+                              }
+                              pageInfo # Skipping already visited type
+                            }
+                            profileLocationGroups {
+                              countriesInAnyZone {
+                                country {
+                                  code {
+                                    countryCode # Skipping enum
+                                    restOfWorld 
+                                  }
+                                  id 
+                                  name 
+                                  provinces {
+                                    code 
+                                    id 
+                                    name 
+                                    translatedName 
+                                  }
+                                  translatedName 
+                                }
+                                zone 
+                              }
+                              locationGroup {
+                                id 
+                                locations {
+                                  edges {
+                                    cursor 
+                                    node {
+                                      activatable 
+                                      address {
+                                        address1 
+                                        address2 
+                                        city 
+                                        country 
+                                        countryCode 
+                                        formatted 
+                                        latitude 
+                                        longitude 
+                                        phone 
+                                        province 
+                                        provinceCode 
+                                        zip 
+                                      }
+                                      addressVerified 
+                                      deactivatable 
+                                      deactivatedAt 
+                                      deletable 
+                                      fulfillmentService {
+                                        callbackUrl 
+                                        fulfillmentOrdersOptIn 
+                                        handle 
+                                        id 
+                                        inventoryManagement 
+                                        location # Skipping already visited type
+                                        productBased 
+                                        serviceName 
+                                        shippingMethods {
+                                          code 
+                                          label 
+                                        }
+                                        type # Skipping enum
+                                      }
+                                      fulfillsOnlineOrders 
+                                      hasActiveInventory 
+                                      hasUnfulfilledOrders 
+                                      id 
+                                      inventoryLevel {
+                                        available 
+                                        canDeactivate 
+                                        createdAt 
+                                        deactivationAlert 
+                                        deactivationAlertHtml 
+                                        id 
+                                        incoming 
+                                        item {
+                                          countryCodeOfOrigin # Skipping enum
+                                          countryHarmonizedSystemCodes {
+                                            edges {
+                                              cursor 
+                                              node {
+                                                countryCode # Skipping enum
+                                                harmonizedSystemCode 
+                                              }
+                                            }
+                                            pageInfo # Skipping already visited type
+                                          }
+                                          createdAt 
+                                          duplicateSkuCount 
+                                          harmonizedSystemCode 
+                                          id 
+                                          inventoryHistoryUrl 
+                                          inventoryLevel # Skipping already visited type
+                                          inventoryLevels {
+                                            edges {
+                                              cursor 
+                                              node # Skipping already visited type
+                                            }
+                                            pageInfo # Skipping already visited type
+                                          }
+                                          legacyResourceId 
+                                          locationsCount 
+                                          provinceCodeOfOrigin 
+                                          requiresShipping 
+                                          sku 
+                                          tracked 
+                                          trackedEditable {
+                                            locked 
+                                            reason 
+                                          }
+                                          unitCost # Skipping already visited type
+                                          updatedAt 
+                                          variant # Skipping already visited type
+                                        }
+                                        location # Skipping already visited type
+                                        updatedAt 
+                                      }
+                                      inventoryLevels # Skipping already visited type
+                                      isActive 
+                                      legacyResourceId 
+                                      name 
+                                      shipsInventory 
+                                      suggestedAddresses {
+                                        address1 
+                                        address2 
+                                        city 
+                                        country 
+                                        countryCode # Skipping enum
+                                        formatted 
+                                        province 
+                                        provinceCode 
+                                        zip 
+                                      }
+                                    }
+                                  }
+                                  pageInfo # Skipping already visited type
+                                }
+                              }
+                              locationGroupZones {
+                                edges {
+                                  cursor 
+                                  node {
+                                    methodDefinitionCounts {
+                                      participantDefinitionsCount 
+                                      rateDefinitionsCount 
+                                    }
+                                    methodDefinitions {
+                                      edges {
+                                        cursor 
+                                        node {
+                                          active 
+                                          description 
+                                          id 
+                                          methodConditions {
+                                            conditionCriteria # Skipping union
+                                            field # Skipping enum
+                                            id 
+                                            operator # Skipping enum
+                                          }
+                                          name 
+                                          rateProvider # Skipping union
+                                        }
+                                      }
+                                      pageInfo # Skipping already visited type
+                                    }
+                                    zone {
+                                      countries # Skipping already visited type
+                                      id 
+                                      name 
+                                    }
+                                  }
+                                }
+                                pageInfo # Skipping already visited type
+                              }
+                            }
+                            sellingPlanGroups {
+                              edges {
+                                cursor 
+                                node {
+                                  appId 
+                                  appliesToProduct 
+                                  appliesToProductVariant 
+                                  appliesToProductVariants 
+                                  createdAt 
+                                  description 
+                                  id 
+                                  merchantCode 
+                                  name 
+                                  options 
+                                  position 
+                                  productCount 
+                                  productVariantCount 
+                                  productVariants # Skipping already visited type
+                                  products # Skipping already visited type
+                                  sellingPlans {
+                                    edges {
+                                      cursor 
+                                      node {
+                                        billingPolicy # Skipping union
+                                        createdAt 
+                                        deliveryPolicy # Skipping union
+                                        description 
+                                        id 
+                                        name 
+                                        options 
+                                        position 
+                                        pricingPolicies # Skipping union
+                                      }
+                                    }
+                                    pageInfo # Skipping already visited type
+                                  }
+                                  summary 
+                                }
+                              }
+                              pageInfo # Skipping already visited type
+                            }
+                            unassignedLocations # Skipping already visited type
+                            zoneCountryCount 
+                          }
+                          displayName 
+                          fulfillmentService # Skipping already visited type
+                          fulfillmentServiceEditable # Skipping already visited type
+                          id 
+                          image # Skipping already visited type
+                          inventoryItem # Skipping already visited type
+                          inventoryPolicy # Skipping enum
+                          inventoryQuantity 
+                          legacyResourceId 
+                          media # Skipping already visited type
+                          metafield # Skipping already visited type
+                          metafields # Skipping already visited type
+                          position 
+                          presentmentPrices {
+                            edges {
+                              cursor 
+                              node {
+                                compareAtPrice # Skipping already visited type
+                                price # Skipping already visited type
+                              }
+                            }
+                            pageInfo # Skipping already visited type
+                          }
+                          price 
+                          privateMetafield # Skipping already visited type
+                          privateMetafields # Skipping already visited type
+                          product # Skipping already visited type
+                          selectedOptions {
+                            name 
+                            value 
+                          }
+                          sellingPlanGroupCount 
+                          sku 
+                          storefrontId 
+                          taxCode 
+                          taxable 
+                          title 
+                          translations # Skipping already visited type
+                          updatedAt 
+                          weight 
+                          weightUnit # Skipping enum
+                        }
+                      }
+                      pageInfo # Skipping already visited type
+                    }
+                    vendor 
+                  }
+                }
+                pageInfo # Skipping already visited type
+              }
+              productsCount 
+              publicationCount 
+              publishedOnCurrentPublication 
+              publishedOnPublication 
+              resourcePublications # Skipping already visited type
+              resourcePublicationsV2 # Skipping already visited type
+              ruleSet {
+                appliedDisjunctively 
+                rules {
+                  column # Skipping enum
+                  condition 
+                  relation # Skipping enum
+                }
+              }
+              seo # Skipping already visited type
+              sortOrder # Skipping enum
+              storefrontId 
+              templateSuffix 
+              title 
+              translations # Skipping already visited type
+              unpublishedPublications # Skipping already visited type
+              updatedAt 
+            }
+          }
+          pageInfo # Skipping already visited type
+        }
+        hasCollection 
+        id 
+        name 
+        productPublicationsV3 # Skipping already visited type
+        products # Skipping already visited type
+        supportsFuturePublishing 
+      }
+      revenueAttributionRecords {
+        edges {
+          cursor 
+          node {
+            amount # Skipping already visited type
+            capturedAt 
+            createdAt 
+            id 
+            idempotencyKey 
+            test 
+            type # Skipping enum
+          }
+        }
+        pageInfo # Skipping already visited type
+      }
+      uninstallUrl 
+    }
+    pricingDetails 
+    pricingDetailsSummary 
+    privacyPolicyUrl 
+    published 
+    screenshots # Skipping already visited type
+    shopifyDeveloped 
+    title 
+    uninstallMessage 
+  }
+  appByHandle # Skipping already visited type
+  appByKey # Skipping already visited type
+  appInstallation # Skipping already visited type
+  appInstallations {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  automaticDiscountNode {
+    automaticDiscount # Skipping union
+    events {
+      edges {
+        cursor 
+        node # Skipping interface
+      }
+      pageInfo # Skipping already visited type
+    }
+    id 
+  }
+  automaticDiscountNodes {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  automaticDiscountSavedSearches {
+    edges {
+      cursor 
+      node {
+        filters {
+          key 
+          value 
+        }
+        id 
+        legacyResourceId 
+        name 
+        query 
+        resourceType # Skipping enum
+        searchTerms 
+      }
+    }
+    pageInfo # Skipping already visited type
+  }
+  availableCarrierServices {
+    carrierService {
+      availableServicesForCountries {
+        countries {
+          countryCodes # Skipping enum
+          restOfWorld 
+        }
+        name 
+      }
+      formattedName 
+      icon # Skipping already visited type
+      id 
+      name 
+    }
+    locations # Skipping already visited type
+  }
+  availableLocales {
+    isoCode 
+    name 
+  }
+  carrierService # Skipping already visited type
+  codeDiscountNode {
+    codeDiscount # Skipping union
+    events # Skipping already visited type
+    id 
+  }
+  codeDiscountNodeByCode # Skipping already visited type
+  codeDiscountNodes {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  codeDiscountSavedSearches # Skipping already visited type
+  collection # Skipping already visited type
+  collectionByHandle # Skipping already visited type
+  collectionRulesConditions {
+    allowedRelations # Skipping enum
+    defaultRelation # Skipping enum
+    ruleType # Skipping enum
+  }
+  collectionSavedSearches # Skipping already visited type
+  collections # Skipping already visited type
+  currentAppInstallation # Skipping already visited type
+  currentBulkOperation {
+    completedAt 
+    createdAt 
+    errorCode # Skipping enum
+    fileSize 
+    id 
+    objectCount 
+    partialDataUrl 
+    query 
+    rootObjectCount 
+    status # Skipping enum
+    url 
+  }
+  customer {
+    acceptsMarketing 
+    acceptsMarketingUpdatedAt 
+    addresses {
+      address1 
+      address2 
+      city 
+      company 
+      country 
+      countryCodeV2 # Skipping enum
+      firstName 
+      formatted 
+      formattedArea 
+      id 
+      lastName 
+      latitude 
+      longitude 
+      name 
+      phone 
+      province 
+      provinceCode 
+      zip 
+    }
+    averageOrderAmountV2 # Skipping already visited type
+    canDelete 
+    createdAt 
+    defaultAddress # Skipping already visited type
+    displayName 
+    email 
+    events # Skipping already visited type
+    firstName 
+    hasNote 
+    hasTimelineComment 
+    id 
+    image # Skipping already visited type
+    lastName 
+    lastOrder {
+      alerts {
+        actions {
+          primary 
+          show 
+          title 
+          url 
+        }
+        content 
+        dismissibleHandle 
+        icon # Skipping enum
+        severity # Skipping enum
+        title 
+      }
+      billingAddress # Skipping already visited type
+      billingAddressMatchesShippingAddress 
+      canMarkAsPaid 
+      canNotifyCustomer 
+      cancelReason # Skipping enum
+      cancelledAt 
+      capturable 
+      cartDiscountAmountSet {
+        presentmentMoney # Skipping already visited type
+        shopMoney # Skipping already visited type
+      }
+      clientIp 
+      closed 
+      closedAt 
+      confirmed 
+      createdAt 
+      currencyCode # Skipping enum
+      currentCartDiscountAmountSet # Skipping already visited type
+      currentSubtotalLineItemsQuantity 
+      currentSubtotalPriceSet # Skipping already visited type
+      currentTaxLines {
+        priceSet # Skipping already visited type
+        rate 
+        ratePercentage 
+        title 
+      }
+      currentTotalDiscountsSet # Skipping already visited type
+      currentTotalDutiesSet # Skipping already visited type
+      currentTotalPriceSet # Skipping already visited type
+      currentTotalTaxSet # Skipping already visited type
+      currentTotalWeight 
+      customAttributes {
+        key 
+        value 
+      }
+      customer # Skipping already visited type
+      customerAcceptsMarketing 
+      customerJourneySummary {
+        customerOrderIndex 
+        daysToConversion 
+        firstVisit {
+          id 
+          landingPage 
+          landingPageHtml 
+          marketingEvent {
+            app # Skipping already visited type
+            channel # Skipping enum
+            description 
+            endedAt 
+            id 
+            legacyResourceId 
+            manageUrl 
+            previewUrl 
+            remoteId 
+            scheduledToEndAt 
+            sourceAndMedium 
+            startedAt 
+            type # Skipping enum
+            utmCampaign 
+            utmMedium 
+            utmSource 
+          }
+          occurredAt 
+          referralCode 
+          referralInfoHtml 
+          referrerUrl 
+          source 
+          sourceDescription 
+          sourceType # Skipping enum
+          utmParameters {
+            campaign 
+            content 
+            medium 
+            source 
+            term 
+          }
+        }
+        lastVisit # Skipping already visited type
+        moments {
+          edges {
+            cursor 
+            node # Skipping interface
+          }
+          pageInfo # Skipping already visited type
+        }
+        momentsCount 
+        ready 
+      }
+      customerLocale 
+      discountApplications {
+        edges {
+          cursor 
+          node # Skipping interface
+        }
+        pageInfo # Skipping already visited type
+      }
+      discountCode 
+      displayAddress # Skipping already visited type
+      displayFinancialStatus # Skipping enum
+      displayFulfillmentStatus # Skipping enum
+      disputes {
+        id 
+        initiatedAs # Skipping enum
+        status # Skipping enum
+      }
+      edited 
+      email 
+      events # Skipping already visited type
+      fulfillable 
+      fulfillmentOrders {
+        edges {
+          cursor 
+          node {
+            assignedLocation {
+              address1 
+              address2 
+              city 
+              countryCode # Skipping enum
+              location # Skipping already visited type
+              name 
+              phone 
+              province 
+              zip 
+            }
+            deliveryMethod {
+              id 
+              methodType # Skipping enum
+            }
+            destination {
+              address1 
+              address2 
+              city 
+              company 
+              countryCode # Skipping enum
+              email 
+              firstName 
+              id 
+              lastName 
+              phone 
+              province 
+              zip 
+            }
+            fulfillAt 
+            fulfillments {
+              edges {
+                cursor 
+                node {
+                  createdAt 
+                  deliveredAt 
+                  displayStatus # Skipping enum
+                  estimatedDeliveryAt 
+                  events {
+                    edges {
+                      cursor 
+                      node {
+                        happenedAt 
+                        id 
+                        status # Skipping enum
+                      }
+                    }
+                    pageInfo # Skipping already visited type
+                  }
+                  fulfillmentLineItems {
+                    edges {
+                      cursor 
+                      node {
+                        discountedTotalSet # Skipping already visited type
+                        id 
+                        lineItem {
+                          contract {
+                            app # Skipping already visited type
+                            appAdminUrl 
+                            billingAttempts {
+                              edges {
+                                cursor 
+                                node {
+                                  completedAt 
+                                  createdAt 
+                                  errorCode # Skipping enum
+                                  errorMessage 
+                                  id 
+                                  idempotencyKey 
+                                  nextActionUrl 
+                                  order # Skipping already visited type
+                                  ready 
+                                  subscriptionContract # Skipping already visited type
+                                }
+                              }
+                              pageInfo # Skipping already visited type
+                            }
+                            billingPolicy {
+                              anchors {
+                                day 
+                                month 
+                                type # Skipping enum
+                              }
+                              interval # Skipping enum
+                              intervalCount 
+                              maxCycles 
+                              minCycles 
+                            }
+                            createdAt 
+                            currencyCode # Skipping enum
+                            customer # Skipping already visited type
+                            customerPaymentMethod {
+                              customer # Skipping already visited type
+                              id 
+                              instrument # Skipping union
+                              revokedAt 
+                              subscriptionContracts {
+                                edges {
+                                  cursor 
+                                  node # Skipping already visited type
+                                }
+                                pageInfo # Skipping already visited type
+                              }
+                            }
+                            deliveryMethod # Skipping union
+                            deliveryPolicy {
+                              anchors # Skipping already visited type
+                              interval # Skipping enum
+                              intervalCount 
+                            }
+                            deliveryPrice # Skipping already visited type
+                            discounts {
+                              edges {
+                                cursor 
+                                node {
+                                  entitledLines {
+                                    all 
+                                    lines {
+                                      edges {
+                                        cursor 
+                                        node {
+                                          currentPrice # Skipping already visited type
+                                          customAttributes # Skipping already visited type
+                                          discountAllocations {
+                                            amount # Skipping already visited type
+                                            discount # Skipping union
+                                          }
+                                          id 
+                                          lineDiscountedPrice # Skipping already visited type
+                                          pricingPolicy {
+                                            basePrice # Skipping already visited type
+                                            cycleDiscounts {
+                                              adjustmentType # Skipping enum
+                                              adjustmentValue # Skipping union
+                                              afterCycle 
+                                              computedPrice # Skipping already visited type
+                                            }
+                                          }
+                                          productId 
+                                          quantity 
+                                          requiresShipping 
+                                          sellingPlanId 
+                                          sellingPlanName 
+                                          sku 
+                                          taxable 
+                                          title 
+                                          variantId 
+                                          variantImage # Skipping already visited type
+                                          variantTitle 
+                                        }
+                                      }
+                                      pageInfo # Skipping already visited type
+                                    }
+                                  }
+                                  id 
+                                  recurringCycleLimit 
+                                  rejectionReason # Skipping enum
+                                  targetType # Skipping enum
+                                  title 
+                                  type # Skipping enum
+                                  usageCount 
+                                  value # Skipping union
+                                }
+                              }
+                              pageInfo # Skipping already visited type
+                            }
+                            id 
+                            lastPaymentStatus # Skipping enum
+                            lineCount 
+                            lines # Skipping already visited type
+                            nextBillingDate 
+                            orders {
+                              edges {
+                                cursor 
+                                node # Skipping already visited type
+                              }
+                              pageInfo # Skipping already visited type
+                            }
+                            originOrder # Skipping already visited type
+                            status # Skipping enum
+                            updatedAt 
+                          }
+                          currentQuantity 
+                          customAttributes # Skipping already visited type
+                          discountAllocations {
+                            allocatedAmountSet # Skipping already visited type
+                            discountApplication # Skipping interface
+                          }
+                          discountedTotalSet # Skipping already visited type
+                          discountedUnitPriceSet # Skipping already visited type
+                          duties {
+                            countryCodeOfOrigin # Skipping enum
+                            harmonizedSystemCode 
+                            id 
+                            price # Skipping already visited type
+                            taxLines # Skipping already visited type
+                          }
+                          fulfillableQuantity 
+                          fulfillmentService # Skipping already visited type
+                          fulfillmentStatus 
+                          id 
+                          image # Skipping already visited type
+                          merchantEditable 
+                          name 
+                          nonFulfillableQuantity 
+                          originalTotalSet # Skipping already visited type
+                          originalUnitPriceSet # Skipping already visited type
+                          product # Skipping already visited type
+                          quantity 
+                          refundableQuantity 
+                          requiresShipping 
+                          restockable 
+                          sellingPlan {
+                            name 
+                          }
+                          sku 
+                          taxLines # Skipping already visited type
+                          taxable 
+                          title 
+                          totalDiscountSet # Skipping already visited type
+                          unfulfilledDiscountedTotalSet # Skipping already visited type
+                          unfulfilledOriginalTotalSet # Skipping already visited type
+                          unfulfilledQuantity 
+                          variant # Skipping already visited type
+                          variantTitle 
+                          vendor 
+                        }
+                        originalTotalSet # Skipping already visited type
+                        quantity 
+                      }
+                    }
+                    pageInfo # Skipping already visited type
+                  }
+                  fulfillmentOrders # Skipping already visited type
+                  id 
+                  inTransitAt 
+                  legacyResourceId 
+                  location # Skipping already visited type
+                  name 
+                  order # Skipping already visited type
+                  requiresShipping 
+                  service # Skipping already visited type
+                  status # Skipping enum
+                  totalQuantity 
+                  trackingInfo {
+                    company 
+                    number 
+                    url 
+                  }
+                  updatedAt 
+                }
+              }
+              pageInfo # Skipping already visited type
+            }
+            id 
+            lineItems {
+              edges {
+                cursor 
+                node {
+                  id 
+                  lineItem # Skipping already visited type
+                  remainingQuantity 
+                  totalQuantity 
+                }
+              }
+              pageInfo # Skipping already visited type
+            }
+            locationsForMove {
+              edges {
+                cursor 
+                node {
+                  location # Skipping already visited type
+                  message 
+                  movable 
+                }
+              }
+              pageInfo # Skipping already visited type
+            }
+            merchantRequests {
+              edges {
+                cursor 
+                node {
+                  id 
+                  kind # Skipping enum
+                  message 
+                  requestOptions 
+                  responseData 
+                  sentAt 
+                }
+              }
+              pageInfo # Skipping already visited type
+            }
+            order # Skipping already visited type
+            requestStatus # Skipping enum
+            status # Skipping enum
+            supportedActions {
+              action # Skipping enum
+              externalUrl 
+            }
+          }
+        }
+        pageInfo # Skipping already visited type
+      }
+      fulfillments # Skipping already visited type
+      fullyPaid 
+      hasTimelineComment 
+      id 
+      legacyResourceId 
+      lineItems {
+        edges {
+          cursor 
+          node # Skipping already visited type
+        }
+        pageInfo # Skipping already visited type
+      }
+      localizationExtensions {
+        edges {
+          cursor 
+          node {
+            countryCode # Skipping enum
+            key # Skipping enum
+            purpose # Skipping enum
+            title 
+            value 
+          }
+        }
+        pageInfo # Skipping already visited type
+      }
+      merchantEditable 
+      merchantEditableErrors 
+      metafield # Skipping already visited type
+      metafields # Skipping already visited type
+      name 
+      netPaymentSet # Skipping already visited type
+      nonFulfillableLineItems # Skipping already visited type
+      note 
+      originalTotalDutiesSet # Skipping already visited type
+      originalTotalPriceSet # Skipping already visited type
+      paymentCollectionDetails {
+        additionalPaymentCollectionUrl 
+      }
+      paymentGatewayNames 
+      phone 
+      physicalLocation # Skipping already visited type
+      presentmentCurrencyCode # Skipping enum
+      privateMetafield # Skipping already visited type
+      privateMetafields # Skipping already visited type
+      processedAt 
+      publication # Skipping already visited type
+      refundDiscrepancySet # Skipping already visited type
+      refundable 
+      refunds {
+        createdAt 
+        duties {
+          amountSet # Skipping already visited type
+          originalDuty # Skipping already visited type
+        }
+        id 
+        legacyResourceId 
+        note 
+        order # Skipping already visited type
+        refundLineItems {
+          edges {
+            cursor 
+            node {
+              lineItem # Skipping already visited type
+              location # Skipping already visited type
+              priceSet # Skipping already visited type
+              quantity 
+              restockType # Skipping enum
+              restocked 
+              subtotalSet # Skipping already visited type
+              totalTaxSet # Skipping already visited type
+            }
+          }
+          pageInfo # Skipping already visited type
+        }
+        totalRefundedSet # Skipping already visited type
+        transactions {
+          edges {
+            cursor 
+            node {
+              accountNumber 
+              amountSet # Skipping already visited type
+              authorizationCode 
+              authorizationExpiresAt 
+              createdAt 
+              errorCode # Skipping enum
+              fees {
+                amount # Skipping already visited type
+                flatFee # Skipping already visited type
+                flatFeeName 
+                id 
+                rate 
+                rateName 
+                taxAmount # Skipping already visited type
+                type 
+              }
+              formattedGateway 
+              gateway 
+              id 
+              kind # Skipping enum
+              manuallyCapturable 
+              maximumRefundableV2 # Skipping already visited type
+              order # Skipping already visited type
+              parentTransaction # Skipping already visited type
+              paymentIcon # Skipping already visited type
+              processedAt 
+              settlementCurrency # Skipping enum
+              settlementCurrencyRate 
+              shopifyPaymentsSet {
+                extendedAuthorizationSet {
+                  extendedAuthorizationExpiresAt 
+                  standardAuthorizationExpiresAt 
+                }
+              }
+              status # Skipping enum
+              test 
+              totalUnsettledSet # Skipping already visited type
+            }
+          }
+          pageInfo # Skipping already visited type
+        }
+        updatedAt 
+      }
+      requiresShipping 
+      restockable 
+      riskLevel # Skipping enum
+      risks {
+        display 
+        level # Skipping enum
+        message 
+      }
+      shippingAddress # Skipping already visited type
+      shippingLine {
+        carrierIdentifier 
+        code 
+        custom 
+        deliveryCategory 
+        discountAllocations # Skipping already visited type
+        discountedPriceSet # Skipping already visited type
+        id 
+        originalPriceSet # Skipping already visited type
+        phone 
+        requestedFulfillmentService # Skipping already visited type
+        shippingRateHandle 
+        source 
+        taxLines # Skipping already visited type
+        title 
+      }
+      shippingLines {
+        edges {
+          cursor 
+          node # Skipping already visited type
+        }
+        pageInfo # Skipping already visited type
+      }
+      subtotalLineItemsQuantity 
+      subtotalPriceSet # Skipping already visited type
+      suggestedRefund {
+        amountSet # Skipping already visited type
+        discountedSubtotalSet # Skipping already visited type
+        maximumRefundableSet # Skipping already visited type
+        refundDuties # Skipping already visited type
+        refundLineItems # Skipping already visited type
+        shipping {
+          amountSet # Skipping already visited type
+          maximumRefundableSet # Skipping already visited type
+          taxSet # Skipping already visited type
+        }
+        subtotalSet # Skipping already visited type
+        suggestedTransactions {
+          accountNumber 
+          amountSet # Skipping already visited type
+          formattedGateway 
+          gateway 
+          kind # Skipping enum
+          maximumRefundableSet # Skipping already visited type
+          parentTransaction # Skipping already visited type
+        }
+        totalCartDiscountAmountSet # Skipping already visited type
+        totalDutiesSet # Skipping already visited type
+        totalTaxSet # Skipping already visited type
+      }
+      tags 
+      taxLines # Skipping already visited type
+      taxesIncluded 
+      test 
+      totalCapturableSet # Skipping already visited type
+      totalDiscountsSet # Skipping already visited type
+      totalOutstandingSet # Skipping already visited type
+      totalPriceSet # Skipping already visited type
+      totalReceivedSet # Skipping already visited type
+      totalRefundedSet # Skipping already visited type
+      totalRefundedShippingSet # Skipping already visited type
+      totalShippingPriceSet # Skipping already visited type
+      totalTaxSet # Skipping already visited type
+      totalTipReceivedSet # Skipping already visited type
+      totalWeight 
+      transactions # Skipping already visited type
+      unpaid 
+      updatedAt 
+    }
+    legacyResourceId 
+    lifetimeDuration 
+    locale 
+    marketingOptInLevel # Skipping enum
+    metafield # Skipping already visited type
+    metafields # Skipping already visited type
+    multipassIdentifier 
+    note 
+    orders # Skipping already visited type
+    ordersCount 
+    paymentMethods {
+      edges {
+        cursor 
+        node # Skipping already visited type
+      }
+      pageInfo # Skipping already visited type
+    }
+    phone 
+    privateMetafield # Skipping already visited type
+    privateMetafields # Skipping already visited type
+    productSubscriberStatus # Skipping enum
+    state # Skipping enum
+    subscriptionContracts # Skipping already visited type
+    tags 
+    taxExempt 
+    taxExemptions # Skipping enum
+    totalSpent 
+    totalSpentV2 # Skipping already visited type
+    updatedAt 
+    validEmailAddress 
+    verifiedEmail 
+  }
+  customerPaymentMethod # Skipping already visited type
+  customerSavedSearches # Skipping already visited type
+  customers {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  deletionEvents {
+    edges {
+      cursor 
+      node {
+        occurredAt 
+        subjectId 
+        subjectType # Skipping enum
+      }
+    }
+    pageInfo # Skipping already visited type
+  }
+  deliveryProfile # Skipping already visited type
+  deliveryProfiles {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  deliverySettings {
+    legacyModeBlocked {
+      blocked 
+      reasons # Skipping enum
+    }
+    legacyModeProfiles 
+  }
+  discountCodeCount 
+  discountRedeemCodeBulkCreation {
+    codes {
+      edges {
+        cursor 
+        node {
+          code 
+          discountRedeemCode {
+            asyncUsageCount 
+            code 
+            createdBy # Skipping already visited type
+            id 
+          }
+          errors {
+            code # Skipping enum
+            extraInfo 
+            field 
+            message 
+          }
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    codesCount 
+    createdAt 
+    discountCode # Skipping already visited type
+    done 
+    failedCount 
+    id 
+    importedCount 
+  }
+  discountRedeemCodeSavedSearches # Skipping already visited type
+  domain {
+    host 
+    id 
+    localization {
+      alternateLocales 
+      country 
+      defaultLocale 
+    }
+    sslEnabled 
+    url 
+  }
+  draftOrder {
+    appliedDiscount {
+      amountV2 # Skipping already visited type
+      description 
+      title 
+      value 
+      valueType # Skipping enum
+    }
+    billingAddress # Skipping already visited type
+    completedAt 
+    createdAt 
+    currencyCode # Skipping enum
+    customAttributes # Skipping already visited type
+    customer # Skipping already visited type
+    email 
+    events # Skipping already visited type
+    hasTimelineComment 
+    id 
+    invoiceSentAt 
+    invoiceUrl 
+    legacyResourceId 
+    lineItems {
+      edges {
+        cursor 
+        node {
+          appliedDiscount # Skipping already visited type
+          custom 
+          customAttributes # Skipping already visited type
+          discountedTotal 
+          discountedUnitPrice 
+          fulfillmentService # Skipping already visited type
+          id 
+          image # Skipping already visited type
+          isGiftCard 
+          name 
+          originalTotal 
+          originalUnitPrice 
+          product # Skipping already visited type
+          quantity 
+          requiresShipping 
+          sku 
+          taxLines # Skipping already visited type
+          taxable 
+          title 
+          totalDiscount 
+          variant # Skipping already visited type
+          variantTitle 
+          vendor 
+          weight {
+            unit # Skipping enum
+            value 
+          }
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    localizationExtensions # Skipping already visited type
+    metafield # Skipping already visited type
+    metafields # Skipping already visited type
+    name 
+    note2 
+    order # Skipping already visited type
+    privateMetafield # Skipping already visited type
+    privateMetafields # Skipping already visited type
+    ready 
+    shippingAddress # Skipping already visited type
+    shippingLine # Skipping already visited type
+    status # Skipping enum
+    subtotalPrice 
+    tags 
+    taxExempt 
+    taxLines # Skipping already visited type
+    taxesIncluded 
+    totalPrice 
+    totalShippingPrice 
+    totalTax 
+    totalWeight 
+    updatedAt 
+  }
+  draftOrderSavedSearches # Skipping already visited type
+  draftOrders {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  fulfillment # Skipping already visited type
+  fulfillmentOrder # Skipping already visited type
+  fulfillmentService # Skipping already visited type
+  giftCard {
+    balance # Skipping already visited type
+    createdAt 
+    customer # Skipping already visited type
+    disabledAt 
+    enabled 
+    expiresOn 
+    id 
+    initialValue # Skipping already visited type
+    lastCharacters 
+    maskedCode 
+    note 
+    order # Skipping already visited type
+  }
+  giftCards {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  giftCardsCount 
+  inventoryItem # Skipping already visited type
+  inventoryItems {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  inventoryLevel # Skipping already visited type
+  job {
+    done 
+    id 
+    query # Skipping already visited type
+  }
+  location # Skipping already visited type
+  locations # Skipping already visited type
+  locationsAvailableForDeliveryProfilesConnection # Skipping already visited type
+  marketingActivities {
+    edges {
+      cursor 
+      node {
+        activityListUrl 
+        adSpend # Skipping already visited type
+        app # Skipping already visited type
+        appErrors {
+          code # Skipping enum
+          userErrors # Skipping already visited type
+        }
+        budget {
+          budgetType # Skipping enum
+          total # Skipping already visited type
+        }
+        createdAt 
+        formData 
+        id 
+        marketingChannel # Skipping enum
+        marketingEvent # Skipping already visited type
+        sourceAndMedium 
+        status # Skipping enum
+        statusBadgeType # Skipping enum
+        statusLabel 
+        statusTransitionedAt 
+        tactic # Skipping enum
+        targetStatus # Skipping enum
+        title 
+        updatedAt 
+        utmParameters # Skipping already visited type
+      }
+    }
+    pageInfo # Skipping already visited type
+  }
+  marketingActivity # Skipping already visited type
+  marketingEvent # Skipping already visited type
+  marketingEvents {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  metafield # Skipping already visited type
+  metafieldStorefrontVisibilities {
+    edges {
+      cursor 
+      node {
+        createdAt 
+        id 
+        key 
+        legacyResourceId 
+        namespace 
+        ownerType # Skipping enum
+        updatedAt 
+      }
+    }
+    pageInfo # Skipping already visited type
+  }
+  metafieldStorefrontVisibility # Skipping already visited type
+  node # Skipping interface
+  nodes # Skipping interface
+  order # Skipping already visited type
+  orderSavedSearches # Skipping already visited type
+  orders # Skipping already visited type
+  priceList {
+    contextRule {
+      countries # Skipping enum
+    }
+    currency # Skipping enum
+    id 
+    name 
+    parent {
+      adjustment {
+        type # Skipping enum
+        value 
+      }
+    }
+    prices {
+      edges {
+        cursor 
+        node {
+          compareAtPrice # Skipping already visited type
+          originType # Skipping enum
+          price # Skipping already visited type
+          variant # Skipping already visited type
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+  }
+  priceLists {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  priceRule {
+    allocationLimit 
+    allocationMethod # Skipping enum
+    app # Skipping already visited type
+    createdAt 
+    customerSelection {
+      customers # Skipping already visited type
+      forAllCustomers 
+      savedSearches # Skipping already visited type
+    }
+    discountCodes {
+      edges {
+        cursor 
+        node {
+          app # Skipping already visited type
+          code 
+          id 
+          usageCount 
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    discountCodesCount 
+    endsAt 
+    events # Skipping already visited type
+    features # Skipping enum
+    hasTimelineComment 
+    id 
+    itemEntitlements {
+      collections # Skipping already visited type
+      productVariants # Skipping already visited type
+      products # Skipping already visited type
+      targetAllLineItems 
+    }
+    itemPrerequisites {
+      collections # Skipping already visited type
+      productVariants # Skipping already visited type
+      products # Skipping already visited type
+    }
+    legacyResourceId 
+    oncePerCustomer 
+    prerequisiteQuantityRange {
+      greaterThan 
+      greaterThanOrEqualTo 
+      lessThan 
+      lessThanOrEqualTo 
+    }
+    prerequisiteShippingPriceRange {
+      greaterThan 
+      greaterThanOrEqualTo 
+      lessThan 
+      lessThanOrEqualTo 
+    }
+    prerequisiteSubtotalRange # Skipping already visited type
+    prerequisiteToEntitlementQuantityRatio {
+      entitlementQuantity 
+      prerequisiteQuantity 
+    }
+    shareableUrls {
+      targetItemImage # Skipping already visited type
+      targetType # Skipping enum
+      title 
+      url 
+    }
+    shippingEntitlements {
+      countryCodes # Skipping enum
+      includeRestOfWorld 
+      targetAllShippingLines 
+    }
+    startsAt 
+    status # Skipping enum
+    summary 
+    target # Skipping enum
+    title 
+    totalSales # Skipping already visited type
+    usageCount 
+    usageLimit 
+    validityPeriod {
+      end 
+      start 
+    }
+    valueV2 # Skipping union
+  }
+  priceRuleSavedSearches # Skipping already visited type
+  priceRules {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  privateMetafield # Skipping already visited type
+  privateMetafields # Skipping already visited type
+  product # Skipping already visited type
+  productByHandle # Skipping already visited type
+  productSavedSearches # Skipping already visited type
+  productVariant # Skipping already visited type
+  productVariants # Skipping already visited type
+  products # Skipping already visited type
+  publicApiVersions {
+    displayName 
+    handle 
+    supported 
+  }
+  publication # Skipping already visited type
+  publications # Skipping already visited type
+  refund # Skipping already visited type
+  scriptTag {
+    cache 
+    createdAt 
+    displayScope # Skipping enum
+    id 
+    legacyResourceId 
+    src 
+    updatedAt 
+  }
+  scriptTags {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  sellingPlanGroup # Skipping already visited type
+  sellingPlanGroups # Skipping already visited type
+  shop {
+    alerts {
+      action {
+        title 
+        url 
+      }
+      description 
+    }
+    analyticsToken 
+    assignedFulfillmentOrders # Skipping already visited type
+    availableChannelApps {
+      edges {
+        cursor 
+        node # Skipping already visited type
+      }
+      pageInfo # Skipping already visited type
+    }
+    billingAddress # Skipping already visited type
+    checkoutApiSupported 
+    contactEmail 
+    countriesInShippingZones {
+      countryCodes # Skipping enum
+      includeRestOfWorld 
+    }
+    currencyCode # Skipping enum
+    currencyFormats {
+      moneyFormat 
+      moneyInEmailsFormat 
+      moneyWithCurrencyFormat 
+      moneyWithCurrencyInEmailsFormat 
+    }
+    currencySettings {
+      edges {
+        cursor 
+        node {
+          currencyCode # Skipping enum
+          currencyName 
+          enabled 
+          rateUpdatedAt 
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    customerAccounts # Skipping enum
+    customerTags {
+      edges {
+        cursor 
+        node 
+      }
+      pageInfo # Skipping already visited type
+    }
+    description 
+    domains # Skipping already visited type
+    draftOrderTags # Skipping already visited type
+    email 
+    enabledPresentmentCurrencies # Skipping enum
+    features {
+      avalaraAvatax 
+      branding # Skipping enum
+      captcha 
+      captchaExternalDomains 
+      dynamicRemarketing 
+      eligibleForSubscriptionMigration 
+      eligibleForSubscriptions 
+      giftCards 
+      harmonizedSystemCode 
+      internationalDomains 
+      internationalPriceOverrides 
+      internationalPriceRules 
+      legacySubscriptionGatewayEnabled 
+      liveView 
+      multiLocation 
+      onboardingVisual 
+      reports 
+      sellsSubscriptions 
+      showMetrics 
+      storefront 
+      usingShopifyBalance 
+    }
+    fulfillmentOrders # Skipping already visited type
+    fulfillmentServices # Skipping already visited type
+    ianaTimezone 
+    id 
+    limitedPendingOrderCount {
+      atMax 
+      count 
+    }
+    metafield # Skipping already visited type
+    metafields # Skipping already visited type
+    myshopifyDomain 
+    name 
+    navigationSettings # Skipping already visited type
+    orderNumberFormatPrefix 
+    orderNumberFormatSuffix 
+    orderTags # Skipping already visited type
+    paymentSettings {
+      supportedDigitalWallets # Skipping enum
+    }
+    plan {
+      displayName 
+      partnerDevelopment 
+      shopifyPlus 
+    }
+    primaryDomain # Skipping already visited type
+    privateMetafield # Skipping already visited type
+    privateMetafields # Skipping already visited type
+    productImages # Skipping already visited type
+    productTags # Skipping already visited type
+    productTypes # Skipping already visited type
+    productVendors # Skipping already visited type
+    publicationCount 
+    resourceLimits {
+      locationLimit 
+      maxProductOptions 
+      maxProductVariants 
+      redirectLimitReached 
+      skuResourceLimits {
+        available 
+        quantityAvailable 
+        quantityLimit 
+        quantityUsed 
+      }
+    }
+    richTextEditorUrl 
+    search {
+      edges {
+        cursor 
+        node {
+          description 
+          image # Skipping already visited type
+          reference # Skipping interface
+          title 
+          url 
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    searchFilters {
+      productAvailability {
+        label 
+        value 
+      }
+    }
+    setupRequired 
+    shipsToCountries # Skipping enum
+    shopPolicies {
+      body 
+      id 
+      translations # Skipping already visited type
+      type # Skipping enum
+      url 
+    }
+    storefrontAccessTokens {
+      edges {
+        cursor 
+        node {
+          accessScopes # Skipping already visited type
+          accessToken 
+          createdAt 
+          id 
+          title 
+          updatedAt 
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    taxShipping 
+    taxesIncluded 
+    timezoneAbbreviation 
+    timezoneOffset 
+    timezoneOffsetMinutes 
+    translations # Skipping already visited type
+    unitSystem # Skipping enum
+    uploadedImages # Skipping already visited type
+    uploadedImagesByIds # Skipping already visited type
+    url 
+    weightUnit # Skipping enum
+  }
+  shopLocales {
+    locale 
+    name 
+    primary 
+    published 
+  }
+  shopifyPaymentsAccount {
+    activated 
+    balance # Skipping already visited type
+    bankAccounts {
+      edges {
+        cursor 
+        node {
+          accountNumber 
+          accountNumberLastDigits 
+          bankName 
+          country # Skipping enum
+          createdAt 
+          currency # Skipping enum
+          id 
+          payouts {
+            edges {
+              cursor 
+              node {
+                bankAccount # Skipping already visited type
+                id 
+                issuedAt 
+                legacyResourceId 
+                net # Skipping already visited type
+                status # Skipping enum
+                summary {
+                  adjustmentsFee # Skipping already visited type
+                  adjustmentsGross # Skipping already visited type
+                  chargesFee # Skipping already visited type
+                  chargesGross # Skipping already visited type
+                  refundsFee # Skipping already visited type
+                  refundsFeeGross # Skipping already visited type
+                  reservedFundsFee # Skipping already visited type
+                  reservedFundsGross # Skipping already visited type
+                  retriedPayoutsFee # Skipping already visited type
+                  retriedPayoutsGross # Skipping already visited type
+                }
+                transactionType # Skipping enum
+              }
+            }
+            pageInfo # Skipping already visited type
+          }
+          routingNumber 
+          status # Skipping enum
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    chargeStatementDescriptors # Skipping interface
+    country 
+    defaultCurrency # Skipping enum
+    disputes {
+      edges {
+        cursor 
+        node {
+          amount # Skipping already visited type
+          evidenceDueBy 
+          evidenceSentOn 
+          finalizedOn 
+          id 
+          initiatedAt 
+          legacyResourceId 
+          order # Skipping already visited type
+          reasonDetails {
+            networkReasonCode 
+            reason # Skipping enum
+          }
+          status # Skipping enum
+          type # Skipping enum
+        }
+      }
+      pageInfo # Skipping already visited type
+    }
+    fraudSettings {
+      declineChargeOnAvsFailure 
+      declineChargeOnCvcFailure 
+    }
+    id 
+    notificationSettings {
+      payouts 
+    }
+    onboardable 
+    payoutSchedule {
+      interval # Skipping enum
+      monthlyAnchor 
+      weeklyAnchor # Skipping enum
+    }
+    payoutStatementDescriptor 
+    payouts # Skipping already visited type
+    permittedVerificationDocuments {
+      backRequired 
+      frontRequired 
+      type # Skipping enum
+    }
+    verifications {
+      id 
+      status # Skipping enum
+      subject {
+        familyName 
+        givenName 
+      }
+    }
+  }
+  subscriptionBillingAttempt # Skipping already visited type
+  subscriptionContract # Skipping already visited type
+  subscriptionContracts # Skipping already visited type
+  subscriptionDraft {
+    billingPolicy # Skipping already visited type
+    currencyCode # Skipping enum
+    customer # Skipping already visited type
+    customerPaymentMethod # Skipping already visited type
+    deliveryMethod # Skipping union
+    deliveryPolicy # Skipping already visited type
+    deliveryPrice # Skipping already visited type
+    discounts {
+      edges {
+        cursor 
+        node # Skipping union
+      }
+      pageInfo # Skipping already visited type
+    }
+    discountsAdded # Skipping already visited type
+    discountsRemoved # Skipping already visited type
+    discountsUpdated # Skipping already visited type
+    id 
+    lines # Skipping already visited type
+    linesAdded # Skipping already visited type
+    linesRemoved # Skipping already visited type
+    nextBillingDate 
+    originalContract # Skipping already visited type
+    shippingOptions # Skipping union
+    status # Skipping enum
+  }
+  tenderTransactions {
+    edges {
+      cursor 
+      node {
+        amount # Skipping already visited type
+        id 
+        paymentMethod 
+        processedAt 
+        remoteReference 
+        test 
+        transactionDetails # Skipping union
+      }
+    }
+    pageInfo # Skipping already visited type
+  }
+  translatableResource {
+    resourceId 
+    translatableContent {
+      digest 
+      key 
+      locale 
+      value 
+    }
+    translations {
+      key 
+      locale 
+      outdated 
+      value 
+    }
+  }
+  translatableResources {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+  webhookSubscription {
+    createdAt 
+    endpoint # Skipping union
+    format # Skipping enum
+    id 
+    includeFields 
+    legacyResourceId 
+    metafieldNamespaces 
+    topic # Skipping enum
+    updatedAt 
+  }
+  webhookSubscriptions {
+    edges {
+      cursor 
+      node # Skipping already visited type
+    }
+    pageInfo # Skipping already visited type
+  }
+}
