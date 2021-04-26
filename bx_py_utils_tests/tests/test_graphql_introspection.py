@@ -36,3 +36,6 @@ class GraphQLIntrospectionTest(TestCase):
 
         got = complete_query(introspection_doc, 'Product')
         assert_text_snapshot(TEST_DIR, 'shopify_product_only', got)
+
+        depth2 = complete_query(introspection_doc, 'Product', max_depth=2)
+        assert_text_snapshot(TEST_DIR, 'shopify_product_only_depth2', depth2)
