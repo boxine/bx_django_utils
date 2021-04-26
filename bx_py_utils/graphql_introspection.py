@@ -51,7 +51,8 @@ def _resolve_type(types_by_name, graphql_type):
         return graphql_type
 
 
-def _craft_complete_query(types_by_name, visited_types, graphql_type, allow_recursive, indent=''):
+def _craft_complete_query(types_by_name, visited_types, graphql_type, allow_recursive,
+                          max_depth=None, indent=''):
     graphql_type = _resolve_type(types_by_name, graphql_type)
 
     if graphql_type in visited_types:
@@ -67,12 +68,15 @@ def _craft_complete_query(types_by_name, visited_types, graphql_type, allow_recu
     elif kind == 'INTERFACE':
         return '# Skipping interface'
     elif kind == 'OBJECT':
+        if max_depth is not None and max_depth <= 0:
+            return '# More details hidden by max_depth'
+        next_max_depth = max_depth if max_depth is None else max_depth - 1
         visited_types.append(graphql_type)
         fields = sorted(graphql_type['fields'], key=lambda t: t['name'])
         return '{\n' + '\n'.join(
             (f'{indent}  {field["name"]} ' + _craft_complete_query(
                 types_by_name, visited_types[:] if allow_recursive else visited_types,
-                field['type'], allow_recursive, indent + '  '
+                field['type'], allow_recursive, next_max_depth, indent + '  '
             ))
             for field in fields
         ) + '\n' + indent + '}'
@@ -80,9 +84,11 @@ def _craft_complete_query(types_by_name, visited_types, graphql_type, allow_recu
         raise ValueError(f'Unsupported GraphQL kind {kind}')
 
 
-def complete_query(schema_doc: dict, root_name: str, allow_recursive=True) -> str:
+def complete_query(schema_doc: dict, root_name: str, allow_recursive=True, max_depth=None) -> str:
     types_by_name = {}
     for graphql_type in schema_doc['__schema']['types']:
         types_by_name[graphql_type['name']] = graphql_type
 
-    return _craft_complete_query(types_by_name, [], types_by_name[root_name], allow_recursive)
+    return _craft_complete_query(
+        types_by_name, [], types_by_name[root_name],
+        allow_recursive=allow_recursive, max_depth=max_depth)

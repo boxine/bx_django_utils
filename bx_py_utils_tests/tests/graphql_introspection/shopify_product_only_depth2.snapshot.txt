@@ -1,0 +1,129 @@
+{
+  availablePublicationCount 
+  collections {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  createdAt 
+  defaultCursor 
+  description 
+  descriptionHtml 
+  featuredImage {
+    altText 
+    height 
+    id 
+    metafield # More details hidden by max_depth
+    metafields # More details hidden by max_depth
+    originalSrc 
+    privateMetafield # More details hidden by max_depth
+    privateMetafields # More details hidden by max_depth
+    transformedSrc 
+    width 
+  }
+  featuredMedia # Skipping interface
+  feedback {
+    details # More details hidden by max_depth
+    summary 
+  }
+  giftCardTemplateSuffix 
+  handle 
+  hasOnlyDefaultVariant 
+  hasOutOfStockVariants 
+  id 
+  images {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  inCollection 
+  isGiftCard 
+  legacyResourceId 
+  media {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  mediaCount 
+  metafield {
+    createdAt 
+    description 
+    id 
+    key 
+    legacyResourceId 
+    namespace 
+    ownerType # Skipping enum
+    updatedAt 
+    value 
+    valueType # Skipping enum
+  }
+  metafields {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  onlineStorePreviewUrl 
+  onlineStoreUrl 
+  options {
+    id 
+    name 
+    position 
+    translations # More details hidden by max_depth
+    values 
+  }
+  priceRangeV2 {
+    maxVariantPrice # More details hidden by max_depth
+    minVariantPrice # More details hidden by max_depth
+  }
+  privateMetafield {
+    createdAt 
+    id 
+    key 
+    namespace 
+    updatedAt 
+    value 
+    valueType # Skipping enum
+  }
+  privateMetafields {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  productType 
+  publicationCount 
+  publishedAt 
+  publishedOnCurrentPublication 
+  publishedOnPublication 
+  requiresSellingPlan 
+  resourcePublications {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  resourcePublicationsV2 {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  sellingPlanGroupCount 
+  seo {
+    description 
+    title 
+  }
+  status # Skipping enum
+  storefrontId 
+  tags 
+  templateSuffix 
+  title 
+  totalInventory 
+  totalVariants 
+  tracksInventory 
+  translations {
+    key 
+    locale 
+    value 
+  }
+  unpublishedPublications {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  updatedAt 
+  variants {
+    edges # More details hidden by max_depth
+    pageInfo # More details hidden by max_depth
+  }
+  vendor 
+}
