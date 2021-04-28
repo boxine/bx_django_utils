@@ -9,11 +9,13 @@ def _write_json(obj, snapshot_file):
         json.dump(obj, snapshot_handle, ensure_ascii=False, indent=4, sort_keys=True)
 
 
-def assert_text_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got: str):
+def assert_text_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got: str,
+                         extension: str = '.txt'):
     assert re.match(r'^[-_.a-zA-Z0-9]+$', snapshot_name), f'Invalid snapshot name {snapshot_name}'
+    assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
     assert isinstance(got, str)
 
-    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.snapshot.txt'
+    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.snapshot{extension}'
     try:
         expected = snapshot_file.read_text()
     except (FileNotFoundError, IOError, OSError):
