@@ -36,3 +36,8 @@ def test_assert_text_snapshot():
         assert written_text == 'changed'
 
         assert_text_snapshot(tmp_dir, 'text', 'changed')
+
+        with pytest.raises(FileNotFoundError) as excinfo:
+            assert_text_snapshot(tmp_dir, 'text', TEXT, extension='.test2')
+        written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.test2').read_text()
+        assert written_text == TEXT
