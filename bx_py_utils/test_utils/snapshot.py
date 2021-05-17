@@ -3,6 +3,8 @@ import pathlib
 import re
 from typing import Union
 
+from bx_py_utils.test_utils.assertion import assert_equal, assert_text_equal
+
 
 def _write_json(obj, snapshot_file):
     with snapshot_file.open('w') as snapshot_handle:
@@ -18,14 +20,14 @@ def assert_text_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str,
     snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.snapshot{extension}'
     try:
         expected = snapshot_file.read_text()
-    except (FileNotFoundError, IOError, OSError):
+    except (FileNotFoundError, OSError):
         snapshot_file.write_text(got)
         raise
 
     if got != expected:
         snapshot_file.write_text(got)
 
-        assert got == expected
+        assert_text_equal(got, expected)  # display error message with ndiff
 
 
 def assert_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got: Union[dict, list]):
@@ -36,11 +38,11 @@ def assert_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got:
     try:
         with snapshot_file.open('r') as snapshot_handle:
             expected = json.load(snapshot_handle)
-    except (ValueError, IOError, FileNotFoundError, OSError):
+    except (ValueError, OSError, FileNotFoundError):
         _write_json(got, snapshot_file)
         raise
 
     if got != expected:
         _write_json(got, snapshot_file)
 
-        assert got == expected
+        assert_equal(got, expected)  # display error message with ndiff using pformat
