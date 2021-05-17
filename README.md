@@ -36,8 +36,10 @@ Please take a look into the sources and tests for deeper informations.
 * `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
 * `AssertQueries()` - Context manager with different checks of made database queries
 * `assert_json_requests_mock()` - Check the requests history of `requests_mock.mock()`
-* `assert_equal()` - Compare objects with a nice ndiff
-* `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file)
+* `assert_equal()` - Compare objects with a nice ndiff using pformat
+* `assert_text_equal()` - Compare text strings with a nice ndiff
+* `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file using json)
+* `assert_text_snapshot` - Same as `assert_snapshot` comparing text strings
 
 ### performance analysis
 
