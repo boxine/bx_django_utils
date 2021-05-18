@@ -32,14 +32,18 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
 
         msg = (
             'Messages are not equal:\n'
-            '  [\n'
-            '      "First message.",\n'
-            '-     "Second message.",\n'
-            '+     "Second X message.",\n'
-            '?            ++\n'
+            '--- got\n'
             '\n'
-            '      "The last message."\n'
-            '  ]'
+            '+++ expected\n'
+            '\n'
+            '@@ -1,5 +1,5 @@\n'
+            '\n'
+            ' [\n'
+            '     "First message.",\n'
+            '-    "Second message.",\n'
+            '+    "Second X message.",\n'
+            '     "The last message."\n'
+            ' ]'
         )
         with self.assertRaisesMessage(AssertionError, msg):
             self.assert_messages(response, expected_messages=[
