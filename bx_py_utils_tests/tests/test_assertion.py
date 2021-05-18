@@ -2,7 +2,7 @@ import inspect
 
 from django.test import SimpleTestCase
 
-from bx_py_utils.test_utils.assertion import assert_equal, assert_text_equal
+from bx_py_utils.test_utils.assertion import assert_equal, assert_text_equal, pformat_ndiff, text_ndiff
 
 
 class AssertionTestCase(SimpleTestCase):
@@ -13,22 +13,24 @@ class AssertionTestCase(SimpleTestCase):
         assert_equal(x, x)
 
         with self.assertRaisesMessage(AssertionError, 'Objects are not equal:\n- 1\n+ 2'):
-            assert_equal(1, 2)
+            assert_equal(1, 2, diff_func=pformat_ndiff)
 
         msg = (
             'Objects are not equal:\n'
-            '  [\n'
-            '      {\n'
-            '          "1": {\n'
-            '-             "2": "two"\n'
-            '?                   ^^^\n'
+            '--- got\n'
             '\n'
-            '+             "2": "XXX"\n'
-            '?                   ^^^\n'
+            '+++ expected\n'
             '\n'
-            '          }\n'
-            '      }\n'
-            '  ]'
+            '@@ -1,7 +1,7 @@\n'
+            '\n'
+            ' [\n'
+            '     {\n'
+            '         "1": {\n'
+            '-            "2": "two"\n'
+            '+            "2": "XXX"\n'
+            '         }\n'
+            '     }\n'
+            ' ]'
         )
         with self.assertRaisesMessage(AssertionError, msg):
             assert_equal(
@@ -40,25 +42,36 @@ class AssertionTestCase(SimpleTestCase):
         assert_text_equal(txt1='foo', txt2='foo')
 
         with self.assertRaisesMessage(AssertionError, 'Text not equal:\n- 1\n+ 2'):
-            assert_text_equal('1', '2')
+            assert_text_equal('1', '2', diff_func=text_ndiff)
 
         msg = (
             'Text not equal:\n'
-            '  one\n'
-            '- tWo\n'
-            '+ two\n'
-            '  three'
+            '--- got\n'
+            '\n'
+            '+++ expected\n'
+            '\n'
+            '@@ -1,4 +1,4 @@\n'
+            '\n'
+            '-oNe\n'
+            '+one\n'
+            ' two\n'
+            ' three\n'
+            ' four'
         )
         with self.assertRaisesMessage(AssertionError, msg):
             assert_text_equal(
                 inspect.cleandoc('''
-                    one
-                    tWo
+                    oNe
+                    two
                     three
+                    four
+                    five
                 '''),
                 inspect.cleandoc('''
                     one
                     two
                     three
+                    four
+                    five
                 '''),
             )
