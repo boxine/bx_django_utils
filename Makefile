@@ -65,6 +65,8 @@ pytest: check-poetry ## Run pytest
 pytest-ci: check-poetry ## Run pytest with CI settings
 	poetry run pytest -c pytest-ci.ini
 
+test: pytest
+
 publish: ## Release new version to PyPi
 	poetry run publish
 
@@ -78,4 +80,4 @@ start-dev-server: ## Start Django dev. server with the test project
 clean: ## Remove created files from the test project (e.g.: SQlite, static files)
 	git clean -dfX bx_py_utils_tests/
 
-.PHONY: help install lint fix pytest publish
+.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server
