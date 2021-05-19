@@ -1,4 +1,4 @@
-def removeprefix(self: str, prefix: str, /) -> str:
+def removeprefix(self: str, prefix: str) -> str:
     """ Backport of removeprefix from PEP-616 (Python 3.9+) """
 
     if self.startswith(prefix):
@@ -7,7 +7,7 @@ def removeprefix(self: str, prefix: str, /) -> str:
         return self
 
 
-def removesuffix(self: str, suffix: str, /) -> str:
+def removesuffix(self: str, suffix: str) -> str:
     """ Backport of removesuffix from PEP-616 (Python 3.9+) """
 
     if self.endswith(suffix):
