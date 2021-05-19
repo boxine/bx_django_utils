@@ -1,10 +1,8 @@
 from collections import Counter
-from unittest import mock
 
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 
-from bx_py_utils import stacktrace
 from bx_py_utils.test_utils.assert_queries import AssertQueries
 
 
@@ -153,3 +151,48 @@ class AssertQueriesTestCase(TestCase):
         assert '1 queries executed, 2 expected.\n' in msg
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
+
+    def test_assert_queries_variants(self):
+
+        # INSERT INTO "auth_group" ("name") VALUES (%s)
+
+        with AssertQueries() as queries:
+            Group.objects.create(name='foo')
+        queries.assert_queries(
+            table_counts=Counter({
+                'auth_group': 1
+            }),
+            double_tables=True,
+            table_names=['auth_group'],
+            duplicated=True,
+            similar=True,
+        )
+
+        # SELECT "auth_group"."id", "auth_group"."name" FROM...
+
+        with AssertQueries() as queries:
+            group = Group.objects.first()
+        queries.assert_queries(
+            table_counts=Counter({
+                'auth_group': 1
+            }),
+            double_tables=True,
+            table_names=['auth_group'],
+            duplicated=True,
+            similar=True,
+        )
+
+        # UPDATE "auth_group" SET "name" = %s WHERE...
+
+        with AssertQueries() as queries:
+            group.name = 'foo bar'
+            group.save(update_fields=['name'])
+        queries.assert_queries(
+            table_counts=Counter({
+                'auth_group': 1
+            }),
+            double_tables=True,
+            table_names=['auth_group'],
+            duplicated=True,
+            similar=True,
+        )

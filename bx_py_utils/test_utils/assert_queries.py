@@ -58,9 +58,9 @@ class AssertQueries(SQLQueryRecorder):
         table_name_count = Counter()
         for db, query in self.logger._queries:
             sql = query['sql']
-            table_name = re.findall(r' FROM "(.+?)" ', sql)
+            table_name = re.findall(r'(FROM|INSERT INTO|UPDATE) \"(.+?)\"', sql)
             assert len(table_name) == 1, f'Error parsing: {sql!r}'
-            table_name = table_name[0]
+            table_name = table_name[0][1]
             table_name_count[table_name] += 1
 
         return table_name_count
