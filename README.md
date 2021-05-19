@@ -81,6 +81,8 @@ Please take a look into the sources and tests for deeper informations.
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
 * `anonymize.anonymize()` - Anonymize a string (With special handling of email addresses)
 * `hash_utils.url_safe_hash()` - Generate URL safe hashes
+* `compat.removeprefix()` - Backport of `str.removeprefix` from PEP-616
+* `compat.removesuffix()` - Backport of `str.removesuffix` from PEP-616
 
 
 ## developing
