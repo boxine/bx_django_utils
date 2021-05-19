@@ -97,7 +97,6 @@ def test_assert_text_snapshot():
                 tmp_dir, 'text',
                 'This is:\nmultiline "text"\none\ntwo\nthree\nfour',
             )
-        print(repr(exc_info.value.args[0]))
         assert exc_info.value.args[0] == (
             'Text not equal:\n'
             '--- got\n'
