@@ -1,6 +1,7 @@
 from collections import Counter
 
 from django.contrib.auth.models import Group, Permission
+from django.db import transaction
 from django.test import TestCase
 
 from bx_py_utils.test_utils.assert_queries import AssertQueries
@@ -187,6 +188,23 @@ class AssertQueriesTestCase(TestCase):
         with AssertQueries() as queries:
             group.name = 'foo bar'
             group.save(update_fields=['name'])
+        queries.assert_queries(
+            table_counts=Counter({
+                'auth_group': 1
+            }),
+            double_tables=True,
+            table_names=['auth_group'],
+            duplicated=True,
+            similar=True,
+        )
+
+        # SAVEPOINT...RELEASE SAVEPOINT
+
+        with AssertQueries() as queries:
+            with transaction.atomic():
+                group.name = 'foobar'
+                group.save()
+
         queries.assert_queries(
             table_counts=Counter({
                 'auth_group': 1
