@@ -1,10 +1,14 @@
+import datetime
 import pathlib
 import tempfile
+from decimal import Decimal
+from uuid import UUID
 
 import pytest
 
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
-from bx_py_utils.test_utils.snapshot import assert_snapshot, assert_text_snapshot
+from bx_py_utils.test_utils.datetime import parse_dt
+from bx_py_utils.test_utils.snapshot import assert_py_snapshot, assert_snapshot, assert_text_snapshot
 
 
 def test_assert_snapshot():
@@ -56,6 +60,7 @@ def test_assert_snapshot():
             '     }\n'
             ' ]'
         )
+
 
 def test_assert_text_snapshot():
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -118,3 +123,36 @@ def test_assert_text_snapshot():
             assert_text_snapshot(tmp_dir, 'text', TEXT, extension='.test2')
         written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.test2').read_text()
         assert written_text == TEXT
+
+
+def test_assert_py_snapshot():
+    example = {
+        'uuid': UUID('00000000-0000-0000-1111-000000000001'),
+        'datetime': parse_dt('2020-01-01T00:00:00+0000'),
+        'date': datetime.date(2000, 1, 2),
+        'time': datetime.time(3, 4, 5),
+        'decimal': Decimal('3.14')
+    }
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with pytest.raises(FileNotFoundError):
+            assert_py_snapshot(tmp_dir, 'snap', example)
+
+        assert_py_snapshot(tmp_dir, 'snap', example)
+
+        example['uuid'] = '00000000-0000-0000-1111-000000000001'
+        with pytest.raises(AssertionError) as exc_info:
+            assert_py_snapshot(tmp_dir, 'snap', example)
+        assert exc_info.value.args[0] == (
+            "Objects are not equal:\n"
+            "--- got\n"
+            "\n"
+            "+++ expected\n"
+            "\n"
+            "@@ -2,4 +2,4 @@\n"
+            "\n"
+            "     'datetime': datetime.datetime(2020, 1, 1, 0, 0, tzinfo=datetime.timezone.utc),\n"
+            "     'decimal': Decimal('3.14'),\n"
+            "     'time': datetime.time(3, 4, 5),\n"
+            "-    'uuid': '00000000-0000-0000-1111-000000000001'}\n"
+            "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}"
+        )
