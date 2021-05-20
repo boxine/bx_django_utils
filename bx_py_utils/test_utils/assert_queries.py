@@ -58,6 +58,10 @@ class AssertQueries(SQLQueryRecorder):
         table_name_count = Counter()
         for db, query in self.logger._queries:
             sql = query['sql']
+            if sql.startswith('SAVEPOINT') or sql.startswith('RELEASE SAVEPOINT'):
+                # Skip transaction statements
+                continue
+
             table_name = re.findall(r'(FROM|INSERT INTO|UPDATE) \"(.+?)\"', sql)
             assert len(table_name) == 1, f'Error parsing: {sql!r}'
             table_name = table_name[0][1]
