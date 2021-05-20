@@ -40,6 +40,7 @@ Please take a look into the sources and tests for deeper informations.
 * `assert_text_equal()` - Compare text strings with a nice diff
 * `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file using json)
 * `assert_text_snapshot` - Same as `assert_snapshot` comparing text strings
+* `assert_py_snapshot` - Snapshot test using `PrettyPrinter()`
 
 ### performance analysis
 

@@ -1,9 +1,16 @@
 import json
 import pathlib
+import pprint
 import re
-from typing import Callable, Union
+from typing import Any, Callable, Union
 
-from bx_py_utils.test_utils.assertion import assert_equal, assert_text_equal, pformat_unified_diff, text_unified_diff
+from bx_py_utils.test_utils.assertion import (
+    _unified_diff,
+    assert_equal,
+    assert_text_equal,
+    pformat_unified_diff,
+    text_unified_diff,
+)
 
 
 def _write_json(obj, snapshot_file):
@@ -57,6 +64,37 @@ def assert_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got:
         # display error message with diff:
         assert_equal(
             got, expected,
+            fromfile=fromfile, tofile=tofile,
+            diff_func=diff_func
+        )
+
+
+def assert_py_snapshot(root_dir: Union[pathlib.Path, str], snapshot_name: str, got: Any,
+                       fromfile: str = 'got', tofile: str = 'expected',
+                       diff_func: Callable = _unified_diff):
+    """
+    Snapshot test using PrettyPrinter()
+    Advantage over JSON:
+     - More python object types are supported
+     - The comparison is stricter. e.g.: UUID object instance vs. UUID string
+    """
+    assert re.match(r'^[-_.a-zA-Z0-9]+$', snapshot_name), f'Invalid snapshot name {snapshot_name}'
+
+    got_str = pprint.pformat(got, indent=4, width=120)
+
+    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.txt'
+    try:
+        expected_str = snapshot_file.read_text()
+    except FileNotFoundError:
+        snapshot_file.write_text(got_str)
+        raise
+
+    if got_str != expected_str:
+        snapshot_file.write_text(got_str)
+
+        # display error message with diff:
+        assert_equal(
+            got_str, expected_str,
             fromfile=fromfile, tofile=tofile,
             diff_func=diff_func
         )
