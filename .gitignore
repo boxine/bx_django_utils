@@ -9,7 +9,7 @@
 !.coveralls.yml
 
 # from test projects:
-/bx_py_utils_tests/static/
+/bx_django_utils_tests/static/
 *.sqlite3
 
 # Coverage HTML Report files:

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = 'bx_py_utils'
-version = "36"
-description = 'Various Python / Django utility functions'
+name = 'bx_django_utils'
+version = "1alpha0"
+description = 'Various Django utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
     'Philipp Hagemeister <phihag@phihag.de>',
@@ -19,11 +19,12 @@ readme='README.md'
 
 [tool.poetry.dependencies]
 python = '>=3.6,<4.0.0'
+bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = "*"  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
-boto3 = "*"  # needed for e.g.: bx_py_utils/aws/ stuff!
+boto3 = "*"  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = "*"
 tox = '*'
 pytest = '*'
@@ -38,7 +39,7 @@ poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = "*"
 
 [tool.poetry.scripts]
-publish = "bx_py_utils_tests.test_project.publish:publish"
+publish = "bx_django_utils_tests.test_project.publish:publish"
 
 [build-system]
 requires = ['poetry>=0.12']
