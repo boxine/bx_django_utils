@@ -47,15 +47,3 @@ class MockDatetimeGenerator:
         else:
             self.now += self.offset
             return self.now
-
-
-def parse_dt(dtstr):
-    """
-    >>> parse_dt(None) is None
-    True
-    >>> parse_dt('2020-01-01T00:00:00+0000')
-    datetime.datetime(2020, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)
-    """
-    if dtstr is None:
-        return None
-    return datetime.datetime.strptime(dtstr, '%Y-%m-%dT%H:%M:%S%z')

@@ -1,6 +1,5 @@
+from bx_py_utils.test_utils.assertion import assert_equal
 from django.contrib.messages import get_messages
-
-from bx_django_utils.test_utils.assertion import assert_equal
 
 
 class HtmlAssertionMixin:

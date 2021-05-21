@@ -1,11 +1,12 @@
 from unittest import mock
 
+from bx_py_utils.test_utils.datetime import parse_dt
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
 from bx_django_utils.models.manipulate import create, create_or_update
-from bx_django_utils.test_utils.datetime import MockDatetimeGenerator, parse_dt
+from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
 from bx_django_utils.test_utils.model_clean_assert import AssertModelCleanCalled
 from bx_django_utils_tests.test_app.models import CreateOrUpdateTestModel
 

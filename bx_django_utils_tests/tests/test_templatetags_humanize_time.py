@@ -1,10 +1,10 @@
 import datetime
 
+from bx_py_utils.test_utils.datetime import parse_dt
 from django.test import SimpleTestCase
 from django.utils import translation
 
 from bx_django_utils.templatetags.humanize_time import human_duration
-from bx_django_utils.test_utils.datetime import parse_dt
 
 
 class HumanizeTimeTestCase(SimpleTestCase):
