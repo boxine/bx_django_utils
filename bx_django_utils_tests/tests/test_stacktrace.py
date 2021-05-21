@@ -1,7 +1,7 @@
+from bx_py_utils.test_utils.assertion import assert_equal
 from django.test import TestCase
 
 from bx_django_utils.stacktrace import get_stacktrace, iter_frameinfo
-from bx_django_utils.test_utils.assertion import assert_equal
 
 
 def foo():

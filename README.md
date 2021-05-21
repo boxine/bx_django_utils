@@ -1,6 +1,6 @@
 # Boxine - bx_django_utils
 
-Various Python / Django utility functions
+Various Django utility functions
 
 
 ## Quickstart
@@ -29,18 +29,11 @@ Please take a look into the sources and tests for deeper informations.
 ### test utilities
 
 * `datetime.MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps
-* `datetime.parse_dt()` - Handy `datetime.strptime()` convert
 * `html_assertion.HtmlAssertionMixin` - Unittest mixin class with usefull assertments around Django test client tests
 * `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
 * `users` - Utilities around user/permission setup for tests
 * `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
 * `AssertQueries()` - Context manager with different checks of made database queries
-* `assert_json_requests_mock()` - Check the requests history of `requests_mock.mock()`
-* `assert_equal()` - Compare objects with a nice diff using pformat
-* `assert_text_equal()` - Compare text strings with a nice diff
-* `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file using json)
-* `assert_text_snapshot` - Same as `assert_snapshot` comparing text strings
-* `assert_py_snapshot` - Snapshot test using `PrettyPrinter()`
 
 ### performance analysis
 
@@ -52,38 +45,15 @@ Please take a look into the sources and tests for deeper informations.
 * `templatetags.humanize_time.human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
 * `filename.filename2human_name()` - Convert filename to a capitalized name
 * `filename.clean_filename()` - Convert filename to ASCII only via slugify
-* `pformat()` - Better `pretty-print-format` using JSON with fallback to `pprint.pformat()`
+* `pformat()` - Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
 
 ### view utilities
 
 * `view_utils.dynamic_menu_urls.DynamicViewMenu()` - Register views to build a simple menu with sections
 
-
-### AWS stuff
-
-* `bx_django_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
-* `bx_django_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
-* `bx_django_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
-* `bx_django_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
-
-### GraphQL
-
-* `graphql_introspection.introspection_query` Generate an introspection query to get an introspection doc.
-* `graphql_introspection.complete_query` Generate a full query for all fields from an introspection doc.
-
 ### misc
 
-* `dict_utils.dict_get()` - nested dict `get()`
-* `dict_utils.pluck()` - Extract values from a dict, if they are present
-* `environ.cgroup_memory_usage()` - Get the memory usage of the current cgroup
-* `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
-* `iteration.chunk_iterable()` - Create chunks off of any iterable
-* `processify.processify()` - Will execute the decorated function in a separate process
 * `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
-* `anonymize.anonymize()` - Anonymize a string (With special handling of email addresses)
-* `hash_utils.url_safe_hash()` - Generate URL safe hashes
-* `compat.removeprefix()` - Backport of `str.removeprefix` from PEP-616
-* `compat.removesuffix()` - Backport of `str.removesuffix` from PEP-616
 
 
 ## developing
