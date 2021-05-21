@@ -1,4 +1,4 @@
-# Boxine - bx_py_utils
+# Boxine - bx_django_utils
 
 Various Python / Django utility functions
 
@@ -6,7 +6,7 @@ Various Python / Django utility functions
 ## Quickstart
 
 ```bash
-pip install bx_py_utils
+pip install bx_django_utils
 ```
 
 
@@ -24,7 +24,7 @@ Please take a look into the sources and tests for deeper informations.
 
 ### data types
 
-* `data_types.gtin` - ModelField, FormField and validators for GTIN/UPC/EAN numbers, more info: [data_types/gtin/README.md](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/data_types/gtin/README.md)
+* `data_types.gtin` - ModelField, FormField and validators for GTIN/UPC/EAN numbers, more info: [data_types/gtin/README.md](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/README.md)
 
 ### test utilities
 
@@ -61,10 +61,10 @@ Please take a look into the sources and tests for deeper informations.
 
 ### AWS stuff
 
-* `bx_py_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
-* `bx_py_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
-* `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
-* `bx_py_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
+* `bx_django_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
+* `bx_django_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
+* `bx_django_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
+* `bx_django_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
 
 ### GraphQL
 
@@ -91,9 +91,9 @@ Please take a look into the sources and tests for deeper informations.
 To start developing e.g.:
 
 ```bash
-~$ git clone https://github.com/boxine/bx_py_utils.git
-~$ cd bx_py_utils
-~/bx_py_utils$ make
+~$ git clone https://github.com/boxine/bx_django_utils.git
+~$ cd bx_django_utils
+~/bx_django_utils$ make
 help                 List all commands
 install-poetry       install or update poetry
 install              install via poetry
@@ -116,13 +116,13 @@ clean                Remove created files from the test project (e.g.: SQlite, s
 
 You can start the test project with the Django developing server, e.g.:
 ```bash
-~/bx_py_utils$ make start-dev-server
+~/bx_django_utils$ make start-dev-server
 ```
 This is a own manage command, that will create migrations files from our test app, migrate, collectstatic and create a super user if no user exists ;)
 
 If you like to start from stretch, just delete related test project files with:
 ```bash
-~/bx_py_utils$ make clean
+~/bx_django_utils$ make clean
 ```
 ...and start the test server again ;)
 

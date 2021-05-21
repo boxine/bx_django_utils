@@ -32,13 +32,13 @@ update: check-poetry ## Update the dependencies as according to the pyproject.to
 	poetry update
 
 lint: ## Run code formatters and linter
-	poetry run flynt --fail-on-change --line_length=${MAX_LINE_LENGTH} bx_py_utils
+	poetry run flynt --fail-on-change --line_length=${MAX_LINE_LENGTH} bx_django_utils
 	poetry run isort --check-only .
-	poetry run flake8 bx_py_utils
+	poetry run flake8 bx_django_utils
 
 fix-code-style: ## Fix code formatting
-	poetry run flynt --line_length=${MAX_LINE_LENGTH} bx_py_utils
-	poetry run autopep8 --ignore-local-config --max-line-length=${MAX_LINE_LENGTH} --aggressive --aggressive --in-place --recursive bx_py_utils
+	poetry run flynt --line_length=${MAX_LINE_LENGTH} bx_django_utils
+	poetry run autopep8 --ignore-local-config --max-line-length=${MAX_LINE_LENGTH} --aggressive --aggressive --in-place --recursive bx_django_utils
 	poetry run isort .
 
 tox-listenvs: check-poetry ## List all tox test environments
@@ -78,6 +78,6 @@ start-dev-server: ## Start Django dev. server with the test project
 	./manage.sh run_testserver
 
 clean: ## Remove created files from the test project (e.g.: SQlite, static files)
-	git clean -dfX bx_py_utils_tests/
+	git clean -dfX bx_django_utils_tests/
 
 .PHONY: help install lint fix pytest publish test clean makemessages start-dev-server

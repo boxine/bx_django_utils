@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bx_py_utils_tests.test_project.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bx_django_utils_tests.test_project.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
