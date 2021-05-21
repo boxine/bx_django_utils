@@ -103,4 +103,4 @@ If you like to start from stretch, just delete related test project files with:
 
 ## Links
 
-* https://pypi.org/project/bx-py-utils/
+* https://pypi.org/project/bx-django-utils/
