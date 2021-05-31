@@ -15,46 +15,121 @@ pip install bx_django_utils
 Here only a simple list about existing utilities.
 Please take a look into the sources and tests for deeper informations.
 
+[comment]: <> (✂✂✂ auto generated start ✂✂✂)
 
-### models utilities
+### bx_django_utils.approve_workflow
 
-* `approve_workflow` - Base model/admin/form classes to implement a model with draft/approve versions workflow
-* `manipulate.create_or_update()` - Similar to django's `create_or_update()` with benefits
-* `timetracking.TimetrackingBaseModel()` - Base model with "create" and "last update" date time
+Base model/admin/form classes to implement a model with draft/approve versions workflow
 
-### data types
 
-* `data_types.gtin` - ModelField, FormField and validators for GTIN/UPC/EAN numbers, more info: [data_types/gtin/README.md](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/README.md)
+#### bx_django_utils.approve_workflow.admin
 
-### test utilities
+* `BaseApproveModelAdmin()` - Base admin class for a draft/approve Model
 
-* `datetime.MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps
-* `html_assertion.HtmlAssertionMixin` - Unittest mixin class with usefull assertments around Django test client tests
-* `model_clean_assert.CleanMock()` - Context manager to track if model `full_clean()` was called
-* `users` - Utilities around user/permission setup for tests
-* `time.MockTimeMonotonicGenerator()` - Mock `time.monotonic()` with generic time stamps
-* `AssertQueries()` - Context manager with different checks of made database queries
+#### bx_django_utils.approve_workflow.forms
 
-### performance analysis
+* `PublishAdminForm()` - Activate models REQUIRED_FIELDS_PUBLIC on approve
 
-* `dbperf.query_recorder.SQLQueryRecorder` - Context Manager that records SQL queries executed via the Django ORM
+#### bx_django_utils.approve_workflow.models
 
-### humanize
+* `BaseApproveModel()` - Base model class for approve models *and* this relation models.
+* `BaseApproveWorkflowModel()` - Base model for approve workflow models.
 
-* `humanize.time.human_timedelta()` - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
-* `templatetags.humanize_time.human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
-* `filename.filename2human_name()` - Convert filename to a capitalized name
-* `filename.clean_filename()` - Convert filename to ASCII only via slugify
+#### bx_django_utils.data_types.gtin
+
+ModelField, FormField and validators for GTIN/UPC/EAN numbers
+
+
+##### bx_django_utils.data_types.gtin.form_fields
+
+* `GtinFormField()` - Form field with GTIN validator.
+
+##### bx_django_utils.data_types.gtin.model_fields
+
+* `GtinModelField()` - GTIN model field
+
+##### bx_django_utils.data_types.gtin.validators
+
+* `GtinValidator()` - Validate GTIN number
+* `validate_gtin()` - It's the same as stdnum.ean.validate() but also accept ISBN-10
+
+#### bx_django_utils.dbperf.cursor
+
+* `RecordingCursorWrapper()` - An implementation of django.db.backends.utils.CursorWrapper.
+
+#### bx_django_utils.dbperf.query_recorder
+
+* `SQLQueryRecorder()` - A context manager that allows recording SQL queries executed during its lifetime.
+
+### bx_django_utils.filename
+
+* `clean_filename()` - Convert filename to ASCII only via slugify.
+* `filename2human_name()` - Convert filename to a capitalized name.
+
+#### bx_django_utils.humanize.pformat
+
 * `pformat()` - Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
 
-### view utilities
+#### bx_django_utils.humanize.time
 
-* `view_utils.dynamic_menu_urls.DynamicViewMenu()` - Register views to build a simple menu with sections
+* `human_timedelta()` - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
 
-### misc
+#### bx_django_utils.models.manipulate
 
-* `stacktrace.get_stacktrace()` - Returns a filterable and easy-to-process stacktrace
+Utilities to manipulate objects in database via models:
 
+* `create()` - Create a new model instance with optional validate before create.
+* `create_or_update()` - Create a new model instance or update a existing one.
+
+#### bx_django_utils.models.timetracking
+
+* `TimetrackingBaseModel()` - Abstract base model that will automaticly set create/update Datetimes.
+
+### bx_django_utils.stacktrace
+
+* `StackTrace()` - Built-in mutable sequence.
+* `StacktraceAfter()` - Generate a stack trace after a package was visited.
+* `get_stacktrace()` - Returns a StackTrace object, which is a list of FrameInfo objects.
+
+#### bx_django_utils.templatetags.humanize_time
+
+* `human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
+
+### bx_django_utils.test_utils
+
+Utilities / helper for writing tests.
+
+
+#### bx_django_utils.test_utils.assert_queries
+
+* `AssertQueries()` - Assert executed database queries: Check table names, duplicate/similar Queries.
+
+#### bx_django_utils.test_utils.datetime
+
+* `MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps in tests.
+
+#### bx_django_utils.test_utils.html_assertion
+
+* `HtmlAssertionMixin()` - Unittest mixin class with useful assertments around Django test client tests
+
+#### bx_django_utils.test_utils.model_clean_assert
+
+* `AssertModelCleanCalled()` - Context manager for assert that full_clean() was called for every model instance.
+* `CleanMock()` - Track if full_clean() was called.
+
+#### bx_django_utils.test_utils.users
+
+* `assert_permissions()` - Check user permissions.
+* `filter_permission_names()` - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
+* `make_max_test_user()` - Create a test user with all permissions *except* the {exclude_permissions} ones.
+* `make_minimal_test_user()` - Create a test user and set given permissions.
+* `make_test_user()` - Create a test user and set given permissions.
+
+#### bx_django_utils.view_utils.dynamic_menu_urls
+
+* `DynamicViewMenu()` - Simple storage for store information about views/urls to build a menu.
+
+[comment]: <> (✂✂✂ auto generated end ✂✂✂)
 
 ## developing
 
