@@ -17,7 +17,7 @@ TIMESINCE_CHUNKS = (
 
 def human_timedelta(t):
     """
-    Converts a time duration into a friendly text representation.
+    Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
 
     >>> human_timedelta(datetime.timedelta(microseconds=1000))
     '1.0\xa0ms'

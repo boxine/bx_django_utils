@@ -29,7 +29,7 @@ DEFAULT_AFTER_MODULES = (
 
 class AssertQueries(SQLQueryRecorder):
     """
-    Assert executed database queries.
+    Assert executed database queries: Check table names, duplicate/similar Queries.
 
     Example usage:
 

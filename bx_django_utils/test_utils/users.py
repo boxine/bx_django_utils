@@ -6,6 +6,9 @@ from django.contrib.auth.models import Permission
 
 
 def filter_permission_names(permissions):
+    """
+    Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
+    """
     permission_pks = []
     for permission in permissions:
         assert '.' in permission, f'Wrong format: {permission!r}'

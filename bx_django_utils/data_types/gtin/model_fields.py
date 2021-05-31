@@ -8,6 +8,9 @@ from bx_django_utils.data_types.gtin.validators import GtinValidator
 
 
 class GtinModelField(CharField):
+    """
+    GTIN model field
+    """
     description = _('GTIN number')
 
     def __init__(self, *args, accepted_length=DEFAULT_ACCEPT_LENGTH, **kwargs):

@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 def filename2human_name(filename):
     """
-    Convert filename to a capitalized name, e.g.:
+    Convert filename to a capitalized name.
 
     >>> filename2human_name('bar.py')
     'Bar'
@@ -33,7 +33,7 @@ def filename2human_name(filename):
 
 def clean_filename(filename):
     """
-    Convert filename to ASCII only via slugify, e.g.:
+    Convert filename to ASCII only via slugify.
 
     >>> clean_filename('bar.py')
     'bar.py'

@@ -5,7 +5,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 def pformat(value):
     """
-    Format given object.
+    Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
+
     Try to use JSON fist, because it nicer than pprint.pformat() ;)
     Use DjangoJSONEncoder, because it can encode additional types like:
         date/time, decimal types, UUIDs

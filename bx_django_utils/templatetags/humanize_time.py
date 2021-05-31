@@ -15,7 +15,9 @@ register = Library()
 @register.filter
 def human_duration(value, arg=None):
     """
-    Format a date as the time since that date as html, e.g.:
+    Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
+
+    e.g.:
         <span title="Jan. 1, 2000, noon">2.0 seconds</span>
     """
     if not value:

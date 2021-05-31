@@ -7,8 +7,7 @@
 
 def create(*, ModelClass, call_full_clean=True, **values):
     """
-    Create a new model instance.
-    Optional validate before create.
+    Create a new model instance with optional validate before create.
     """
     instance = ModelClass(**values)
     if call_full_clean:
@@ -19,7 +18,7 @@ def create(*, ModelClass, call_full_clean=True, **values):
 
 def create_or_update(*, ModelClass, lookup=None, call_full_clean=True, **values):
     """
-    Create a new model instance or update a existing one
+    Create a new model instance or update a existing one.
     Similar to django's own create_or_update() but:
 
      * Use update_fields and save only changed fields

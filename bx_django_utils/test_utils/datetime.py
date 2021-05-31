@@ -3,7 +3,8 @@ import datetime
 
 class MockDatetimeGenerator:
     """
-    Helper to mock datetime now in tests.
+    Mock django `timezone.now()` with generic time stamps in tests.
+
     Note: Set a lower offset if you use the Django test client!
           By default every timezone.now() will increase by 1 Year,
           so a session is practically always expired ;)

@@ -19,7 +19,7 @@ readme='README.md'
 
 [tool.poetry.dependencies]
 python = '>=3.6,<4.0.0'
-bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
+bx_py_utils = '>=38'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = "*"  # https://arthurdejong.org/python-stdnum/
 
@@ -37,6 +37,12 @@ autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = "*"
+
+# pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
+# so we must install pdoc only with 3.7 or newer, to get a up-to-date version.
+# The result is, that we can't generate the docs with Python 3.6, but this
+# seems not to be a show stopper ;)
+pdoc = { version = "*", python = ">=3.7" }  # https://pdoc.dev/
 
 [tool.poetry.scripts]
 publish = "bx_django_utils_tests.test_project.publish:publish"

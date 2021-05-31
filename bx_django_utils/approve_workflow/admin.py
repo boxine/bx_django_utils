@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class BaseApproveModelAdmin(admin.ModelAdmin):
+    """
+    Base admin class for a draft/approve Model
+    """
     form = PublishAdminForm  # Activate models REQUIRED_FIELDS_PUBLIC on approve
     change_form_template = 'approve_workflow/change_form.html'
     readonly_fields = (
