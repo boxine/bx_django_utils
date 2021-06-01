@@ -460,10 +460,14 @@ class BaseApproveModelAdminTestCase(HtmlAssertionMixin, TestCase):
         ]
 
         messages = [m.message for m in get_messages(response.wsgi_request)]
+
+        # "normalize" different Django versions:
+        messages = [m.replace('“', '"').replace('”', '"') for m in messages]
+
         assert messages == [
-            'The approve test model “<a href="/admin/approve_workflow_test_app/approvetestmodel'
+            'The approve test model "<a href="/admin/approve_workflow_test_app/approvetestmodel'
             '/00000000-0000-0000-0000-000000000001/change/">&lt;ApproveTestModel '
-            'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)&gt;</a>” was '
+            'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)&gt;</a>" was '
             'changed successfully.',
 
             'Warning: "Ready to Approve" flag was not set!',
