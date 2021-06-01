@@ -22,4 +22,5 @@ def test_auto_doc_in_readme():
         start_marker_line='[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
         end_marker_line='[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
         start_level=2,
+        link_template='https://github.com/boxine/bx_django_utils/blob/master/{path}#L{lnum}'
     )
