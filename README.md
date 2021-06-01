@@ -24,16 +24,16 @@ Base model/admin/form classes to implement a model with draft/approve versions w
 
 #### bx_django_utils.approve_workflow.admin
 
-* `BaseApproveModelAdmin()` - Base admin class for a draft/approve Model
+* [`BaseApproveModelAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/admin.py#L15) - Base admin class for a draft/approve Model
 
 #### bx_django_utils.approve_workflow.forms
 
-* `PublishAdminForm()` - Activate models REQUIRED_FIELDS_PUBLIC on approve
+* [`PublishAdminForm()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/forms.py#L7) - Activate models REQUIRED_FIELDS_PUBLIC on approve
 
 #### bx_django_utils.approve_workflow.models
 
-* `BaseApproveModel()` - Base model class for approve models *and* this relation models.
-* `BaseApproveWorkflowModel()` - Base model for approve workflow models.
+* [`BaseApproveModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L14) - Base model class for approve models *and* this relation models.
+* [`BaseApproveWorkflowModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L205) - Base model for approve workflow models.
 
 #### bx_django_utils.data_types.gtin
 
@@ -42,58 +42,58 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 
 ##### bx_django_utils.data_types.gtin.form_fields
 
-* `GtinFormField()` - Form field with GTIN validator.
+* [`GtinFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/form_fields.py#L8) - Form field with GTIN validator.
 
 ##### bx_django_utils.data_types.gtin.model_fields
 
-* `GtinModelField()` - GTIN model field
+* [`GtinModelField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/model_fields.py#L10) - GTIN model field
 
 ##### bx_django_utils.data_types.gtin.validators
 
-* `GtinValidator()` - Validate GTIN number
-* `validate_gtin()` - It's the same as stdnum.ean.validate() but also accept ISBN-10
+* [`GtinValidator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/validators.py#L34) - Validate GTIN number
+* [`validate_gtin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/validators.py#L12) - It's the same as stdnum.ean.validate() but also accept ISBN-10
 
 #### bx_django_utils.dbperf.cursor
 
-* `RecordingCursorWrapper()` - An implementation of django.db.backends.utils.CursorWrapper.
+* [`RecordingCursorWrapper()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/cursor.py#L17) - An implementation of django.db.backends.utils.CursorWrapper.
 
 #### bx_django_utils.dbperf.query_recorder
 
-* `SQLQueryRecorder()` - A context manager that allows recording SQL queries executed during its lifetime.
+* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L95) - A context manager that allows recording SQL queries executed during its lifetime.
 
 ### bx_django_utils.filename
 
-* `clean_filename()` - Convert filename to ASCII only via slugify.
-* `filename2human_name()` - Convert filename to a capitalized name.
+* [`clean_filename()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L34) - Convert filename to ASCII only via slugify.
+* [`filename2human_name()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L7) - Convert filename to a capitalized name.
 
 #### bx_django_utils.humanize.pformat
 
-* `pformat()` - Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
+* [`pformat()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/humanize/pformat.py#L6) - Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
 
 #### bx_django_utils.humanize.time
 
-* `human_timedelta()` - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
+* [`human_timedelta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/humanize/time.py#L18) - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
 
 #### bx_django_utils.models.manipulate
 
 Utilities to manipulate objects in database via models:
 
-* `create()` - Create a new model instance with optional validate before create.
-* `create_or_update()` - Create a new model instance or update a existing one.
+* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L8) - Create a new model instance with optional validate before create.
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19) - Create a new model instance or update a existing one.
 
 #### bx_django_utils.models.timetracking
 
-* `TimetrackingBaseModel()` - Abstract base model that will automaticly set create/update Datetimes.
+* [`TimetrackingBaseModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/timetracking.py#L8) - Abstract base model that will automaticly set create/update Datetimes.
 
 ### bx_django_utils.stacktrace
 
-* `StackTrace()` - Built-in mutable sequence.
-* `StacktraceAfter()` - Generate a stack trace after a package was visited.
-* `get_stacktrace()` - Returns a StackTrace object, which is a list of FrameInfo objects.
+* [`StackTrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L21) - Built-in mutable sequence.
+* [`StacktraceAfter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L83) - Generate a stack trace after a package was visited.
+* [`get_stacktrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L63) - Returns a StackTrace object, which is a list of FrameInfo objects.
 
 #### bx_django_utils.templatetags.humanize_time
 
-* `human_duration()` - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
+* [`human_duration()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/templatetags/humanize_time.py#L15) - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
 
 ### bx_django_utils.test_utils
 
@@ -102,32 +102,32 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.assert_queries
 
-* `AssertQueries()` - Assert executed database queries: Check table names, duplicate/similar Queries.
+* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
 #### bx_django_utils.test_utils.datetime
 
-* `MockDatetimeGenerator()` - Mock django `timezone.now()` with generic time stamps in tests.
+* [`MockDatetimeGenerator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L4) - Mock django `timezone.now()` with generic time stamps in tests.
 
 #### bx_django_utils.test_utils.html_assertion
 
-* `HtmlAssertionMixin()` - Unittest mixin class with useful assertments around Django test client tests
+* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L5) - Unittest mixin class with useful assertments around Django test client tests
 
 #### bx_django_utils.test_utils.model_clean_assert
 
-* `AssertModelCleanCalled()` - Context manager for assert that full_clean() was called for every model instance.
-* `CleanMock()` - Track if full_clean() was called.
+* [`AssertModelCleanCalled()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L35) - Context manager for assert that full_clean() was called for every model instance.
+* [`CleanMock()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L6) - Track if full_clean() was called.
 
 #### bx_django_utils.test_utils.users
 
-* `assert_permissions()` - Check user permissions.
-* `filter_permission_names()` - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
-* `make_max_test_user()` - Create a test user with all permissions *except* the {exclude_permissions} ones.
-* `make_minimal_test_user()` - Create a test user and set given permissions.
-* `make_test_user()` - Create a test user and set given permissions.
+* [`assert_permissions()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L29) - Check user permissions.
+* [`filter_permission_names()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L8) - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
+* [`make_max_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L106) - Create a test user with all permissions *except* the {exclude_permissions} ones.
+* [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L79) - Create a test user and set given permissions.
+* [`make_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L47) - Create a test user and set given permissions.
 
 #### bx_django_utils.view_utils.dynamic_menu_urls
 
-* `DynamicViewMenu()` - Simple storage for store information about views/urls to build a menu.
+* [`DynamicViewMenu()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/view_utils/dynamic_menu_urls.py#L4) - Simple storage for store information about views/urls to build a menu.
 
 [comment]: <> (✂✂✂ auto generated end ✂✂✂)
 
