@@ -1,7 +1,9 @@
 from unittest import mock
 
+import django
 from bx_py_utils.test_utils.datetime import parse_dt
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_slug
 from django.test import TestCase
 from django.utils import timezone
 
@@ -90,10 +92,7 @@ class ModelManipulateTestCase(TestCase):
         assert updated_fields == []
 
     def test_non_valid(self):
-        msg = (
-            "{'slug': ['Enter a valid “slug” consisting of letters,"
-            " numbers, underscores or hyphens.']}"
-        )
+        msg = str(validate_slug.message)
         with self.assertRaisesMessage(ValidationError, msg):
             create_or_update(
                 ModelClass=CreateOrUpdateTestModel,
