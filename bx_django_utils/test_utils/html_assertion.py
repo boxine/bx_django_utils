@@ -1,5 +1,29 @@
+from pathlib import Path
+
 from bx_py_utils.test_utils.assertion import assert_equal
+from bx_py_utils.test_utils.snapshot import assert_text_snapshot
 from django.contrib.messages import get_messages
+from django.http import HttpResponse
+
+
+def assert_html_response_snapshot(response: HttpResponse, status_code=200, **kwargs):
+    """
+    Assert a HttpResponse via snapshot file. (Strip all empty lines from html)
+    e.g.:
+        response = self.client.get(path='/foo/bar/')
+        assert_html_response_snapshot(response)
+    """
+    html = response.content.decode('utf-8')
+    html_striped = '\n'.join(line.rstrip() for line in html.splitlines() if line.strip())
+    assert_text_snapshot(
+        got=html_striped,
+        extension='.html',
+        self_file_path=Path(__file__),
+        **kwargs
+    )
+    assert response.status_code == status_code, (
+        f'Status code is {response.status_code} but excepted {status_code}'
+    )
 
 
 class HtmlAssertionMixin:

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-us" >
+<head>
+<title>Log in | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/login.css">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+<body class=" login"
+  data-admin-utc-offset="0">
+<!-- Container -->
+<div id="container">
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+<h1 id="site-name"><a href="/admin/">Django administration</a></h1>
+        </div>
+    </div>
+    <!-- END Header -->
+    <!-- Content -->
+    <div id="content" class="colM">
+<div id="content-main">
+<form action="/admin/login/" method="post" id="login-form">MockedCsrfTokenNode
+  <div class="form-row">
+    <label class="required" for="id_username">Username:</label> <input type="text" name="username" autofocus required id="id_username">
+  </div>
+  <div class="form-row">
+    <label class="required" for="id_password">Password:</label> <input type="password" name="password" required id="id_password">
+    <input type="hidden" name="next" value="/admin/">
+  </div>
+  <div class="submit-row">
+    <label>&nbsp;</label><input type="submit" value="Log in">
+  </div>
+</form>
+</div>
+        <br class="clear">
+    </div>
+    <!-- END Content -->
+    <div id="footer"></div>
+</div>
+<!-- END Container -->
+</body>
+</html>
