@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -104,7 +104,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOCALE_PATHS = (
-     BASE_DIR.parent / 'bx_django_utils' / 'locale',
+    BASE_DIR.parent / 'bx_django_utils' / 'locale',
 )
 
 # Static files (CSS, JavaScript, Images)
