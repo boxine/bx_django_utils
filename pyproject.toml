@@ -2,6 +2,7 @@
 name = 'bx_django_utils'
 version = "4"
 description = 'Various Django utility functions'
+homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
     'Philipp Hagemeister <phihag@phihag.de>',
