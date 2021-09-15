@@ -4,6 +4,7 @@ import django
 from bx_py_utils.test_utils.datetime import parse_dt
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_slug
+from django.db.utils import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 
@@ -183,3 +184,12 @@ class ModelManipulateTestCase(TestCase):
             assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')
             assert instance.update_dt == parse_dt('2001-01-01T00:00:00+0000')
         cm.assert_no_missing_cleans()
+
+        # Cannot create an already existing model
+        with self.assertRaises(IntegrityError):
+            create(
+                ModelClass=CreateOrUpdateTestModel,
+                id=instance.id,
+                name='second create',
+                slug='second'
+            )
