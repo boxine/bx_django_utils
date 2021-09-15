@@ -12,7 +12,7 @@ def create(*, ModelClass, call_full_clean=True, **values):
     instance = ModelClass(**values)
     if call_full_clean:
         instance.full_clean(validate_unique=False)  # Don't create non-valid instances
-    instance.save()
+    instance.save(force_insert=True)
     return instance
 
 
