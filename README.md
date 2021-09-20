@@ -83,8 +83,11 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 
 Utilities to manipulate objects in database via models:
 
-* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L8-L16) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19-L56) - Create a new model instance or update a existing one.
+* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L38-L61) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19-L23) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
+* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L26-L34) - Create a new model instance with optional validate before create.
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L189-L209) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L64-L186) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
 
 #### bx_django_utils.models.timetracking
 

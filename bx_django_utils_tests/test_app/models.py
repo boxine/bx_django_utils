@@ -13,6 +13,15 @@ class CreateOrUpdateTestModel(TimetrackingBaseModel):
     name = models.CharField(max_length=64)
     slug = models.SlugField(max_length=64)
 
+    many2one_rel = models.ForeignKey(
+        TimetrackingTestModel,
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+
+    blank_field = models.CharField(max_length=64, blank=True)
+    null_field = models.CharField(max_length=64, blank=True, null=True)
+
 
 class GtinFieldTestModel(models.Model):
     default_gtin = GtinModelField()  # accept default length: 12,13 and 14
