@@ -1,10 +1,9 @@
 import datetime
 
 from django.template import Library
-from django.utils import dateformat
+from django.utils import dateformat, timezone
 from django.utils.formats import get_format
 from django.utils.html import format_html
-from django.utils.timezone import is_aware, utc
 
 from bx_django_utils.humanize.time import human_timedelta
 
@@ -31,7 +30,7 @@ def human_duration(value, arg=None):
         if arg and not isinstance(arg, datetime.datetime):
             arg = datetime.datetime(arg.year, arg.month, arg.day)
 
-        arg = arg or datetime.datetime.now(utc if is_aware(value) else None)
+        arg = arg or timezone.now()
 
         delta_str = human_timedelta(t=arg - value)
         time_str = dateformat.format(value, get_format('DATETIME_FORMAT'))
