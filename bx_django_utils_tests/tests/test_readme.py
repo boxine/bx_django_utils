@@ -7,7 +7,7 @@ from bx_py_utils.auto_doc import assert_readme
 import bx_django_utils
 
 
-PY39 = (3, 8) < sys.version_info < (3, 10)
+PY39 = (3, 9) <= sys.version_info < (3, 10)
 
 
 # pdoc is not compatible with Python 3.6 and
