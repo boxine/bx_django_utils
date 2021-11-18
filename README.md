@@ -194,6 +194,12 @@ If you like to start from stretch, just delete related test project files with:
 
 [MIT](LICENSE). Patches welcome!
 
+## About us
+
+We’ve been rethinking the listening experience for kids and have created an ecosystem where haptic and listening experience are combined via smart technology - the Toniebox.
+
+We are constantly looking for engineers to join our team in different areas. If you’d be interested in contributing to our platform, have a look at: https://tonies.com/jobs/
+    
 ## Links
 
 * https://pypi.org/project/bx-django-utils/
