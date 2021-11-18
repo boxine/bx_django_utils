@@ -51,6 +51,9 @@ test: pytest
 publish: ## Release new version to PyPi
 	poetry run publish
 
+docker-test:  ## Run tests in docker
+	docker build -f Dockerfile.tests .
+
 makemessages: ## Make and compile locales message files
 	./manage.sh makemessages --all --no-location --no-obsolete
 	./manage.sh compilemessages --ignore=.tox
@@ -61,4 +64,4 @@ start-dev-server: ## Start Django dev. server with the test project
 clean: ## Remove created files from the test project (e.g.: SQlite, static files)
 	git clean -dfX bx_django_utils_tests/
 
-.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server
+.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server docker-test
