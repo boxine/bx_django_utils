@@ -1,0 +1,26 @@
+# docker build -f Dockerfile.tests .
+FROM python:3.8-slim-bullseye
+
+WORKDIR /bx_django_utils
+RUN apt-get update && apt-get install -y make curl && rm -rf /var/lib/apt/lists/*
+
+# Install packages
+COPY Makefile poetry.lock pyproject.toml ./
+RUN make install-poetry && \
+	poetry lock && \
+	poetry show --tree && \
+	make install
+
+# List installed packages
+RUN poetry run pip freeze
+
+# Run tests
+ENV PYTEST_ADDOPTS: "-c pytest-ci.ini"
+COPY . .
+RUN make pytest-ci
+# Run tox tests
+RUN poetry run tox -e python-django3.2
+
+# Run linters
+RUN make lint
+

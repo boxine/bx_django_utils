@@ -31,4 +31,5 @@ sdist/
 .installed.cfg
 *.egg
 /publish.log
+coverage.xml
 
