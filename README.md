@@ -94,6 +94,10 @@ Utilities to manipulate objects in database via models:
 * [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L197-L217) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
 * [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L66-L194) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
 
+#### bx_django_utils.models.queryset_utils
+
+* [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L6-L23) - Remove a applied .filter() from a QuerySet
+
 #### bx_django_utils.models.timetracking
 
 * [`TimetrackingBaseModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/timetracking.py#L8-L62) - Abstract base model that will automaticly set create/update Datetimes.
