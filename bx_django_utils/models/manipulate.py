@@ -23,14 +23,16 @@ class InvalidStoreBehavior(FieldDoesNotExist):
     pass
 
 
-def create(*, ModelClass, call_full_clean=True, **values):
+def create(*, ModelClass, call_full_clean=True, save_kwargs=None, **values):
     """
     Create a new model instance with optional validate before create.
     """
     instance = ModelClass(**values)
     if call_full_clean:
         instance.full_clean(validate_unique=False)  # Don't create non-valid instances
-    instance.save(force_insert=True)
+    if save_kwargs is None:
+        save_kwargs = {}
+    instance.save(force_insert=True, **save_kwargs)
     return instance
 
 
@@ -67,6 +69,7 @@ def create_or_update2(
     lookup: dict = None,
     call_full_clean: bool = True,
     store_behavior: Optional[dict] = None,
+    save_kwargs: Optional[dict] = None,
     **values
 ) -> CreateOrUpdateResult:
     """
@@ -92,6 +95,8 @@ def create_or_update2(
       - STORE_BEHAVIOR_SET_IF_EMPTY..: Store given value only if current field value is empty
       - STORE_BEHAVIOR_SKIP_EMPTY....: Don't store empty values to the field (protect existing)
     """
+    if save_kwargs is None:
+        save_kwargs = {}
     result = CreateOrUpdateResult()
 
     to_be_ignore_fields = set()  # Fields that should be ignored.
@@ -138,7 +143,9 @@ def create_or_update2(
 
     if lookup is None:
         # Create a new object
-        instance = create(ModelClass=ModelClass, call_full_clean=call_full_clean, **filtered_values)
+        instance = create(
+            ModelClass=ModelClass, call_full_clean=call_full_clean, save_kwargs=save_kwargs,
+            **filtered_values)
         result.instance = instance
         result.created = True
         return result
@@ -150,6 +157,7 @@ def create_or_update2(
         instance = create(
             ModelClass=ModelClass,
             call_full_clean=call_full_clean,
+            save_kwargs=save_kwargs,
             **lookup,
             **filtered_values
         )
@@ -179,7 +187,7 @@ def create_or_update2(
     if result.updated_fields:
         if call_full_clean:
             instance.full_clean(validate_unique=False)  # Don't save new non-valid values
-        instance.save(update_fields=result.updated_fields)
+        instance.save(update_fields=result.updated_fields, **save_kwargs)
 
     result.instance = instance
 

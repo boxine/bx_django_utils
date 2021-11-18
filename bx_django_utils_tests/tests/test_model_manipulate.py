@@ -18,7 +18,7 @@ from bx_django_utils.models.manipulate import (
 )
 from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
 from bx_django_utils.test_utils.model_clean_assert import AssertModelCleanCalled
-from bx_django_utils_tests.test_app.models import CreateOrUpdateTestModel, TimetrackingTestModel
+from bx_django_utils_tests.test_app.models import CreateOrUpdateTestModel, StoreSaveModel, TimetrackingTestModel
 
 
 class ModelManipulateTestCase(TestCase):
@@ -389,3 +389,36 @@ class ModelManipulateTestCase(TestCase):
             )
 
         assert CreateOrUpdateTestModel.objects.count() == 1
+
+    @mock.patch.object(timezone, 'now', MockDatetimeGenerator())
+    def test_save_kwargs(self):
+        obj = create_or_update2(
+            ModelClass=StoreSaveModel,
+            name='foobar',
+            save_kwargs={'arg': 'original'},
+        ).instance
+        assert obj.name == 'foobar'
+
+        create_or_update2(
+            ModelClass=StoreSaveModel,
+            lookup={'pk': obj.pk},
+            name='bazqux',
+            save_kwargs={'other_arg': 'changed'},
+        )
+        obj.refresh_from_db()
+        assert obj.name == 'bazqux'
+
+        create_or_update2(
+            ModelClass=StoreSaveModel,
+            lookup={'pk': obj.pk},
+            name='final',
+            save_kwargs={},
+        )
+        obj.refresh_from_db()
+        assert obj.name == 'final'
+
+        assert obj._save_calls.saves == [
+            {'arg': 'original'},
+            {'other_arg': 'changed'},
+            {},
+        ]

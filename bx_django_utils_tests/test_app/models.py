@@ -1,3 +1,6 @@
+import threading
+
+from bx_py_utils.dict_utils import pluck
 from django.db import models
 
 from bx_django_utils.data_types.gtin.model_fields import GtinModelField
@@ -38,3 +41,21 @@ class GtinFieldTestModel(models.Model):
 class ColorFieldTestModel(models.Model):
     required_color = ColorModelField()
     optional_color = ColorModelField(blank=True, null=True)
+
+
+
+class StoreSaveModel(models.Model):
+    name = models.CharField(max_length=64)
+    _save_calls = threading.local()
+
+    def save(self, **kwargs):
+        if not hasattr(self._save_calls, 'saves'):
+            self._save_calls.saves = []
+
+        self._save_calls.saves.append(pluck(kwargs, ('arg', 'other_arg')))
+        if 'arg' in kwargs:
+            del kwargs['arg']
+        if 'other_arg' in kwargs:
+            del kwargs['other_arg']
+
+        return super().save(**kwargs)
