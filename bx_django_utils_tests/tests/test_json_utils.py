@@ -7,6 +7,8 @@ from bx_django_utils.json_utils import make_json_serializable, to_json
 
 
 class TestObject:
+    __test__ = False
+
     def __init__(self, text):
         self.text = text
 
