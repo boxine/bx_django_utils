@@ -1,7 +1,7 @@
 import re
 from collections import Counter
 from difflib import unified_diff
-from typing import List, Optional
+from typing import List, Optional, Tuple, Union
 
 from bx_django_utils.dbperf.query_recorder import SQLQueryRecorder
 from bx_django_utils.stacktrace import StacktraceAfter
@@ -109,8 +109,16 @@ class AssertQueries(SQLQueryRecorder):
             ))
             raise AssertionError(self.build_error_message(f'Table names does not match:\n{diff}'))
 
-    def assert_table_counts(self, table_counts: Counter):
+    def assert_table_counts(self, table_counts: Union[Counter, dict],
+                            exclude: Optional[Tuple[str]] = None):
+        if not isinstance(table_counts, Counter):
+            table_counts = Counter(table_counts)
         table_name_count = self.count_table_names()
+        if exclude:
+            for k in exclude:
+                assert k not in table_counts, f'Excluded key {k!r} is listed in table_counts'
+                if k in table_name_count:
+                    del table_name_count[k]
         if table_counts != table_name_count:
             diff = counter_diff(
                 c1=table_counts,
@@ -174,7 +182,7 @@ class AssertQueries(SQLQueryRecorder):
 
     def assert_queries(
         self,
-        table_counts: Optional[Counter] = None,
+        table_counts: Optional[Union[Counter, dict]] = None,
         double_tables: Optional[bool] = True,
         table_names: Optional[List[str]] = None,
         query_count: Optional[int] = None,
