@@ -46,6 +46,7 @@ class AssertQueriesTestCase(TestCase):
     def test_assert_table_counts(self):
         queries = self.get_instance()
         queries.assert_table_counts(Counter(auth_permission=1))
+        queries.assert_table_counts({'auth_permission': 1})
 
         with self.assertRaises(AssertionError) as err:
             queries.assert_table_counts(Counter(auth_permission=2, foo=1, bar=3))
@@ -57,6 +58,37 @@ class AssertQueriesTestCase(TestCase):
         assert '+auth_permission: 1\n' in msg
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
+
+    def test_assert_table_counts_exclude(self):
+        with AssertQueries() as queries:
+            Permission.objects.all().first()
+            Permission.objects.all().first()
+            Group.objects.all().first()
+
+        queries.assert_table_counts({'auth_permission': 2}, exclude=('auth_group', 'not_mentioned'))
+
+        # Incorrect counts / added tables
+        with self.assertRaises(AssertionError) as err:
+            queries.assert_table_counts({'auth_permission': 3, 'foo': 1}, exclude=('auth_group',))
+        msg = str(err.exception)
+        assert 'Table count error:\n' in msg
+        assert '-auth_permission: 3\n' in msg
+        assert '-foo: 1\n' in msg
+        assert '+auth_permission: 2\n' in msg
+        assert 'Captured queries were:\n' in msg
+
+        # Missing counts
+        with self.assertRaises(AssertionError) as err:
+            queries.assert_table_counts({'auth_group': 1}, exclude=('foobar',))
+        assert 'Table count error:\n' in msg
+        assert '+auth_permission: 2\n' in msg
+
+        # Excluding a table that is specified
+        with self.assertRaises(AssertionError) as err:
+            queries.assert_table_counts(
+                {'auth_permission': 3, 'auth_group': 1}, exclude=('auth_permission',))
+        msg = str(err.exception)
+        assert msg == 'Excluded key \'auth_permission\' is listed in table_counts'
 
     def test_assert_not_double_tables(self):
         queries = self.get_instance()
