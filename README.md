@@ -121,6 +121,10 @@ Utilities / helper for writing tests.
 
 * [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30-L200) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
+#### bx_django_utils.test_utils.content_types
+
+* [`ContentTypeCacheFixMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/content_types.py#L7-L35) - TestCase mixin to fill the ContentType cache to avoid flaky database queries.
+
 #### bx_django_utils.test_utils.datetime
 
 * [`MockDatetimeGenerator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L4-L50) - Mock django `timezone.now()` with generic time stamps in tests.
@@ -158,20 +162,17 @@ To start developing e.g.:
 ~$ cd bx_django_utils
 ~/bx_django_utils$ make
 help                 List all commands
-install-poetry       install or update poetry
+install-poetry       install or update poetry via pip
 install              install via poetry
 update               Update the dependencies as according to the pyproject.toml file
 lint                 Run code formatters and linter
 fix-code-style       Fix code formatting
 tox-listenvs         List all tox test environments
 tox                  Run pytest via tox with all environments
-tox-py36             Run pytest via tox with *python v3.6*
-tox-py37             Run pytest via tox with *python v3.7*
-tox-py38             Run pytest via tox with *python v3.8*
-tox-py39             Run pytest via tox with *python v3.9*
 pytest               Run pytest
 pytest-ci            Run pytest with CI settings
 publish              Release new version to PyPi
+docker-test          Run tests in docker
 makemessages         Make and compile locales message files
 start-dev-server     Start Django dev. server with the test project
 clean                Remove created files from the test project (e.g.: SQlite, static files)
@@ -190,16 +191,29 @@ If you like to start from stretch, just delete related test project files with:
 ...and start the test server again ;)
 
 
+### update this README
+
+This README will be updated via tests ;) But currently this is only done with Python 3.9 !
+If your system Python version is not 3.9: Install this Python version and switch to it, e.g.:
+
+```bash
+~/bx_django_utils$ poetry env use python3.9
+~/bx_django_utils$ make install
+~/bx_django_utils$ make pytest
+```
+
 ## License
 
 [MIT](LICENSE). Patches welcome!
+
 
 ## About us
 
 We’ve been rethinking the listening experience for kids and have created an ecosystem where haptic and listening experience are combined via smart technology - the Toniebox.
 
 We are constantly looking for engineers to join our team in different areas. If you’d be interested in contributing to our platform, have a look at: https://tonies.com/jobs/
-    
+
+
 ## Links
 
 * https://pypi.org/project/bx-django-utils/
