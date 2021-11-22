@@ -1,10 +1,11 @@
 import re
 from collections import Counter
 from difflib import unified_diff
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from bx_django_utils.dbperf.query_recorder import SQLQueryRecorder
 from bx_django_utils.stacktrace import StacktraceAfter
+from bx_py_utils.dict_utils import pluck
 
 
 def counter_diff(c1, c2, fromfile=None, tofile=None):
@@ -120,6 +121,21 @@ class AssertQueries(SQLQueryRecorder):
             )
             raise AssertionError(self.build_error_message(f'Table count error:\n{diff}'))
 
+    def assert_partial_table_counts(self, table_counts: Union[Counter, dict]):
+        """ Check that the specified counts are correct. This can be used to ignore irrelevant
+        queries, e.g. authentication/authorization. """
+
+        dict_table_counts = dict(table_counts)
+        current_counts = pluck(self.count_table_names(), dict_table_counts.keys())
+        if dict_table_counts != current_counts:
+            diff = counter_diff(
+                c1=dict_table_counts,
+                c2=current_counts,
+                fromfile='expected table counts',
+                tofile='current table counts'
+            )
+            raise AssertionError(self.build_error_message(f'Table count error:\n{diff}'))
+
     def assert_not_double_tables(self):
         """
         Check if tables are used more than one time.
@@ -175,6 +191,7 @@ class AssertQueries(SQLQueryRecorder):
     def assert_queries(
         self,
         table_counts: Optional[Counter] = None,
+        partial_table_counts: Optional[Union[dict, Counter]] = None,
         double_tables: Optional[bool] = True,
         table_names: Optional[List[str]] = None,
         query_count: Optional[int] = None,
@@ -186,6 +203,9 @@ class AssertQueries(SQLQueryRecorder):
         """
         if table_counts is not None:
             self.assert_table_counts(table_counts=table_counts)
+
+        if partial_table_counts is not None:
+            self.assert_partial_table_counts(partial_table_counts)
 
         if double_tables:
             self.assert_not_double_tables()

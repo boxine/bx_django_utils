@@ -58,6 +58,28 @@ class AssertQueriesTestCase(TestCase):
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
 
+    def test_assert_partial_table_counts(self):
+        with AssertQueries() as queries:
+            Permission.objects.all().first()
+            Group.objects.order_by('pk').first()
+            Group.objects.order_by('pk').first()
+        queries.assert_partial_table_counts({'auth_permission': 1})
+        queries.assert_partial_table_counts({'auth_group': 2})
+        queries.assert_partial_table_counts({'auth_group': 2, 'auth_permission': 1})
+
+        with self.assertRaises(AssertionError) as err:
+            queries.assert_partial_table_counts(Counter(auth_permission=5, foo=1, bar=3))
+        msg = str(err.exception)
+        print(msg)
+        assert 'Table count error:\n' in msg
+        assert 'auth_group: ' not in msg  # Not tested
+        assert '-auth_permission: 5\n' in msg
+        assert '-bar: 3\n' in msg
+        assert '-foo: 1\n' in msg
+        assert '+auth_permission: 1\n' in msg
+        assert 'Captured queries were:\n' in msg
+        assert '1. SELECT "auth_permission"' in msg
+
     def test_assert_not_double_tables(self):
         queries = self.get_instance()
         queries.assert_not_double_tables()
