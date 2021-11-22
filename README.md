@@ -96,7 +96,7 @@ Utilities to manipulate objects in database via models:
 
 #### bx_django_utils.models.queryset_utils
 
-* [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L6-L23) - Remove a applied .filter() from a QuerySet
+* [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L7-L32) - Remove a applied .filter() from a QuerySet
 
 #### bx_django_utils.models.timetracking
 

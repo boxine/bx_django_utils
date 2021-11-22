@@ -52,3 +52,10 @@ class QuerySetUtilsTestCase(TestCase):
         assert error_msg.startswith(
             "Cannot resolve keyword 'doesnotexists' into field. Choices are: "
         )
+
+        # Test with a "empty" queryset:
+        empty_queryset1 = User.objects.none()
+        assert empty_queryset1.count() == 0
+        empty_queryset2 = remove_filter(empty_queryset1, lookup='username')
+        assert empty_queryset2.count() == 0
+        assert empty_queryset1 is empty_queryset2  # In this case we get the same object back
