@@ -119,7 +119,7 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.assert_queries
 
-* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30-L208) - Assert executed database queries: Check table names, duplicate/similar Queries.
+* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30-L209) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
 #### bx_django_utils.test_utils.content_types
 
