@@ -246,3 +246,20 @@ class AssertQueriesTestCase(TestCase):
             duplicated=True,
             similar=True,
         )
+
+        # INNER JOIN tables will be ignored:
+
+        with AssertQueries() as queries:
+            Group.objects.filter(
+                permissions__in=Permission.objects.filter(content_type__app_label='not-exist')
+            ).count()
+
+        queries.assert_queries(
+            table_counts=Counter({
+                'auth_group': 1
+            }),
+            double_tables=True,
+            table_names=['auth_group'],
+            duplicated=True,
+            similar=True,
+        )
