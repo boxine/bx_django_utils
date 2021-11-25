@@ -131,7 +131,7 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.html_assertion
 
-* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L29-L127) - Unittest mixin class with useful assertments around Django test client tests
+* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L29-L131) - Unittest mixin class with useful assertments around Django test client tests
 * [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L9-L26) - Assert a HttpResponse via snapshot file. (Strip all empty lines from html)
 
 #### bx_django_utils.test_utils.model_clean_assert

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from bx_py_utils.test_utils.assertion import assert_equal
-from bx_py_utils.test_utils.snapshot import assert_text_snapshot
+from bx_py_utils.test_utils.snapshot import assert_snapshot, assert_text_snapshot
 from django.contrib.messages import get_messages
 from django.http import HttpResponse
 
@@ -38,6 +38,10 @@ class HtmlAssertionMixin:
             expected_messages,
             msg='Messages are not equal:'
         )
+
+    def snapshot_messages(self, response, **kwargs):
+        current_messages = [m.message for m in get_messages(response.wsgi_request)]
+        assert_snapshot(got=current_messages, self_file_path=Path(__file__), **kwargs)
 
     def get_msg_prefix_and_haystack(self, response, msg_prefix):
         haystack = response.content.decode('utf-8')

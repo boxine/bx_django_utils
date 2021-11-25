@@ -1,3 +1,6 @@
+import json
+import pathlib
+import tempfile
 from unittest import mock
 
 import django
@@ -57,6 +60,28 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
                 'Second X message.',
                 'The last message.'
             ])
+
+    def test_snapshot_messages(self):
+        request = get_request()
+        messages.info(request, 'First message.')
+        messages.warning(request, 'Second message.')
+        messages.error(request, 'The last message.')
+        response = FakeResponse(request)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError):
+                self.snapshot_messages(response, root_dir=tmp_dir)
+
+            # Test that snapshot got written
+            snapshot_name = 'test_html_assertion_snapshot_messages_1'
+            snapshot_file = (pathlib.Path(tmp_dir) / f'{snapshot_name}.snapshot.json')
+            snapshot_content = json.loads(snapshot_file.read_text())
+            self.assertEqual(
+                snapshot_content, ['First message.', 'Second message.', 'The last message.'])
+
+            # Should work now
+            self.snapshot_messages(response, root_dir=tmp_dir, snapshot_name=snapshot_name)
+
 
     def test_assert_html_response_snapshot(self):
         # Add the Django version to snapshot name, because they have different outputs ;)
