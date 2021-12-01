@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.test import TestCase
 
-from bx_django_utils.models.queryset_utils import remove_filter
+from bx_django_utils.models.queryset_utils import remove_filter, remove_model_filter
 
 
 class QuerySetUtilsTestCase(TestCase):
@@ -57,5 +57,43 @@ class QuerySetUtilsTestCase(TestCase):
         empty_queryset1 = User.objects.none()
         assert empty_queryset1.count() == 0
         empty_queryset2 = remove_filter(empty_queryset1, lookup='username')
+        assert empty_queryset2.count() == 0
+        assert empty_queryset1 is empty_queryset2  # In this case we get the same object back
+
+    def test_remove_model_filter(self):
+        admins = Group.objects.create(name='admins')
+        customers = Group.objects.create(name='customers')
+        User.objects.create(username='Beatrice').groups.add(admins)
+        User.objects.create(username='Benedict').groups.add(customers)
+        User.objects.create(username='Bob').groups.add(admins)
+        User.objects.create(username='Jessica').groups.add(admins)
+        User.objects.create(username='John').groups.add(customers)
+
+        # Construct sample query
+        queryset = (
+            User.objects
+            .filter(username__startswith='B')
+            .filter(groups__name__in=['admins'])
+            .order_by('username').all())
+        got = list(queryset.values_list('username', flat=True))
+        assert got == ['Beatrice', 'Bob']
+
+        # Remove model-referencing filter
+        old_id = id(queryset)
+        queryset = remove_model_filter(queryset, Group)
+        got = list(queryset.values_list('username', flat=True))
+        assert got == ['Beatrice', 'Benedict', 'Bob']
+        assert id(queryset) != old_id
+
+        # Not filtering by the model in the first place is no problem
+        simple_queryset = User.objects.filter(username__contains='e')
+        simple_queryset = remove_model_filter(simple_queryset, Group)
+        got = list(simple_queryset.values_list('username', flat=True))
+        assert got == ['Beatrice', 'Benedict', 'Jessica']
+
+        # Test with an empty queryset
+        empty_queryset1 = User.objects.none()
+        assert empty_queryset1.count() == 0
+        empty_queryset2 = remove_model_filter(empty_queryset1, Group)
         assert empty_queryset2.count() == 0
         assert empty_queryset1 is empty_queryset2  # In this case we get the same object back
