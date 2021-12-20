@@ -1,26 +1,27 @@
 from pathlib import Path
 
 from bx_py_utils.test_utils.assertion import assert_equal
-from bx_py_utils.test_utils.snapshot import assert_snapshot, assert_text_snapshot
+from bx_py_utils.test_utils.snapshot import assert_html_snapshot, assert_snapshot
 from django.contrib.messages import get_messages
 from django.http import HttpResponse
 
 
 def assert_html_response_snapshot(response: HttpResponse, status_code=200, **kwargs):
     """
-    Assert a HttpResponse via snapshot file. (Strip all empty lines from html)
+    Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
     e.g.:
         response = self.client.get(path='/foo/bar/')
-        assert_html_response_snapshot(response)
+        assert_html_response_snapshot(response, validate=False)
+
+    Hint: Validation will fail with default Django admin templates.
     """
-    html = response.content.decode('utf-8')
-    html_striped = '\n'.join(line.rstrip() for line in html.splitlines() if line.strip())
-    assert_text_snapshot(
-        got=html_striped,
-        extension='.html',
-        self_file_path=Path(__file__),
-        **kwargs
-    )
+    if response.content:  # e.g.: 302 has no content ;)
+        html = response.content.decode('utf-8')
+        assert_html_snapshot(
+            got=html,
+            self_file_path=Path(__file__),
+            **kwargs
+        )
     assert response.status_code == status_code, (
         f'Status code is {response.status_code} but excepted {status_code}'
     )

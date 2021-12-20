@@ -20,7 +20,7 @@ readme='README.md'
 
 [tool.poetry.dependencies]
 python = '>=3.6,<4.0.0'
-bx_py_utils = '>=41'  # https://github.com/boxine/bx_py_utils
+bx_py_utils = '>=52'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = "*"  # https://arthurdejong.org/python-stdnum/
 
@@ -39,6 +39,8 @@ isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = "*"
 tox-poetry-installer = {extras = ["poetry"], version = "*"}  # https://github.com/enpaul/tox-poetry-installer
+beautifulsoup4 = "*"
+lxml = "*"
 
 # pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
 # so we must install pdoc only with 3.7 or newer, to get a up-to-date version.
