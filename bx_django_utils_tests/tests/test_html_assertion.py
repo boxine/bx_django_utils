@@ -96,6 +96,7 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
                 status_code=200,
                 root_dir=root_dir,
                 snapshot_name=snapshot_name,
+                validate=False
             )
 
         response = self.client.get(path='/admin/')
@@ -103,7 +104,7 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
             response, expected_url='/admin/login/?next=%2Fadmin%2F', fetch_redirect_response=False
         )
 
-        # A redirect will be result in a empty snapshot file,
+        # A redirect has no content, so no snapshot file will be created,
         # but the status code is checked, too:
         assert_html_response_snapshot(response, status_code=302)
 
