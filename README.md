@@ -122,6 +122,11 @@ Utilities / helper for writing tests.
 
 * [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30-L209) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
+#### bx_django_utils.test_utils.cache
+
+* [`ClearCacheMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L39-L50) - TestCase mixin to clear the Django cache in setUp/tearDown
+* [`MockCache()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L6-L36) - Mock Django cache backend, so it's easy to check/manipulate the cache content
+
 #### bx_django_utils.test_utils.content_types
 
 * [`ContentTypeCacheFixMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/content_types.py#L7-L35) - TestCase mixin to fill the ContentType cache to avoid flaky database queries.
