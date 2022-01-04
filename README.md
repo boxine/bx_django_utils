@@ -124,8 +124,8 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.cache
 
-* [`ClearCacheMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L39-L50) - TestCase mixin to clear the Django cache in setUp/tearDown
-* [`MockCache()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L6-L36) - Mock Django cache backend, so it's easy to check/manipulate the cache content
+* [`ClearCacheMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L100-L111) - TestCase mixin to clear the Django cache in setUp/tearDown
+* [`MockCache()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/cache.py#L55-L97) - Mock Django cache backend, so it's easy to check/manipulate the cache content
 
 #### bx_django_utils.test_utils.content_types
 
