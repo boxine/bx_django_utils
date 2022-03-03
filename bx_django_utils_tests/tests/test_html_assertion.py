@@ -96,7 +96,8 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
                 status_code=200,
                 root_dir=root_dir,
                 snapshot_name=snapshot_name,
-                validate=False
+                validate=False,
+                query_selector=None
             )
 
         response = self.client.get(path='/admin/')
@@ -106,8 +107,9 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
 
         # A redirect has no content, so no snapshot file will be created,
         # but the status code is checked, too:
-        assert_html_response_snapshot(response, status_code=302)
+        assert_html_response_snapshot(
+            response, status_code=302, validate=False, query_selector=None)
 
         msg = 'Status code is 302 but excepted 200'
         with self.assertRaisesMessage(AssertionError, msg):
-            assert_html_response_snapshot(response)
+            assert_html_response_snapshot(response, validate=False, query_selector=None)
