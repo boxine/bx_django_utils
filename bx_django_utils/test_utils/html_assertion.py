@@ -6,20 +6,28 @@ from django.contrib.messages import get_messages
 from django.http import HttpResponse
 
 
-def assert_html_response_snapshot(response: HttpResponse, status_code=200, **kwargs):
+def assert_html_response_snapshot(
+    response: HttpResponse,
+    status_code=200,
+    query_selector='#content',
+    **kwargs
+):
     """
     Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
+    Defaults to the `#content` container. Make sure to specify your own `query_selector=''` if you
+    need to test other parts of the HTML document.
     e.g.:
         response = self.client.get(path='/foo/bar/')
         assert_html_response_snapshot(response, validate=False)
 
     Hint: Validation will fail with default Django admin templates.
     """
-    if response.content:  # e.g.: 302 has no content ;)
+    if response.content:  # e.g.: 302 has no content
         html = response.content.decode('utf-8')
         assert_html_snapshot(
             got=html,
             self_file_path=Path(__file__),
+            query_selector=query_selector,
             **kwargs
         )
     assert response.status_code == status_code, (
