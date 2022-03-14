@@ -135,6 +135,15 @@ Utilities / helper for writing tests.
 
 * [`MockDatetimeGenerator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L4-L50) - Mock django `timezone.now()` with generic time stamps in tests.
 
+#### bx_django_utils.test_utils.fixtures
+
+Utilities to manage text fixtures in JSON files.
+
+* [`BaseFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L25-L55) - Base class for JSON dump fixtures.
+* [`FixturesRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L58-L88) - Registry to collect a list of all existing fixture classes.
+* [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L120-L152) - A base Django manage command to renew all existing fixture JSON dump files
+* [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L94-L117) - Register all fixtures by import all **/fixtures/**/*.py files
+
 #### bx_django_utils.test_utils.html_assertion
 
 * [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L38-L140) - Unittest mixin class with useful assertments around Django test client tests
