@@ -139,10 +139,10 @@ Utilities / helper for writing tests.
 
 Utilities to manage text fixtures in JSON files.
 
-* [`BaseFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L25-L55) - Base class for JSON dump fixtures.
-* [`FixturesRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L58-L88) - Registry to collect a list of all existing fixture classes.
-* [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L120-L152) - A base Django manage command to renew all existing fixture JSON dump files
-* [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L94-L117) - Register all fixtures by import all **/fixtures/**/*.py files
+* [`BaseFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L25-L58) - Base class for JSON dump fixtures.
+* [`FixturesRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L61-L91) - Registry to collect a list of all existing fixture classes.
+* [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L123-L155) - A base Django manage command to renew all existing fixture JSON dump files
+* [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L97-L120) - Register all fixtures by import all **/fixtures/**/*.py files
 
 #### bx_django_utils.test_utils.html_assertion
 

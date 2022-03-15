@@ -7,7 +7,12 @@ from django.test import SimpleTestCase
 
 from bx_django_utils.test_utils.fixtures import FIXTURES_FILE_PATHS, BaseFixtures, FixturesRegistry, fixtures_registry
 from bx_django_utils_tests.test_app.management.commands import renew_fixtures
-from bx_django_utils_tests.test_app.tests.fixtures.fixtures1 import EXAMPLE_FIXTURES_DATA, ExampleFixtures
+from bx_django_utils_tests.test_app.tests.fixtures.fixtures1 import (
+    EXAMPLE_FIXTURES_DATA1,
+    EXAMPLE_FIXTURES_DATA2,
+    ExampleFixtures1,
+    ExampleFixtures2,
+)
 
 
 class FixturesHelperTestCase(SimpleTestCase):
@@ -23,13 +28,14 @@ class FixturesHelperTestCase(SimpleTestCase):
         self.reset()
 
     def test_example_fixtures(self):
-        assert ExampleFixtures().get_fixture_data() == EXAMPLE_FIXTURES_DATA
+        assert ExampleFixtures1().get_fixture_data() == EXAMPLE_FIXTURES_DATA1
+        assert ExampleFixtures2().get_fixture_data() == EXAMPLE_FIXTURES_DATA2
 
     def test_registry(self):
-        assert list(fixtures_registry.fixtures.keys()) == [ExampleFixtures]
+        assert sorted(fixtures_registry.fixtures.keys()) == ['ExampleFixtures1', 'ExampleFixtures2']
 
     def test_renew(self):
-        fixture = ExampleFixtures()
+        fixture = ExampleFixtures1()
 
         # Change fixtures file content:
         fixture.store_fixture_data(data=['something else!'])
@@ -39,12 +45,12 @@ class FixturesHelperTestCase(SimpleTestCase):
         fixture.renew()
 
         # The "old" data?
-        assert fixture.get_fixture_data() == EXAMPLE_FIXTURES_DATA
+        assert fixture.get_fixture_data() == EXAMPLE_FIXTURES_DATA1
 
     def test_renew_command(self):
         # Change fixtures file content:
-        ExampleFixtures().store_fixture_data(data=['something else!'])
-        assert ExampleFixtures().get_fixture_data() == ['something else!']
+        ExampleFixtures1().store_fixture_data(data=['something else!'])
+        assert ExampleFixtures1().get_fixture_data() == ['something else!']
 
         # Call "renew" command:
         capture_stdout = io.StringIO()
@@ -52,11 +58,11 @@ class FixturesHelperTestCase(SimpleTestCase):
         call_command(renew_fixtures.Command(), stdout=capture_stdout, stderr=capture_stderr)
         stdout_output = capture_stdout.getvalue()
         stderr_output = capture_stderr.getvalue()
-        assert '1 Fixtures updated, ok.' in stdout_output
+        assert '2 Fixtures updated, ok.' in stdout_output
         assert stderr_output == ''
         assert_text_snapshot(got=stdout_output)
 
-        assert ExampleFixtures().get_fixture_data() == EXAMPLE_FIXTURES_DATA
+        assert ExampleFixtures1().get_fixture_data() == EXAMPLE_FIXTURES_DATA1
 
     def test_overwriting(self):
         class Foo(BaseFixtures):
@@ -73,11 +79,11 @@ class FixturesHelperTestCase(SimpleTestCase):
         with self.assertRaisesMessage(RuntimeError, 'Fixture class "Foo" already registered!'):
             registry.register()(Foo)
 
-        foo = registry.fixtures[Foo]
+        foo = registry.fixtures['Foo']
         file_path = foo.file_path
 
         # It's not possible to overwrite the same JSON file:
         with self.assertRaisesMessage(
-            AssertionError, f'File path "{file_path}" from "Bar" already used!'
+            RuntimeError, f'File path "{file_path}" from "Bar" already used!'
         ):
             registry.register()(Bar)

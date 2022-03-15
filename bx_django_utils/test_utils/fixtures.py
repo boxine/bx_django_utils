@@ -38,7 +38,10 @@ class BaseFixtures:
         self.file_path = self.base_path / self.file_name
 
     def get_fixture_data(self):
-        assert_is_file(self.file_path)
+        try:
+            assert_is_file(self.file_path)
+        except OSError as err:
+            raise OSError(f'{err} (Hint: renew test fixtures!)')
         with Path(self.file_path).open('r') as f:
             return json.load(f)
 
@@ -67,24 +70,24 @@ class FixturesRegistry:
         def _class_wrapper(FixtureClass):
             assert issubclass(FixtureClass, BaseFixtures)
 
-            if FixtureClass in self.fixtures:
-                raise RuntimeError(f'Fixture class "{FixtureClass.__name__}" already registered!')
+            class_name = FixtureClass.__name__
+
+            if class_name in self.fixtures:
+                raise RuntimeError(f'Fixture class "{class_name}" already registered!')
 
             fixtures = FixtureClass()
             file_path = fixtures.file_path
             if file_path in FIXTURES_FILE_PATHS:
-                raise AssertionError(
-                    f'File path "{file_path}" from "{FixtureClass.__name__}" already used!'
-                )
+                raise RuntimeError(f'File path "{file_path}" from "{class_name}" already used!')
             FIXTURES_FILE_PATHS.add(file_path)
 
-            self.fixtures[FixtureClass] = fixtures
+            self.fixtures[class_name] = fixtures
             return FixtureClass
 
         return _class_wrapper
 
     def __iter__(self):
-        for FixtureClass, fixtures in sorted(self.fixtures.items()):
+        for class_name, fixtures in self.fixtures.items():
             yield fixtures
 
 
