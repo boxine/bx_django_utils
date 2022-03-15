@@ -1,5 +1,7 @@
 Found 2 fixtures files.
 ____________________________________________________________________________________________________
-1. renew "ExampleFixtures" file "example_fixtures.json...
+1. renew "ExampleFixtures1" file "example_fixtures1.json...
+____________________________________________________________________________________________________
+2. renew "ExampleFixtures2" file "example_fixtures2.json...
 
-1 Fixtures updated, ok.
+2 Fixtures updated, ok.
