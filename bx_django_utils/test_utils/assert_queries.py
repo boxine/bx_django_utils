@@ -1,3 +1,4 @@
+import collections
 import re
 from collections import Counter
 from difflib import unified_diff
@@ -33,7 +34,7 @@ class AssertQueries(SQLQueryRecorder):
 
     Example usage:
 
-        with AssertQueries() as queries:
+        with AssertQueries(query_explain=True) as queries:
             func_that_makes_queries()
         queries.assert_queries(
             query_count=3,
@@ -47,41 +48,80 @@ class AssertQueries(SQLQueryRecorder):
         bx_django_utils_tests/tests/test_assert_queries.py
     """
 
-    def __init__(self, databases=None, after_modules=None):
+    def __init__(
+        self,
+        databases=None,
+        after_modules=None,
+        query_explain=False,  # Capture EXPLAIN SQL information?
+    ):
         if after_modules is None:
             after_modules = DEFAULT_AFTER_MODULES
 
         collect_stacktrace = StacktraceAfter(after_modules=after_modules)
-        super().__init__(databases=databases, collect_stacktrace=collect_stacktrace)
+        super().__init__(
+            databases=databases, collect_stacktrace=collect_stacktrace, query_explain=query_explain
+        )
+
+    @staticmethod
+    def get_table_name(query):
+        sql = query['sql']
+        if sql.startswith('SAVEPOINT') or sql.startswith('RELEASE SAVEPOINT'):
+            # transaction statements
+            return
+
+        table_names = re.findall(r'(FROM|INSERT INTO|UPDATE) \"(.+?)\"', sql)
+        assert len(table_names) >= 1, f'Error parsing: {sql!r}'
+        # Use only the first table name (e.g.: ignore names in inner join)
+        table_name = table_names[0][1]
+        return table_name
 
     def count_table_names(self):
         table_name_count = Counter()
         for db, query in self.logger._queries:
-            sql = query['sql']
-            if sql.startswith('SAVEPOINT') or sql.startswith('RELEASE SAVEPOINT'):
-                # Skip transaction statements
-                continue
-
-            table_names = re.findall(r'(FROM|INSERT INTO|UPDATE) \"(.+?)\"', sql)
-            assert len(table_names) >= 1, f'Error parsing: {sql!r}'
-            # Use only the first table name (e.g.: ignore names in inner join)
-            table_name = table_names[0][1]
-            table_name_count[table_name] += 1
+            table_name = self.get_table_name(query)
+            if table_name:
+                table_name_count[table_name] += 1
 
         return table_name_count
 
+    def get_explains(self):
+        """
+        Yields DB table name and captured SQL explain information.
+        """
+        assert self.query_explain, 'Explain way not captured!'
+
+        for db, query in self.logger._queries:
+            table_name = self.get_table_name(query)
+            explain_str = '\n'.join(query['explain'])
+
+            yield table_name, explain_str
+
+    def get_explain_dict(self):
+        """
+        Generate a dict with database table name and SQL explain entry.
+        """
+        result = collections.defaultdict(list)
+        for table_name, explain_str in self.get_explains():
+            result[table_name].append(explain_str)
+        return dict(result)
+
     @property
-    def query_info(self):
+    def query_info(self) -> str:
+        """
+        :return: Human readable information about the executed SQL queries
+        """
         parts = []
         for i, (db, query) in enumerate(self.logger._queries, start=1):
             stacktrace = query['stacktrace']
             frameinfo = stacktrace[-1]
 
-            parts.append(
-                f'{i:>3}. {query["sql"]}\n'
-                f'    {frameinfo.filename} {frameinfo.line} {frameinfo.func!r}\n'
-                f'    {frameinfo.code!r}\n'
-            )
+            parts.append(f'{i:>3}. {query["sql"]}\n')
+            parts.append(f'    {frameinfo.filename} {frameinfo.line} {frameinfo.func}():')
+            parts.append(f'        {frameinfo.code!r}\n')
+            if self.query_explain:
+                for explain_line in query['explain']:
+                    parts.append(f'    {explain_line}')
+                parts.append('')
 
         return '\n'.join(parts)
 
