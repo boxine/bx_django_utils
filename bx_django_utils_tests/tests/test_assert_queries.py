@@ -1,7 +1,7 @@
 from collections import Counter
 
 from django.contrib.auth.models import Group, Permission
-from django.db import transaction
+from django.db import connection, transaction
 from django.test import TestCase
 
 from bx_django_utils.test_utils.assert_queries import AssertQueries
@@ -65,7 +65,9 @@ class AssertQueriesTestCase(TestCase):
             Permission.objects.all().first()
             Group.objects.all().first()
 
-        queries.assert_table_counts({'auth_permission': 2}, exclude=('auth_group', 'not_mentioned'))
+        queries.assert_table_counts(
+            {'auth_permission': 2}, exclude=('auth_group', 'not_mentioned')
+        )
 
         # Incorrect counts / added tables
         with self.assertRaises(AssertionError) as err:
@@ -123,7 +125,7 @@ class AssertQueriesTestCase(TestCase):
 
         assert '1. SELECT "auth_permission"' in msg
         assert 'bx_django_utils_tests/tests/test_assert_queries.py' in msg
-        assert "'test_assert_duplicated_queries'\n" in msg
+        assert ' test_assert_duplicated_queries():\n' in msg
         assert "Permission.objects.all().first()  # Query 1" in msg
 
         assert '2. SELECT "auth_permission"' in msg
@@ -263,3 +265,43 @@ class AssertQueriesTestCase(TestCase):
             duplicated=True,
             similar=True,
         )
+
+    def test_query_explain(self):
+        with AssertQueries(query_explain=True) as queries:
+            Permission.objects.all().first()
+
+        results = list(queries.get_explains())
+        self.assertEqual(len(results), 1)
+        table_name, explain_str = results[0]
+
+        self.assertEqual(table_name, 'auth_permission')
+        self.assertIsInstance(explain_str, str)
+        if connection.vendor == 'sqlite':
+            # Depends on SQLite version/implementation!
+            self.assertIn(' SCAN ', explain_str)
+            self.assertIn(' USING INDEX ', explain_str)
+            self.assertIn(' SEARCH ', explain_str)
+
+    def test_query_info(self):
+        with AssertQueries(query_explain=True) as queries:
+            Permission.objects.all().first()
+            Group.objects.all().first()
+
+        query_info = queries.query_info
+        self.assertIsInstance(query_info, str)
+        self.assertIn('1. SELECT ', query_info)
+        self.assertIn('2. SELECT ', query_info)
+        self.assertIn('bx_django_utils_tests/tests/test_assert_queries.py ', query_info)
+        self.assertIn(' test_query_info():\n', query_info)
+        if connection.vendor == 'sqlite':
+            # Depends on SQLite version/implementation!
+            self.assertIn(' SCAN ', query_info)
+            self.assertIn(' USING INDEX ', query_info)
+            self.assertIn(' SEARCH ', query_info)
+
+    def test_query_explain_not_captured(self):
+        with AssertQueries() as queries:
+            Permission.objects.all().first()
+
+        with self.assertRaisesMessage(AssertionError, 'Explain way not captured!'):
+            list(queries.get_explains())

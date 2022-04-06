@@ -55,11 +55,11 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 
 #### bx_django_utils.dbperf.cursor
 
-* [`RecordingCursorWrapper()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/cursor.py#L17-L115) - An implementation of django.db.backends.utils.CursorWrapper.
+* [`RecordingCursorWrapper()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/cursor.py#L17-L136) - An implementation of django.db.backends.utils.CursorWrapper.
 
 #### bx_django_utils.dbperf.query_recorder
 
-* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L95-L167) - A context manager that allows recording SQL queries executed during its lifetime.
+* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L95-L176) - A context manager that allows recording SQL queries executed during its lifetime.
 
 ### bx_django_utils.filename
 
@@ -120,7 +120,7 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.assert_queries
 
-* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L30-L209) - Assert executed database queries: Check table names, duplicate/similar Queries.
+* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L31-L249) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
 #### bx_django_utils.test_utils.cache
 

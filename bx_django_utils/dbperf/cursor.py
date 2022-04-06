@@ -22,7 +22,14 @@ class RecordingCursorWrapper:
     to the provided logger before delegating them to the wrapped cursor.
     """
 
-    def __init__(self, cursor, db, logger, collect_stacktrace=None):
+    def __init__(
+        self,
+        cursor,
+        db,
+        logger,
+        collect_stacktrace=None,
+        query_explain: bool = False,  # Capture EXPLAIN SQL information?
+    ):
         self.cursor = cursor
         self.db = db
         self.logger = logger  # must implement 'record' method
@@ -31,6 +38,8 @@ class RecordingCursorWrapper:
             self.get_stacktrace = get_stacktrace
         else:
             self.get_stacktrace = collect_stacktrace
+
+        self.query_explain = query_explain
 
     def __getattr__(self, attr):
         return getattr(self.cursor, attr)
@@ -75,6 +84,21 @@ class RecordingCursorWrapper:
             return repr(param)
 
     def _record(self, method, sql, params):
+        if not self.query_explain:
+            explain = None
+        else:
+            explain_prefix = self.db.ops.explain_query_prefix()
+            self.cursor.execute(f'{explain_prefix} {sql}', params)
+            result = self.cursor.fetchall()
+
+            # Convert the result in the same way as Django, see: SQLCompiler.explain_query():
+            explain = []
+            for row in result:
+                if not isinstance(row, str):
+                    explain.append(' '.join(str(c) for c in row))
+                else:
+                    explain.append(row)
+
         start = time.monotonic()
         try:
             return method(sql, params)
@@ -90,20 +114,17 @@ class RecordingCursorWrapper:
             sql = str(sql)  # is sometimes an object, e.g. psycopg Composed, so ensure string
             stacktrace = self.get_stacktrace()
 
-            self.logger.record(**{
-                'alias': getattr(self.db, 'alias', 'default'),
-                'vendor': getattr(self.db.connection, 'vendor', 'unknown'),
-                'raw_sql': sql,
-                'sql': self.db.ops.last_executed_query(
-                    self.cursor,
-                    sql,
-                    self._quote_params(params)
-                ),
-                'raw_params': params,
-                'params': _params_decoded,
-                'duration': duration,
-                'stacktrace': stacktrace,
-            })
+            self.logger.record(
+                alias=getattr(self.db, 'alias', 'default'),
+                vendor=getattr(self.db.connection, 'vendor', 'unknown'),
+                raw_sql=sql,
+                sql=self.db.ops.last_executed_query(self.cursor, sql, self._quote_params(params)),
+                raw_params=params,
+                params=_params_decoded,
+                duration=duration,
+                stacktrace=stacktrace,
+                explain=explain,
+            )
 
     def callproc(self, procname, params=None):
         return self._record(self.cursor.callproc, procname, params)

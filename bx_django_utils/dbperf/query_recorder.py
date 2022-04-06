@@ -103,18 +103,21 @@ class SQLQueryRecorder:
 
     Example usage:
 
-        with SQLQueryRecorder() as rec:
+        with SQLQueryRecorder(query_explain=True) as rec:
             func_that_makes_queries()
         print(rec.results(aggregate_results=True))
 
     """
     running = None
 
-    def __init__(self,
-                 databases: Optional[List[str]] = None,
-                 collect_stacktrace: Optional[Callable] = None
-                 ):
+    def __init__(
+        self,
+        databases: Optional[List[str]] = None,
+        collect_stacktrace: Optional[Callable] = None,
+        query_explain: bool = False,  # Capture EXPLAIN SQL information?
+    ):
         self.logger = Logger()
+        self.query_explain = query_explain
 
         if databases:
             self.databases = [db for db in connections.all() if db.alias in databases]
@@ -134,14 +137,20 @@ class SQLQueryRecorder:
 
             def cursor():
                 return RecordingCursorWrapper(
-                    connection._recording_cursor(), connection, self.logger,
-                    collect_stacktrace=self.collect_stacktrace
+                    connection._recording_cursor(),
+                    connection,
+                    self.logger,
+                    collect_stacktrace=self.collect_stacktrace,
+                    query_explain=self.query_explain,
                 )
 
             def chunked_cursor():
                 return RecordingCursorWrapper(
-                    connection._recording_chunked_cursor(), connection, self.logger,
-                    collect_stacktrace=self.collect_stacktrace
+                    connection._recording_chunked_cursor(),
+                    connection,
+                    self.logger,
+                    collect_stacktrace=self.collect_stacktrace,
+                    query_explain=self.query_explain,
                 )
 
             connection.cursor = cursor
