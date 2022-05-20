@@ -35,6 +35,10 @@ Base model/admin/form classes to implement a model with draft/approve versions w
 * [`BaseApproveModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L14-L202) - Base model class for approve models *and* this relation models.
 * [`BaseApproveWorkflowModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L205-L255) - Base model for approve workflow models.
 
+### bx_django_utils.cached_dataclasses
+
+* [`CachedDataclassBase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/cached_dataclasses.py#L7-L59) - A Base dataclass that can be easy store/restore to Django cache.
+
 #### bx_django_utils.data_types.gtin
 
 ModelField, FormField and validators for GTIN/UPC/EAN numbers
