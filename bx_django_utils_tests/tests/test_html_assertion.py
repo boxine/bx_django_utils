@@ -82,7 +82,6 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
             # Should work now
             self.snapshot_messages(response, root_dir=tmp_dir, snapshot_name=snapshot_name)
 
-
     def test_assert_html_response_snapshot(self):
         # Add the Django version to snapshot name, because they have different outputs ;)
         root_dir, snapshot_name = _get_caller_names()
