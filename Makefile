@@ -25,14 +25,10 @@ update: check-poetry ## Update the dependencies as according to the pyproject.to
 	poetry update
 
 lint: ## Run code formatters and linter
-	poetry run flynt --fail-on-change --line-length=${MAX_LINE_LENGTH} bx_django_utils
-	poetry run isort --check-only .
-	poetry run flake8 bx_django_utils
+	poetry run darker --diff --check
 
 fix-code-style: ## Fix code formatting
-	poetry run flynt --line-length=${MAX_LINE_LENGTH} bx_django_utils
-	poetry run autopep8 --ignore-local-config --max-line-length=${MAX_LINE_LENGTH} --aggressive --aggressive --in-place --recursive bx_django_utils
-	poetry run isort .
+	poetry run darker
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
