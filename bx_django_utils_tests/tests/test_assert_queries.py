@@ -12,6 +12,10 @@ def make_database_queries(count=1):
         Permission.objects.all().first()
 
 
+def make_database_queries2(count=1):
+    make_database_queries(count)
+
+
 class AssertQueriesTestCase(TestCase):
 
     def get_instance(self):
@@ -305,3 +309,22 @@ class AssertQueriesTestCase(TestCase):
 
         with self.assertRaisesMessage(AssertionError, 'Explain way not captured!'):
             list(queries.get_explains())
+
+    def test_query_info_max_stacktrace(self):
+        with AssertQueries(max_stacktrace=2) as queries:
+            make_database_queries2(count=1)
+
+        query_info = queries.query_info
+        self.assertIsInstance(query_info, str)
+        self.assertIn('bx_django_utils_tests/tests/test_assert_queries.py ', query_info)
+        self.assertIn('make_database_queries2():\n', query_info)  # <<< last two frames present
+        self.assertIn('make_database_queries():\n', query_info)  # last frame
+
+        with AssertQueries(max_stacktrace=1) as queries:
+            make_database_queries2(count=1)
+
+        query_info = queries.query_info
+        self.assertIsInstance(query_info, str)
+        self.assertIn('bx_django_utils_tests/tests/test_assert_queries.py ', query_info)
+        self.assertNotIn('make_database_queries2():', query_info)  # <<< only last -> not present
+        self.assertIn('make_database_queries():\n', query_info)  # last frame
