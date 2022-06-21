@@ -53,6 +53,7 @@ class AssertQueries(SQLQueryRecorder):
         databases=None,
         after_modules=None,
         query_explain=False,  # Capture EXPLAIN SQL information?
+        max_stacktrace=3,  # How many stack line should be displayed in SQL listing?
     ):
         if after_modules is None:
             after_modules = DEFAULT_AFTER_MODULES
@@ -61,6 +62,10 @@ class AssertQueries(SQLQueryRecorder):
         super().__init__(
             databases=databases, collect_stacktrace=collect_stacktrace, query_explain=query_explain
         )
+        assert (
+            isinstance(max_stacktrace, int) and max_stacktrace >= 0
+        ), f'invalid max_stacktrace: {max_stacktrace!r}'
+        self.max_stacktrace = max_stacktrace
 
     @staticmethod
     def get_table_name(query):
@@ -112,12 +117,28 @@ class AssertQueries(SQLQueryRecorder):
         """
         parts = []
         for i, (db, query) in enumerate(self.logger._queries, start=1):
-            stacktrace = query['stacktrace']
-            frameinfo = stacktrace[-1]
+            parts.append(f'{i:>3}. {query["sql"]}')
 
-            parts.append(f'{i:>3}. {query["sql"]}\n')
-            parts.append(f'    {frameinfo.filename} {frameinfo.line} {frameinfo.func}():')
-            parts.append(f'        {frameinfo.code!r}\n')
+            if self.max_stacktrace:
+                stacktrace = query['stacktrace']
+                stack_count = len(stacktrace)
+                if stack_count > self.max_stacktrace:
+                    parts.append('    ...')
+                else:
+                    parts.append('\n')
+
+                max_lines_slice = -self.max_stacktrace
+                stacktrace = stacktrace[max_lines_slice:]
+
+                start_no = stack_count - self.max_stacktrace + 1
+                for frame_no, frameinfo in enumerate(stacktrace, start=start_no):
+                    parts.append(
+                        f'    {frame_no:>2}.'
+                        f'{frameinfo.filename} {frameinfo.line} {frameinfo.func}():'
+                    )
+                    parts.append(f'        {frameinfo.code!r}')
+                parts.append('\n')
+
             if self.query_explain:
                 for explain_line in query['explain']:
                     parts.append(f'    {explain_line}')
