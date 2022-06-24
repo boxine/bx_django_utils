@@ -150,7 +150,7 @@ Utilities to manage text fixtures in JSON files.
 
 #### bx_django_utils.test_utils.forms
 
-* [`AssertFormFields()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/forms.py#L13-L84) - Helper to check the existing form fields.
+* [`AssertFormFields()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/forms.py#L13-L86) - Helper to check the existing form fields.
 
 #### bx_django_utils.test_utils.html_assertion
 
