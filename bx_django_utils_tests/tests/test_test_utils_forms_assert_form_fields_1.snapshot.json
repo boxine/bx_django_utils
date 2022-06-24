@@ -1,0 +1,23 @@
+[
+    {
+        "type": "submit",
+        "value": "Log in"
+    },
+    {
+        "autocomplete": "current-password",
+        "id": "id_password",
+        "name": "password",
+        "required": "",
+        "type": "password"
+    },
+    {
+        "autocapitalize": "none",
+        "autocomplete": "username",
+        "autofocus": "",
+        "id": "id_username",
+        "maxlength": "150",
+        "name": "username",
+        "required": "",
+        "type": "text"
+    }
+]

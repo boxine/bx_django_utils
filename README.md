@@ -148,6 +148,10 @@ Utilities to manage text fixtures in JSON files.
 * [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L123-L155) - A base Django manage command to renew all existing fixture JSON dump files
 * [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L97-L120) - Register all fixtures by import all **/fixtures/**/*.py files
 
+#### bx_django_utils.test_utils.forms
+
+* [`AssertFormFields()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/forms.py#L13-L84) - Helper to check the existing form fields.
+
 #### bx_django_utils.test_utils.html_assertion
 
 * [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L38-L140) - Unittest mixin class with useful assertments around Django test client tests
