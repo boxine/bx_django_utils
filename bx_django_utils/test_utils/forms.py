@@ -35,7 +35,9 @@ class AssertFormFields:
 
         parser = etree.HTMLParser()
         tree = etree.fromstring(response.content, parser=parser)
-        form_fields = tree.xpath(f'{xpath_prefix}//form//input{xpath_filter}')
+        form_fields = tree.xpath(
+            f'{xpath_prefix}//form//*[self::input or self::textarea or self::select]{xpath_filter}'
+        )
 
         # Collect only the attributes of the <input> field:
         self.data = []

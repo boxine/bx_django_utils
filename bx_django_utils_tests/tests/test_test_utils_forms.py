@@ -1,4 +1,6 @@
 from bx_py_utils.test_utils.snapshot import assert_snapshot
+from django import forms
+from django.http import HttpResponse
 from django.test import TestCase
 
 from bx_django_utils.test_utils.forms import AssertFormFields
@@ -32,3 +34,17 @@ class TestUtilsFormsTestCase(TestCase):
                 field_names={'password', 'not-exists', 'username'}
             )
         assert_snapshot(got=assert_form_fields.data)
+
+    def test_assert_form_fields_gets_all_field_types(self):
+        class TestForm(forms.Form):
+            a_input_field = forms.CharField(max_length=123)
+            a_hidden_input_field = forms.CharField(widget=forms.HiddenInput)
+            a_select_field = forms.ChoiceField(choices=(('foo', 'foo'), ('bar', 'bar')))
+            a_textarea = forms.CharField(widget=forms.Textarea)
+
+        content = TestForm().as_p()
+        content = f'<div id="content"><form>{content}</form></div>'
+        response = HttpResponse(content=f'{content}'.encode())
+        assert_form_fields = AssertFormFields(response)
+        all_field_names = assert_form_fields.get_all_field_names()
+        self.assertEqual(all_field_names, {'a_input_field', 'a_select_field', 'a_textarea'})
