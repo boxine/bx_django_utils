@@ -60,4 +60,13 @@ start-dev-server: ## Start Django dev. server with the test project
 clean: ## Remove created files from the test project (e.g.: SQlite, static files)
 	git clean -dfX bx_django_utils_tests/
 
-.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server docker-test
+playwright-install: ## Install test browser for Playwright tests
+	poetry run playwright install chromium firefox
+
+playwright-inspector:  ## Run Playwright inspector
+	PWDEBUG=1 poetry run pytest -s -m playwright -x
+
+playwright-tests:  ## Run only the Playwright tests
+	poetry run pytest -m playwright
+
+.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server docker-test playwright-install playwright-inspector playwright-tests
