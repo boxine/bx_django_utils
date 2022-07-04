@@ -48,6 +48,7 @@ poetry-publish = '*'  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = '*'
 beautifulsoup4 = '*'
 lxml = '*'
+pytest-playwright = '*'  # https://playwright.dev/python/
 
 
 # pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,

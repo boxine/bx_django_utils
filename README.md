@@ -162,6 +162,15 @@ Utilities to manage text fixtures in JSON files.
 * [`AssertModelCleanCalled()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L35-L86) - Context manager for assert that full_clean() was called for every model instance.
 * [`CleanMock()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L6-L32) - Track if full_clean() was called.
 
+#### bx_django_utils.test_utils.playwright
+
+Use Playwright in Pytest and Unittest + Fast Django user login
+
+* [`PyTestPlaywrightBaseTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L74-L105) - Base class for classed based Playwright tests, using pytest or Unittest runner.
+* [`UnittestRunnerMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L52-L71) - Mixin to initialize Playwright if Unittest runner is used.
+* [`fast_login()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L27-L49) - Helper to fast login, by injecting the session cookie.
+* [`setup_browser_context_args()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L14-L24) - Change Playwright browser arguments: Ignore https errors and `locale=en_US`
+
 #### bx_django_utils.test_utils.users
 
 * [`assert_permissions()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L29-L44) - Check user permissions.
