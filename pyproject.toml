@@ -131,7 +131,7 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{38,39,310}-django{3.2,4.0}
+envlist = py{38,39,310}-django{3.2,4.0,4.1}
 skip_missing_interpreters = True
 
 [testenv]
@@ -139,6 +139,7 @@ passenv = *
 deps =
     django3.2: django>=3.2,<3.3
     django4.0: django>=4.0,<4.1
+    django4.1: django>=4.1,<4.2
 whitelist_externals =
     poetry
 commands =
