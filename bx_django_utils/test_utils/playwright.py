@@ -5,7 +5,7 @@ import os
 
 import pytest
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test.client import Client
 from playwright.sync_api import Browser, BrowserType, Page, Playwright, sync_playwright
@@ -24,7 +24,7 @@ def setup_browser_context_args(context: dict) -> dict:
     return context
 
 
-def fast_login(page: Page, client: Client, live_server_url: str, user: User) -> None:
+def fast_login(page: Page, client: Client, live_server_url: str, user: AbstractUser) -> None:
     """
     Helper to fast login, by injecting the session cookie.
     Usage, e.g.:
@@ -96,7 +96,7 @@ class PyTestPlaywrightBaseTestCase(UnittestRunnerMixin, StaticLiveServerTestCase
     def setup_pytest_fixture(self, page: Page):
         self.page = page
 
-    def login(self, user: User) -> None:
+    def login(self, user: AbstractUser) -> None:
         """
         Helper to fast login, by injecting the session cookie.
         """
