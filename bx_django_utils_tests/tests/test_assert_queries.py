@@ -1,3 +1,6 @@
+import json
+import pathlib
+import tempfile
 from collections import Counter
 
 from django.contrib.auth.models import Group, Permission
@@ -95,6 +98,50 @@ class AssertQueriesTestCase(TestCase):
                 {'auth_permission': 3, 'auth_group': 1}, exclude=('auth_permission',))
         msg = str(err.exception)
         assert msg == 'Excluded key \'auth_permission\' is listed in table_counts'
+
+    def test_snapshot_table_counts(self):
+        with AssertQueries() as queries:
+            Permission.objects.all().first()
+            Permission.objects.all().first()
+            Group.objects.all().first()
+
+        with AssertQueries() as second_queries:
+            Permission.objects.all().first()
+            Permission.objects.all().first()
+            Permission.objects.all().first()
+            Group.objects.all().first()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError):
+                queries.snapshot_table_counts(
+                    exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'
+                )
+
+            queries.snapshot_table_counts(
+                exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'
+            )
+
+            snapshot_file = pathlib.Path(tmp_dir) / 'test.snapshot.json'
+            snapshot_data = json.loads(snapshot_file.read_text())
+            self.assertEqual(
+                snapshot_data,
+                {
+                    'auth_permission': 2,
+                },
+            )
+
+            with self.assertRaises(AssertionError) as error_capture:
+                second_queries.snapshot_table_counts(
+                    exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'
+                )
+
+            message = str(error_capture.exception)
+            self.assertIn('"auth_permission": 2', message)
+            self.assertIn('"auth_permission": 3', message)
+
+        # Use actual test files
+        queries.snapshot_table_counts(exclude=('auth_group',))
+        second_queries.snapshot_table_counts()
 
     def test_assert_not_double_tables(self):
         queries = self.get_instance()
