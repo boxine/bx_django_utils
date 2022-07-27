@@ -2,7 +2,10 @@ import collections
 import re
 from collections import Counter
 from difflib import unified_diff
+from pathlib import Path
 from typing import List, Optional, Tuple, Union
+
+from bx_py_utils.test_utils.snapshot import assert_snapshot
 
 from bx_django_utils.dbperf.query_recorder import SQLQueryRecorder
 from bx_django_utils.stacktrace import StacktraceAfter
@@ -189,6 +192,14 @@ class AssertQueries(SQLQueryRecorder):
                 tofile='current table counts'
             )
             raise AssertionError(self.build_error_message(f'Table count error:\n{diff}'))
+
+    def snapshot_table_counts(self, *, exclude: Optional[Tuple[str]] = None, **kwargs):
+        table_name_count = self.count_table_names()
+        if exclude:
+            for k in exclude:
+                if k in table_name_count:
+                    del table_name_count[k]
+        assert_snapshot(got=table_name_count, self_file_path=Path(__file__), **kwargs)
 
     def assert_not_double_tables(self):
         """
