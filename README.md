@@ -2,6 +2,12 @@
 
 Various Django utility functions
 
+[![pytest](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml/badge.svg?branch=master)](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_django_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_django_utils)
+
+[![bx_django_utils @ PyPi](https://img.shields.io/pypi/v/bx_django_utils?label=bx_django_utils%20%40%20PyPi)](https://pypi.org/project/bx_django_utils/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bx_django_utils)](https://gitlab.com/boxine/bx_django_utils/-/blob/main/pyproject.toml)
+[![License MIT](https://img.shields.io/pypi/l/bx_django_utils)](https://gitlab.com/boxine/bx_django_utils/-/blob/main/LICENSE)
+
 
 ## Quickstart
 
