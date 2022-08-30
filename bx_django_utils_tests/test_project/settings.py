@@ -31,19 +31,23 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    #
     'debug_toolbar',
-
+    #
+    # Own Apps:
     'bx_django_utils',
     'bx_django_utils.approve_workflow',
     'bx_django_utils_tests.test_app',
     'bx_django_utils_tests.approve_workflow_test_app',
+    #
+    # Admin extra views demo:
+    'bx_django_utils.admin_extra_views.apps.AdminExtraViewsAppConfig',
+    'bx_django_utils.admin_extra_views.admin_config.CustomAdminConfig',
 ]
 
 MIDDLEWARE = [
