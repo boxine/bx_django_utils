@@ -23,6 +23,39 @@ Please take a look into the sources and tests for deeper informations.
 
 [comment]: <> (✂✂✂ auto generated start ✂✂✂)
 
+### bx_django_utils.admin_extra_views
+
+Django Admin extra views: https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/README.md
+
+
+#### bx_django_utils.admin_extra_views.admin_config
+
+Activate "ExtraViewAdminSite" by set this as default admin site
+
+* [`CustomAdminConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/admin_config.py#L7-L12) - Change Django Admin Site to ExtraViewAdminSite for the extra views.
+
+#### bx_django_utils.admin_extra_views.apps
+
+* [`AdminExtraViewsAppConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/apps.py#L6-L15) - App config to auto discover all extra views.
+
+#### bx_django_utils.admin_extra_views.conditions
+
+* [`only_staff_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/conditions.py#L4-L15) - Pass only active staff users. The default condition for all admin extra views.
+
+#### bx_django_utils.admin_extra_views.datatypes
+
+* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L13-L56) - Stores information for pseudo app and pseudo models.
+* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L59-L83) - Represents information about a Django App. Instance must be pass to @register_admin_view()
+
+#### bx_django_utils.admin_extra_views.registry
+
+* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L11-L90) - Hold all information about all admin extra views to expand urls and admin app list.
+* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L96-L109) - Decorator to add a normal view as pseudo App/Model to the admin.
+
+#### bx_django_utils.admin_extra_views.site
+
+* [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L13) - An AdminSite object encapsulates an instance of the Django admin application, ready
+
 ### bx_django_utils.approve_workflow
 
 Base model/admin/form classes to implement a model with draft/approve versions workflow
