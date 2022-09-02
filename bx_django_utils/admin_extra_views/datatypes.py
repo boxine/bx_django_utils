@@ -1,7 +1,7 @@
 import dataclasses
 from typing import Callable, List, Set
 
-from slugify import slugify
+from django.utils.text import slugify
 
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
 
