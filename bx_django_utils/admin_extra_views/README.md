@@ -89,10 +89,11 @@ Add `admin_extra_views` to `INSTALLED_APPS`, e.g.:
 INSTALLED_APPS = [
     # ...
     'bx_django_utils.admin_extra_views.apps.AdminExtraViewsAppConfig',
-    'bx_django_utils.admin_extra_views.admin_config.CustomAdminConfig',
+    'bx_django_utils.admin_extra_views.admin_config.CustomAdminConfig', # Replaced 'django.contrib.admin'
     # ...
 ]
 ```
 
-Note: `CustomAdminConfig` sets the default site to `ExtraViewAdminSite`.
+Note: `CustomAdminConfig` sets the default site to `ExtraViewAdminSite` and you have to remove `django.contrib.admin` from `INSTALLED_APPS`!
+
 If you have a own `AdminConfig` then set `default_site` there. See: https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/admin_config.py
