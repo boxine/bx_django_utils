@@ -3,7 +3,7 @@ import logging
 
 from django.contrib.auth.models import User
 from django.core.management import call_command
-from django.test import SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
 
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
@@ -14,6 +14,8 @@ from bx_django_utils.admin_extra_views.datatypes import (
     PseudoApp,
 )
 from bx_django_utils.admin_extra_views.management.commands import admin_extra_views
+from bx_django_utils.admin_extra_views.utils import reverse_admin_extra_view
+from bx_django_utils.admin_extra_views.views import Redirect2AdminExtraView
 from bx_django_utils.test_utils.html_assertion import (
     HtmlAssertionMixin,
     assert_html_response_snapshot,
@@ -21,6 +23,7 @@ from bx_django_utils.test_utils.html_assertion import (
 from bx_django_utils.test_utils.users import make_max_test_user, make_minimal_test_user
 from bx_django_utils_tests.test_app.admin_views import (
     DemoView1,
+    DemoView2,
     DemoView3,
     only_john_can_access,
     pseudo_app1,
@@ -181,6 +184,27 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
         self.assert_html_parts(
             response,
             parts=("Just the demo view at '/admin/pseudo-app-2/demo-view-3/'",),
+        )
+
+
+class AdminExtraViewSimpleTestCase(SimpleTestCase):
+    def test_reverse_admin_extra_view(self):
+        url = reverse_admin_extra_view(DemoView2)
+        self.assertEqual(url, '/admin/pseudo-app-1/demo-view-2/')
+
+    def test_redirect_view(self):
+        redirect_view = Redirect2AdminExtraView.as_view(admin_view=DemoView2)
+
+        dummy_request = RequestFactory().request()
+        response = redirect_view(request=dummy_request)
+        self.assertRedirects(
+            response, expected_url='/admin/pseudo-app-1/demo-view-2/', fetch_redirect_response=False
+        )
+
+    def test_redirect_view_via_urls(self):
+        response = self.client.get('/old_demo_3/')
+        self.assertRedirects(
+            response, expected_url='/admin/pseudo-app-2/demo-view-3/', fetch_redirect_response=False
         )
 
 

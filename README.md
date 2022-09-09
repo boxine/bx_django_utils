@@ -66,7 +66,12 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.utils
 
-* [`iter_admin_extra_views_urls()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/utils.py#L10-L18) - Iterate over all registered admin extra view urls.
+* [`iter_admin_extra_views_urls()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/utils.py#L20-L26) - Iterate over all registered admin extra view urls.
+* [`reverse_admin_extra_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/utils.py#L10-L17) - Get the URL of a Admin Extra View, e.g.: url=reverse_admin_extra_view(YouAdminExtraView)
+
+#### bx_django_utils.admin_extra_views.views
+
+* [`Redirect2AdminExtraView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/views.py#L7-L23) - Redirect to a Admin Extra Views.
 
 ### bx_django_utils.approve_workflow
 
