@@ -1,4 +1,4 @@
-from typing import Type, Union
+from typing import Iterator, Type, Union
 
 from django.http import HttpRequest
 from django.urls import path, reverse
@@ -88,6 +88,13 @@ class AdminExtraViewRegistry:
                 )
 
         return app_list
+
+    def __iter__(self) -> Iterator[Type[Union[AdminExtraViewMixin, View]]]:
+        """
+        Iterate sorted over all registered admin extra view classes.
+        """
+        for pseudo_app in sorted(self.pseudo_apps, key=lambda x: x.meta.name):
+            yield from sorted(pseudo_app.views, key=lambda x: x.meta.name)
 
 
 extra_view_registry = AdminExtraViewRegistry()

@@ -36,7 +36,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.apps
 
-* [`AdminExtraViewsAppConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/apps.py#L6-L15) - App config to auto discover all extra views.
+* [`AdminExtraViewsAppConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/apps.py#L6-L18) - App config to auto discover all extra views.
 
 #### bx_django_utils.admin_extra_views.conditions
 
@@ -47,14 +47,26 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 * [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L13-L56) - Stores information for pseudo app and pseudo models.
 * [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L59-L83) - Represents information about a Django App. Instance must be pass to @register_admin_view()
 
+###### bx_django_utils.admin_extra_views.management.commands.admin_extra_views
+
+* [`Command()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/management/commands/admin_extra_views.py#L7-L26) - Manage command "admin_extra_views": Info about registered admin extra views
+
 #### bx_django_utils.admin_extra_views.registry
 
-* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L11-L90) - Hold all information about all admin extra views to expand urls and admin app list.
-* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L96-L109) - Decorator to add a normal view as pseudo App/Model to the admin.
+* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L11-L97) - Hold all information about all admin extra views to expand urls and admin app list.
+* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L103-L116) - Decorator to add a normal view as pseudo App/Model to the admin.
 
 #### bx_django_utils.admin_extra_views.site
 
 * [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L13) - An AdminSite object encapsulates an instance of the Django admin application, ready
+
+##### bx_django_utils.admin_extra_views.tests.test_admin_extra_views
+
+* [`AdminExtraViewsTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/tests/test_admin_extra_views.py#L10-L37) - Integrations tests for Admin Extra Views.
+
+#### bx_django_utils.admin_extra_views.utils
+
+* [`iter_admin_extra_views_urls()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/utils.py#L10-L18) - Iterate over all registered admin extra view urls.
 
 ### bx_django_utils.approve_workflow
 
