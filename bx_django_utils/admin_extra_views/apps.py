@@ -13,3 +13,6 @@ class AdminExtraViewsAppConfig(AppConfig):
 
     def ready(self):
         autodiscover_admin_views()
+
+        # Register system checks:
+        from bx_django_utils.admin_extra_views.checks import admin_extra_views_check  # noqa

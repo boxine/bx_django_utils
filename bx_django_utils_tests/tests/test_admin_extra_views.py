@@ -1,6 +1,8 @@
+import io
 import logging
 
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 
@@ -11,6 +13,7 @@ from bx_django_utils.admin_extra_views.datatypes import (
     AdminExtraMeta,
     PseudoApp,
 )
+from bx_django_utils.admin_extra_views.management.commands import admin_extra_views
 from bx_django_utils.test_utils.html_assertion import (
     HtmlAssertionMixin,
     assert_html_response_snapshot,
@@ -179,3 +182,17 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response,
             parts=("Just the demo view at '/admin/pseudo-app-2/demo-view-3/'",),
         )
+
+
+class ManageCommandTestCase(TestCase):
+    def test_admin_extra_views_command(self):
+        capture_stdout = io.StringIO()
+        capture_stderr = io.StringIO()
+        call_command(admin_extra_views.Command(), stdout=capture_stdout, stderr=capture_stderr)
+        stdout_output = capture_stdout.getvalue()
+        stderr_output = capture_stderr.getvalue()
+
+        self.assertIn('Pseudo App 1', stdout_output)
+        self.assertIn('Demo View 1', stdout_output)
+        self.assertIn('/admin/pseudo-app-1/demo-view-1/', stdout_output)
+        self.assertEqual(stderr_output, '')
