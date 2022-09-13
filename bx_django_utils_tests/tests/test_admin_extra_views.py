@@ -1,11 +1,15 @@
 import io
 import logging
 
+from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
+from django.views import View
 
+from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
+from bx_django_utils.admin_extra_views.checks import admin_extra_views_check
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
 from bx_django_utils.admin_extra_views.datatypes import (
     _APP_LABELS,
@@ -14,6 +18,8 @@ from bx_django_utils.admin_extra_views.datatypes import (
     PseudoApp,
 )
 from bx_django_utils.admin_extra_views.management.commands import admin_extra_views
+from bx_django_utils.admin_extra_views.registry import extra_view_registry, register_admin_view
+from bx_django_utils.admin_extra_views.site import ExtraViewAdminSite
 from bx_django_utils.admin_extra_views.utils import reverse_admin_extra_view
 from bx_django_utils.admin_extra_views.views import Redirect2AdminExtraView
 from bx_django_utils.test_utils.html_assertion import (
@@ -31,7 +37,7 @@ from bx_django_utils_tests.test_app.admin_views import (
 )
 
 
-class DataTypesTestCase(SimpleTestCase):
+class ClearDataTypesInfoMixin:
     def reset(self):
         _APP_LABELS.clear()
         _URL_NAMES.clear()
@@ -43,6 +49,9 @@ class DataTypesTestCase(SimpleTestCase):
     def tearDown(self) -> None:
         super().tearDown()
         self.reset()
+
+
+class DataTypesTestCase(ClearDataTypesInfoMixin, SimpleTestCase):
 
     def test_pseudo_app(self):
         PseudoApp(meta=AdminExtraMeta(name='Pseudo App'))
@@ -220,3 +229,61 @@ class ManageCommandTestCase(TestCase):
         self.assertIn('Demo View 1', stdout_output)
         self.assertIn('/admin/pseudo-app-1/demo-view-1/', stdout_output)
         self.assertEqual(stderr_output, '')
+
+
+class ChecksTestCase(ClearDataTypesInfoMixin, TestCase):
+    def setUp(self):
+        self._old_pseudo_apps = extra_view_registry.pseudo_apps.copy()
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
+        extra_view_registry.pseudo_apps = self._old_pseudo_apps
+
+    def test_no_errors(self):
+        errors = admin_extra_views_check(app_configs=None)
+        self.assertEqual(errors, [])
+
+    def test_custom_admin_site(self):
+        class CustomAdminSite(ExtraViewAdminSite):
+            pass
+
+        @register_admin_view(
+            pseudo_app=PseudoApp(
+                meta=AdminExtraMeta(name='Foo'),
+                admin_site=CustomAdminSite(),
+            )
+        )
+        class TestView(AdminExtraViewMixin, View):
+            meta = AdminExtraMeta(name='Bar')
+
+        errors = admin_extra_views_check(app_configs=None)
+
+        # We should only get the "URL reverse error" because CustomAdminSite is not in urls.py ;)
+        self.assertEqual(len(errors), 1)
+        reverse_error = errors[0]
+        self.assertEqual(reverse_error.id, 'admin_extra_views.E001')
+
+    def test_wrong_admin_site(self):
+        @register_admin_view(
+            pseudo_app=PseudoApp(
+                meta=AdminExtraMeta(name='Foo'),
+                admin_site=AdminSite(),
+            )
+        )
+        class TestView(AdminExtraViewMixin, View):
+            meta = AdminExtraMeta(name='Bar')
+
+        errors = admin_extra_views_check(app_configs=None)
+        self.assertEqual(len(errors), 2)
+        reverse_error = errors[0]
+        self.assertEqual(reverse_error.id, 'admin_extra_views.E001')
+        self.assertEqual(reverse_error.msg, "Admin extra views URL reverse error with 'TestView'")
+
+        admin_class_error = errors[1]
+        self.assertEqual(admin_class_error.id, 'admin_extra_views.E002')
+        self.assertEqual(
+            admin_class_error.msg,
+            "Pseudo app 'Foo' error: Admin site 'AdminSite'"
+            " is not a instance of ExtraViewAdminSite!",
+        )

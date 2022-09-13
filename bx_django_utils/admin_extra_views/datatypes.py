@@ -1,6 +1,8 @@
 import dataclasses
 from typing import Callable, List, Set
 
+from django.contrib.admin import AdminSite
+from django.contrib.admin.sites import site as default_site
 from django.utils.text import slugify
 
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
@@ -67,6 +69,9 @@ class PseudoApp:
     # Will be filled by @register_admin_view():
     views: List = dataclasses.field(default_factory=list)
 
+    # The Django Admin site for this extra views (optional):
+    admin_site: AdminSite = None
+
     def __post_init__(self):
         assert isinstance(self.meta, AdminExtraMeta)
 
@@ -75,6 +80,9 @@ class PseudoApp:
                 f'PseudoApp must be have a unique label! Current label is: {self.meta.app_label!r}'
             )
         _APP_LABELS.add(self.meta.app_label)
+
+        if not self.admin_site:
+            self.admin_site = default_site
 
     def __eq__(self, other):
         return self.meta.app_label == other.meta.app_label
