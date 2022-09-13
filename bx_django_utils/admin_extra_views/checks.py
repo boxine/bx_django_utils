@@ -1,4 +1,3 @@
-from django.contrib.admin.sites import DefaultAdminSite
 from django.core.checks import Error, Warning, register
 from django.urls import NoReverseMatch, reverse
 
@@ -25,7 +24,7 @@ def admin_extra_views_check(app_configs, **kwargs):
         except NoReverseMatch as err:
             errors.append(
                 Error(
-                    'Admin extra views URL reverse error',
+                    msg=f'Admin extra views URL reverse error with {view_class.__name__!r}',
                     hint='Have you include "extra_view_registry.get_urls()" to your urls.py ?',
                     obj=err,
                     id='admin_extra_views.E001',
@@ -38,19 +37,24 @@ def admin_extra_views_check(app_configs, **kwargs):
     if view_count == 0:
         errors.append(
             Warning(
-                'No admin extra views registered!',
+                msg='No admin extra views registered!',
                 id='admin_extra_views.W001',
             )
         )
 
-    site = DefaultAdminSite()
-    if not isinstance(site, ExtraViewAdminSite):
-        errors.append(
-            Warning(
-                'DefaultAdminSite is not a instance of ExtraViewAdminSite!',
-                hint='Have you used admin_extra_views.admin_config.CustomAdminConfig ?',
-                id='admin_extra_views.W002',
+    for pseudo_app in extra_view_registry.pseudo_apps:
+        admin_site = pseudo_app.admin_site
+        if not isinstance(admin_site, ExtraViewAdminSite):
+            errors.append(
+                Error(
+                    msg=(
+                        f'Pseudo app {pseudo_app.meta.name!r} error:'
+                        f' Admin site {admin_site.__class__.__name__!r}'
+                        ' is not a instance of ExtraViewAdminSite!'
+                    ),
+                    hint='Use CustomAdminConfig or add "site" to PseudoApp definition',
+                    id='admin_extra_views.E002',
+                )
             )
-        )
 
     return errors

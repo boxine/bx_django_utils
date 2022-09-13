@@ -44,8 +44,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.datatypes
 
-* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L13-L56) - Stores information for pseudo app and pseudo models.
-* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L59-L83) - Represents information about a Django App. Instance must be pass to @register_admin_view()
+* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L15-L58) - Stores information for pseudo app and pseudo models.
+* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L61-L91) - Represents information about a Django App. Instance must be pass to @register_admin_view()
 
 ###### bx_django_utils.admin_extra_views.management.commands.admin_extra_views
 
