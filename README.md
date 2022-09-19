@@ -235,6 +235,27 @@ Use Playwright in Pytest and Unittest + Fast Django user login
 * [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L79-L103) - Create a test user and set given permissions.
 * [`make_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L47-L76) - Create a test user and set given permissions.
 
+### bx_django_utils.user_timezone
+
+Automatic local user timezone: https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/README.md
+
+
+#### bx_django_utils.user_timezone.apps
+
+* [`UserTimezoneAppConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/apps.py#L4-L14) - Django app to set the user local time zone.
+
+#### bx_django_utils.user_timezone.humanize
+
+* [`human_timezone_datetime()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/humanize.py#L7-L21) - Render a datetime with timezone information.
+
+#### bx_django_utils.user_timezone.middleware
+
+* [`UserTimezoneMiddleware()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/middleware.py#L10-L31) - Activate Timezone by "UserTimeZone" cookie
+
+##### bx_django_utils.user_timezone.templatetags.user_timezone
+
+* [`humane_timezone_dt()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/templatetags/user_timezone.py#L9-L14) - Template filter to render a datetime with timezone information.
+
 #### bx_django_utils.view_utils.dynamic_menu_urls
 
 * [`DynamicViewMenu()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/view_utils/dynamic_menu_urls.py#L4-L45) - Simple storage for store information about views/urls to build a menu.

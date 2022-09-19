@@ -1,0 +1,9 @@
+{% load tz %}
+
+{% get_current_timezone as TIME_ZONE %}
+
+{% if timezones %}<span title="{% for tz_name in timezones %}{{ tz_name }}: {{ dt|timezone:tz_name }}
+{% endfor %}">{% endif %}
+    {{ dt|localtime|date:_("SHORT_DATETIME_FORMAT") }}
+    <br /><small>({{ TIME_ZONE }})</small>
+{% if timezones %}</span>{% endif %}

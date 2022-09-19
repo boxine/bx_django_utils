@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+{% load static tz %}
+
+{% block extrahead %}{{ block.super }}
+    <script src="{% static 'user_timezone.js' %}"></script>
+{% endblock %}
+
+{% block usertools %}
+    <span>Active Timezone:&nbsp;{% get_current_timezone as TIME_ZONE %}{{ TIME_ZONE }}</span>
+    {{ block.super }}
+{% endblock %}
