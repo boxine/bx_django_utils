@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     # Admin extra views demo:
     'bx_django_utils.admin_extra_views.apps.AdminExtraViewsAppConfig',
     'bx_django_utils.admin_extra_views.admin_config.CustomAdminConfig',
+    #
+    # User Timezone:
+    'bx_django_utils.user_timezone.apps.UserTimezoneAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +62,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #
+    # User Timezone:
+    'bx_django_utils.user_timezone.middleware.UserTimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'bx_django_utils_tests.test_project.urls'
@@ -66,7 +72,7 @@ ROOT_URLCONF = 'bx_django_utils_tests.test_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR / 'test_project' / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,13 +109,16 @@ AUTH_PASSWORD_VALIDATORS = []  # Just a test project, so no restrictions
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
 LOCALE_PATHS = (
     BASE_DIR.parent / 'bx_django_utils' / 'locale',
 )
+
+TIME_ZONE = 'UTC'
+USE_TZ = True
+VISIBLE_TIMEZONES = ['Europe/Berlin', 'America/Los_Angeles']
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
