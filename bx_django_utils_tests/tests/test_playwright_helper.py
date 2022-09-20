@@ -1,47 +1,51 @@
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.http import HttpRequest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import BrowserContext, expect
 
-from bx_django_utils.test_utils.playwright import PyTestPlaywrightBaseTestCase
+from bx_django_utils.test_utils.playwright import PlaywrightTestCase
 
 
-class PlaywrightTestHelperTestCase(PyTestPlaywrightBaseTestCase):
-    def test_setup_pytest_fixture(self):
-        assert hasattr(self, 'page')
-        page = self.page
-        assert isinstance(page, Page)
+class TestPlaywrightTestCase(PlaywrightTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
 
-    def test_admin_login(self):
-        # Create a User:
-        username = 'a-user'
-        password = 'ThisIsNotAPassword!'
-        superuser = User.objects.create_superuser(username=username, password=password)
-        superuser.full_clean()
+        cls.superuser = User.objects.create_superuser(
+            username='a-superuser',
+            password='ThisIsNotAPassword!',
+        )
 
-        # Use can login?
-        user = authenticate(request=HttpRequest(), username=username, password=password)
-        assert isinstance(user, User)
+    def test_login(self):
+        context: BrowserContext = self.browser.new_context(
+            ignore_https_errors=True,  # StaticLiveServerTestCase has no valid certificate ;)
+            locale='en-US',
+        )
+        with context.new_page() as page:
+            # Redirect to login?
+            page.goto(f'{self.live_server_url}/admin/')
+            expect(page).to_have_url(f'{self.live_server_url}/admin/login/?next=/admin/')
+            expect(page).to_have_title('Log in | Django site admin')
 
-        # Redirect to login?
-        self.page.goto(f'{self.live_server_url}/admin/')
-        expect(self.page).to_have_url(f'{self.live_server_url}/admin/login/?next=/admin/')
-        expect(self.page).to_have_title('Log in | Django site admin')
+            # Login:
+            page.fill('#id_username', 'a-superuser')
+            page.fill('#id_password', 'ThisIsNotAPassword!')
+            page.keyboard.press('Enter')
 
-        # Login:
-        self.page.type('#id_username', username)
-        self.page.type('#id_password', password)
-        self.page.locator('text=Log in').click()
+            # Are we logged in?
+            expect(page).to_have_url(f'{self.live_server_url}/admin/')
+            expect(page).to_have_title('Site administration | Django site admin')
 
-        # Are we logged in?
-        expect(self.page).to_have_url(f'{self.live_server_url}/admin/')
-        expect(self.page).to_have_title('Site administration | Django site admin')
 
-    def test_fast_login(self):
-        user = User.objects.create_superuser(username='a-user', password='ThisIsNotAPassword!')
-        self.login(user)
+class TestWithFirefoxTestCase(PlaywrightTestCase):
+    BROWSER_NAME = 'firefox'
 
-        # Are we logged in?
-        self.page.goto(f'{self.live_server_url}/admin/')
-        expect(self.page).to_have_url(f'{self.live_server_url}/admin/')
-        expect(self.page).to_have_title('Site administration | Django site admin')
+    def test_browser(self):
+        self.assertEqual(self.browser_name, 'firefox')
+        self.assertEqual(self.browser_type.name, 'firefox')
+
+
+class TestWithChromiumTestCase(PlaywrightTestCase):
+    BROWSER_NAME = 'chromium'
+
+    def test_browser(self):
+        self.assertEqual(self.browser_name, 'chromium')
+        self.assertEqual(self.browser_type.name, 'chromium')
