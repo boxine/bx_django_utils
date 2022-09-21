@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "33"
+version = "34"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -102,6 +102,9 @@ omit=[".*"]
 minversion = "6.0"
 DJANGO_SETTINGS_MODULE="bx_django_utils_tests.test_project.settings"
 norecursedirs = ".* __pycache__ coverage* dist htmlcov"
+markers = [
+    "playwright: marks Playwright tests",
+]
 # sometimes helpfull "addopts" arguments:
 #    -vv
 #    --verbose

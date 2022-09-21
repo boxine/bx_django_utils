@@ -5,11 +5,10 @@ from bx_django_utils.test_utils.playwright import PlaywrightTestCase
 
 
 class TestPlaywrightTestCase(PlaywrightTestCase):
-    @classmethod
-    def setUpTestData(cls):
-        super().setUpTestData()
 
-        cls.superuser = User.objects.create_superuser(
+    def setUp(self):
+        super().setUp()
+        self.superuser = User.objects.create_superuser(
             username='a-superuser',
             password='ThisIsNotAPassword!',
         )
