@@ -223,7 +223,7 @@ Utilities to manage text fixtures in JSON files.
 Use Playwright in Pytest and Unittest + Fast Django user login
 
 * [`PlaywrightConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L137-L155) - PlaywrightTestCase config from environment (PWBROWSER, PWHEADLESS, PWSKIP, PWSLOWMO)
-* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L158-L217) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
+* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L158-L215) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
 * [`PyTestPlaywrightBaseTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L97-L134) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
 * [`UnittestRunnerMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L68-L94) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
 * [`fast_login()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L36-L65) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"

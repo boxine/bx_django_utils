@@ -176,11 +176,6 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     BROWSER_NAME = None
 
     @classmethod
-    def setUpTestData(cls):
-        """Load initial data for the TestCase."""
-        pass
-
-    @classmethod
     def setUpClass(cls):
         """
         Launch Playwright browser init with config from environment.
@@ -199,8 +194,11 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
                 slow_mo=cls.pw_config.slow_mo,
             )
 
-            # StaticLiveServerTestCase doesn't call the setUpTestData, call it manually:
-            cls.setUpTestData()
+            if hasattr(cls, 'setUpTestData'):
+                warnings.warn(
+                    f'Remove setUpTestData() from {cls.__name__}'
+                    ' because it will never be called!'
+                )
 
     @classmethod
     def tearDownClass(cls):

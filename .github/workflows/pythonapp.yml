@@ -35,7 +35,7 @@ jobs:
     - name: Setup Github Cache
       uses: actions/cache@v3
       with:
-        key: shared-cache
+        key: dot-cache-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.django }}
         path: ~/.cache/
 
     - name: 'Install package'
