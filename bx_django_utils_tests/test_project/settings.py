@@ -152,8 +152,3 @@ LOGGING = {
         'bx_django_utils': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
     },
 }
-
-
-# FIXME: Work-a-round for Playwright tests
-# Avoid django.core.exceptions.SynchronousOnlyOperation:
-os.environ.setdefault('DJANGO_ALLOW_ASYNC_UNSAFE', '1')
