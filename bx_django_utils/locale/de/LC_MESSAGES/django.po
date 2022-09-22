@@ -15,6 +15,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
+msgid "Credential.id.help_text"
+msgstr " "
+
+msgid "Credential.id.verbose_name"
+msgstr "ID"
+
+msgid "Credential.key.help_text"
+msgstr " "
+
+msgid "Credential.key.verbose_name"
+msgstr "Schlüssel"
+
+msgid "Credential.secret.help_text"
+msgstr "<strong>Achtung:</strong> Um Geheimnisse nicht im Klartext preiszugeben ist dieses Feld immer leer. Um den Datensatz zu speichern muss es erneut eingegeben werden"
+
+msgid "Credential.secret.verbose_name"
+msgstr "Geheimniss"
+
 msgid "GTIN number"
 msgstr "GTIN Nummer"
 

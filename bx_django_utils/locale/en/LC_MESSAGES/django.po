@@ -11,6 +11,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Credential.id.help_text"
+msgstr " "
+
+msgid "Credential.id.verbose_name"
+msgstr "ID"
+
+msgid "Credential.key.help_text"
+msgstr " "
+
+msgid "Credential.key.verbose_name"
+msgstr "Key"
+
+msgid "Credential.secret.help_text"
+msgstr "<strong>Please note:</strong> To avoid displaying secrets in plain text this field's value is always empty. If you want to save the record you have to enter the secret again"
+
+msgid "Credential.secret.verbose_name"
+msgstr "Secret"
+
 msgid "GTIN number"
 msgstr ""
 

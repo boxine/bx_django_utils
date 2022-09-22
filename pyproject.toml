@@ -49,6 +49,7 @@ beautifulsoup4 = '*'
 lxml = '*'
 pytest-playwright = '*'  # https://playwright.dev/python/
 pdoc = '*'  # https://pdoc.dev/
+cryptography = '*'  # https://github.com/pyca/cryptography
 
 
 [tool.poetry.scripts]

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Own Apps:
     'bx_django_utils',
     'bx_django_utils.approve_workflow',
+    'bx_django_utils.credentials',
     'bx_django_utils_tests.test_app',
     'bx_django_utils_tests.approve_workflow_test_app',
     #
@@ -153,6 +154,8 @@ LOGGING = {
     },
 }
 
+# Optional info for all credentials secrets:
+CREDENTIALS_INFO_BYTES = b'Just a info'
 
 # Playwright browser tests
 # ----------------------------------------------------------------------------

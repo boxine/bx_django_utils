@@ -1111,7 +1111,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = '>=3.7,<4.0.0'  # Enforce 3.8 in the future
-content-hash = "0467dc72828e7b269a251fa313198e778b7036141e99e1535b2f55bdf42d87e2"
+content-hash = "a56063e0d3da2c4e73133e057aff12cd28ba5ecfcd909e539a48d941f64a4d3e"
 
 [metadata.files]
 asgiref = [

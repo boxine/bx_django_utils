@@ -95,6 +95,36 @@ Base model/admin/form classes to implement a model with draft/approve versions w
 
 * [`CachedDataclassBase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/cached_dataclasses.py#L7-L59) - A Base dataclass that can be easy store/restore to Django cache.
 
+### bx_django_utils.credentials
+
+Store secrets encrypted in Database: https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/README.md
+
+
+#### bx_django_utils.credentials.admin
+
+* [`CredentialAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/admin.py#L7-L30) - Model Admin for manage Credential entries that never display a plaintext secret.
+
+#### bx_django_utils.credentials.apps
+
+* [`CredentialsConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/apps.py#L4-L14) - Credentials AppConfig
+
+#### bx_django_utils.credentials.fields
+
+* [`EncryptedCharField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/fields.py#L7-L31) - A CharField that automatically stores its data in an encrypted state.
+
+#### bx_django_utils.credentials.forms
+
+* [`CredentialForm()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/forms.py#L7-L29) - Model form for Credential that never display a secret in plaintext.
+
+#### bx_django_utils.credentials.models
+
+* [`Credential()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/models.py#L14-L88) - Credential stores arbitrary key-value-pairs. The value is always stored encrypted.
+
+#### bx_django_utils.credentials.utils
+
+* [`decrypt()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/utils.py#L49-L53) - Helper function to decrypt a value that was Fernet-encrypted against Django's SECRET_KEY.
+* [`encrypt()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/credentials/utils.py#L42-L46) - Helper function to Fernet-encrypt a value against Django's SECRET_KEY.
+
 #### bx_django_utils.data_types.gtin
 
 ModelField, FormField and validators for GTIN/UPC/EAN numbers
