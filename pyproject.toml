@@ -31,7 +31,6 @@ bx_py_utils = '>=52'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
 
-
 [tool.poetry.dev-dependencies]
 boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = '*'
@@ -49,13 +48,7 @@ django-debug-toolbar = '*'
 beautifulsoup4 = '*'
 lxml = '*'
 pytest-playwright = '*'  # https://playwright.dev/python/
-
-
-# pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
-# so we must install pdoc only with 3.7 or newer, to get a up-to-date version.
-# The result is, that we can't generate the docs with Python 3.6, but this
-# seems not to be a show stopper ;)
-pdoc = { version = '*', python = ">=3.7" }  # https://pdoc.dev/
+pdoc = '*'  # https://pdoc.dev/
 
 
 [tool.poetry.scripts]
@@ -113,7 +106,6 @@ markers = [
 #    --full-trace
 #    -p no:warnings
 addopts = """
-    --import-mode=importlib
     --reuse-db
     --nomigrations
     --cov=.

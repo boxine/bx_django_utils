@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 import pytest
-from bx_py_utils.auto_doc import assert_readme
+from bx_py_utils.auto_doc import FnmatchExclude, assert_readme
 
 import bx_django_utils
 
@@ -21,6 +21,7 @@ def test_auto_doc_in_readme():
     assert_readme(
         readme_path=readme_path,
         modules=['bx_django_utils'],
+        exclude_func=FnmatchExclude('*/migrations/*'),
         start_marker_line='[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
         end_marker_line='[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
         start_level=2,
