@@ -73,6 +73,10 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 * [`Redirect2AdminExtraView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/views.py#L7-L23) - Redirect to a Admin Extra Views.
 
+#### bx_django_utils.admin_utils.filters
+
+* [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L4-L19) - Similar to SimpleListFilter, but don't add "All" choice.
+
 ### bx_django_utils.approve_workflow
 
 Base model/admin/form classes to implement a model with draft/approve versions workflow
