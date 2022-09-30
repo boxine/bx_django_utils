@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "34"
+version = "35"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -49,7 +49,7 @@ beautifulsoup4 = '*'
 lxml = '*'
 pytest-playwright = '*'  # https://playwright.dev/python/
 pdoc = '*'  # https://pdoc.dev/
-
+model-bakery = '*'  # https://github.com/model-bakers/model_bakery
 
 [tool.poetry.scripts]
 publish = "bx_django_utils_tests.test_project.publish:publish"
