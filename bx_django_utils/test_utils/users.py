@@ -1,5 +1,7 @@
 import uuid
 
+from bx_py_utils.test_utils.assertion import assert_equal
+from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
@@ -48,7 +50,9 @@ def make_test_user(
     username=None,
     email='test@test.tld',
     password='t',
+    is_active=True,
     is_staff=True,
+    is_superuser=False,
     permissions=None
 ):
     """
@@ -61,17 +65,19 @@ def make_test_user(
         # Generate a unique username for tests that will create more than one user
         username = f'test {uuid.uuid4()}'
 
-    for permission in permissions:
-        assert isinstance(permission, Permission)
-
     User = get_user_model()
     user = User.objects.create_user(
         username=username,
         email=email,
         password=password,
-        is_staff=is_staff
+        is_active=is_active,
+        is_staff=is_staff,
+        is_superuser=is_superuser,
     )
-    user.user_permissions.set(permissions)
+    if permissions is not None:
+        for permission in permissions:
+            assert isinstance(permission, Permission)
+        user.user_permissions.set(permissions)
     user = User.objects.get(pk=user.pk)
     return user
 
@@ -138,3 +144,28 @@ def make_max_test_user(
         permissions=permissions
     )
     return user
+
+
+def assert_user_properties(user, properties: dict, raw_password: str = None) -> None:
+    """
+    Check a user instance with all properties and password (optional)
+    """
+    User = get_user_model()
+    if not isinstance(user, User):
+        raise AssertionError(
+            f'Given user object (type={type(user).__name__!r})'
+            f' is not a {settings.AUTH_USER_MODEL!r} instance.'
+        )
+
+    current_props = {}
+    for attr_name in properties.keys():
+        if attr_name == 'permissions':
+            current_props['permissions'] = sorted(user.get_all_permissions())
+        else:
+            current_props[attr_name] = getattr(user, attr_name)
+
+    assert_equal(current_props, properties)
+
+    if raw_password is not None:
+        if not user.check_password(raw_password):
+            raise AssertionError(f'Password {raw_password!r} is wrong!')
