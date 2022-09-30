@@ -231,11 +231,12 @@ Use Playwright in Pytest and Unittest + Fast Django user login
 
 #### bx_django_utils.test_utils.users
 
-* [`assert_permissions()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L29-L44) - Check user permissions.
-* [`filter_permission_names()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L8-L26) - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
-* [`make_max_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L106-L140) - Create a test user with all permissions *except* the {exclude_permissions} ones.
-* [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L79-L103) - Create a test user and set given permissions.
-* [`make_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L47-L76) - Create a test user and set given permissions.
+* [`assert_permissions()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L31-L46) - Check user permissions.
+* [`assert_user_properties()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L149-L171) - Check a user instance with all properties and password (optional)
+* [`filter_permission_names()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L10-L28) - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
+* [`make_max_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L112-L146) - Create a test user with all permissions *except* the {exclude_permissions} ones.
+* [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L85-L109) - Create a test user and set given permissions.
+* [`make_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L49-L82) - Create a test user and set given permissions.
 
 ### bx_django_utils.user_timezone
 
