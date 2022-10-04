@@ -75,7 +75,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_utils.filters
 
-* [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L4-L19) - Similar to SimpleListFilter, but don't add "All" choice.
+* [`ExistingCountedListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L26-L62) - Advanced SimpleListFilter that list only existing filter values with counts.
+* [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L8-L23) - Similar to SimpleListFilter, but don't add "All" choice.
 
 ### bx_django_utils.approve_workflow
 
