@@ -15,8 +15,8 @@ check-poetry:
 		exit 1 ; \
 	fi
 
-install-poetry: ## install or update poetry via pip
-	pip3 install -U poetry
+install-poetry: ## install poetry
+	curl -sSL https://install.python-poetry.org | python3 -
 
 install: check-poetry ## install via poetry
 	python3 -m venv .venv
