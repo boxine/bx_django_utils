@@ -14,7 +14,9 @@ from pathlib import Path
 
 from bx_py_utils.path import assert_is_dir, assert_is_file
 from django.apps import apps
+from django.core import serializers
 from django.core.management import BaseCommand
+from django.core.serializers.base import DeserializedObject
 
 from bx_django_utils.json_utils import to_json
 
@@ -56,6 +58,40 @@ class BaseFixtures:
         Should be use self.store_fixture_data()
         """
         raise NotImplementedError
+
+
+class SerializerFixtures(BaseFixtures):
+    """
+    Helper to store/restore model instances serialized into a JSON file.
+    """
+
+    def store_fixture_data(self, queryset):
+        """
+        Save the given QuerySet data into JSON fixture file
+        """
+        assert queryset.count() >= 1
+        with Path(self.file_path).open('w') as f:
+            serializers.serialize(
+                format='json',
+                queryset=queryset,
+                indent=2,
+                sort_keys=True,
+                stream=f,
+            )
+
+    def create_objects(self):
+        """
+        Create model entries from stored JSON fixtures.
+        returns the created model instance.
+        """
+        instances = []
+        with Path(self.file_path).open('r') as f:
+            for unsaved_instance in serializers.deserialize('json', f):
+                assert isinstance(unsaved_instance, DeserializedObject)
+                unsaved_instance.object.full_clean()
+                unsaved_instance.save()
+                instances.append(unsaved_instance.object)
+        return instances
 
 
 class FixturesRegistry:

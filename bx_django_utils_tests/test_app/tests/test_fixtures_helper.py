@@ -1,12 +1,20 @@
 import io
+import tempfile
 from pathlib import Path
 
 from bx_py_utils.test_utils.snapshot import assert_text_snapshot
 from django.core.management import call_command
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 
-from bx_django_utils.test_utils.fixtures import FIXTURES_FILE_PATHS, BaseFixtures, FixturesRegistry, fixtures_registry
+from bx_django_utils.test_utils.fixtures import (
+    FIXTURES_FILE_PATHS,
+    BaseFixtures,
+    FixturesRegistry,
+    SerializerFixtures,
+    fixtures_registry,
+)
 from bx_django_utils_tests.test_app.management.commands import renew_fixtures
+from bx_django_utils_tests.test_app.models import ColorFieldTestModel
 from bx_django_utils_tests.test_app.tests.fixtures.fixtures1 import (
     EXAMPLE_FIXTURES_DATA1,
     EXAMPLE_FIXTURES_DATA2,
@@ -87,3 +95,50 @@ class FixturesHelperTestCase(SimpleTestCase):
             RuntimeError, f'File path "{file_path}" from "Bar" already used!'
         ):
             registry.register()(Bar)
+
+
+class SerializerFixturesTestCase(TestCase):
+    def test_basic(self):
+        with tempfile.NamedTemporaryFile(prefix='serializer_fixtures_', suffix='.json') as tmp_file:
+            tmp_file_path = Path(tmp_file.name)
+
+            class Example(SerializerFixtures):
+                """Just a test example implementation"""
+
+                base_path = tmp_file_path.parent
+                file_name = tmp_file_path.name
+
+                def renew(self):
+                    ColorFieldTestModel.objects.create(pk=1, required_color='#00AAff')
+                    qs = ColorFieldTestModel.objects.all()
+                    self.store_fixture_data(queryset=qs)
+
+            example = Example()
+
+            # Store the model instance into the JSON file:
+            example.renew()
+
+            json_str = tmp_file_path.read_text()
+            self.assertIn('#00AAff', json_str)
+
+            ColorFieldTestModel.objects.all().delete()
+            self.assertEqual(ColorFieldTestModel.objects.count(), 0)
+
+            # Maybe useful: It's possible to get the serializer data:
+            data = example.get_fixture_data()
+            self.assertEqual(
+                data,
+                [
+                    {
+                        'fields': {'optional_color': None, 'required_color': '#00AAff'},
+                        'model': 'test_app.colorfieldtestmodel',
+                        'pk': 1,
+                    }
+                ],
+            )
+
+            # Recreate the objects:
+            instances = example.create_objects()
+            self.assertEqual(ColorFieldTestModel.objects.count(), 1)
+            created_instance = ColorFieldTestModel.objects.first()
+            self.assertEqual(instances, [created_instance])
