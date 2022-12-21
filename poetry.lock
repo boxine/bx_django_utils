@@ -1473,18 +1473,6 @@ soap-alt = ["suds"]
 soap-fallback = ["PySimpleSOAP"]
 
 [[package]]
-name = "pytz"
-version = "2022.7"
-description = "World timezone definitions, modern and historical"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytz-2022.7-py2.py3-none-any.whl", hash = "sha256:93007def75ae22f7cd991c84e02d434876818661f8df9ad5df9e950ff4e52cfd"},
-    {file = "pytz-2022.7.tar.gz", hash = "sha256:7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a"},
-]
-
-[[package]]
 name = "pywin32-ctypes"
 version = "0.2.0"
 description = ""
@@ -1873,4 +1861,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = '>=3.8,<4.0.0'  # Enforce 3.9 in the future
-content-hash = "95c9d3733094d209dbd7f33049ed83ba9d163b0abfad5770b4542b96b7167210"
+content-hash = "aa7ddb84d376076a8ef7e22089c31a9b4a201f76e3aaf203faa8869e16f96baf"

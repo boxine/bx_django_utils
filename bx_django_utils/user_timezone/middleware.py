@@ -1,7 +1,7 @@
 import logging
 
-import pytz
 from django.utils import timezone
+from django.utils.timezone import zoneinfo
 
 
 logger = logging.getLogger(__name__)
@@ -18,8 +18,8 @@ class UserTimezoneMiddleware:
     def __call__(self, request):
         if raw_time_zone := request.COOKIES.get('UserTimeZone'):
             try:
-                tzinfo = pytz.timezone(raw_time_zone)
-            except pytz.exceptions.UnknownTimeZoneError:
+                tzinfo = zoneinfo.ZoneInfo(raw_time_zone)
+            except zoneinfo.ZoneInfoNotFoundError:
                 logger.error('Unknown user time zone %r', raw_time_zone)
             else:
                 # Response with user timezone:

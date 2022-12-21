@@ -1,13 +1,13 @@
 import logging
 
-import pytz
 from django.test import RequestFactory, SimpleTestCase
 from django.utils import timezone
+from django.utils.timezone import zoneinfo
 
 from bx_django_utils.user_timezone.middleware import UserTimezoneMiddleware
 
 
-DEFAULT_TIMEZONE = pytz.timezone('America/Los_Angeles')
+DEFAULT_TIMEZONE = zoneinfo.ZoneInfo('America/Los_Angeles')
 
 
 class UserTimezoneMiddlewareTestCase(SimpleTestCase):
