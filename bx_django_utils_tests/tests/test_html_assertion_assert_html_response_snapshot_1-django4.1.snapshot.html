@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-us">
+ <head>
+  <title>
+   Log in | Django site admin
+  </title>
+  <link href="/static/admin/css/base.css" rel="stylesheet"/>
+  <link href="/static/admin/css/dark_mode.css" rel="stylesheet"/>
+  <link href="/static/admin/css/nav_sidebar.css" rel="stylesheet"/>
+  <script defer="" src="/static/admin/js/nav_sidebar.js">
+  </script>
+  <link href="/static/admin/css/login.css" rel="stylesheet"/>
+  <script src="/static/user_timezone.js">
+  </script>
+  <meta content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport"/>
+  <link href="/static/admin/css/responsive.css" rel="stylesheet"/>
+  <meta content="NONE,NOARCHIVE" name="robots"/>
+ </head>
+ <body class="login" data-admin-utc-offset="0">
+  <!-- Container -->
+  <div id="container">
+   <!-- Header -->
+   <div id="header">
+    <div id="branding">
+     <h1 id="site-name">
+      <a href="/admin/">
+       Django administration
+      </a>
+     </h1>
+    </div>
+   </div>
+   <!-- END Header -->
+   <div class="main" id="main">
+    <div class="content">
+     <!-- Content -->
+     <div class="colM" id="content">
+      <div id="content-main">
+       <form action="/admin/login/" id="login-form" method="post">
+        MockedCsrfTokenNode
+        <div class="form-row">
+         <label class="required" for="id_username">
+          Username:
+         </label>
+         <input autocapitalize="none" autocomplete="username" autofocus="" id="id_username" maxlength="150" name="username" required="" type="text"/>
+        </div>
+        <div class="form-row">
+         <label class="required" for="id_password">
+          Password:
+         </label>
+         <input autocomplete="current-password" id="id_password" name="password" required="" type="password"/>
+         <input name="next" type="hidden" value="/admin/"/>
+        </div>
+        <div class="submit-row">
+         <input type="submit" value="Log in"/>
+        </div>
+       </form>
+      </div>
+      <br class="clear"/>
+     </div>
+     <!-- END Content -->
+     <div id="footer">
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- END Container -->
+ </body>
+</html>

@@ -1,3 +1,4 @@
+import django
 from django.test import TestCase
 from model_bakery import baker
 
@@ -40,7 +41,18 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         # without filter -> default
 
         response = self.client.get('/admin/test_app/createorupdatetestmodel/')
-        self.assert_html_parts(
+        if django.VERSION >= (4, 1):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<summary>By blank_field set</summary>',
+                    '<li><a href="?blank_field=all">All</a></li>',
+                    '<li class="selected"><a href="?">Yes</a></li>',  # Yes is default!
+                    '<li><a href="?blank_field=no">No</a></li>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
             response,
             parts=(
                 '<h3>By blank_field set</h3>',
@@ -63,15 +75,26 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         # only blank fields
 
         response = self.client.get('/admin/test_app/createorupdatetestmodel/?blank_field=no')
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<h3>By blank_field set</h3>',
-                '<li><a href="?blank_field=all" title="All">All</a></li>',
-                '<li><a href="?" title="Yes">Yes</a></li>',
-                '<li class="selected"><a href="?blank_field=no" title="No">No</a></li>',
-            ),
-        )
+        if django.VERSION >= (4, 1):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<summary>By blank_field set</summary>',
+                    '<li><a href="?blank_field=all">All</a></li>',
+                    '<li><a href="?">Yes</a></li>',  # Yes is default!
+                    '<li class="selected"><a href="?blank_field=no">No</a></li>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<h3>By blank_field set</h3>',
+                    '<li><a href="?blank_field=all" title="All">All</a></li>',
+                    '<li><a href="?" title="Yes">Yes</a></li>',
+                    '<li class="selected"><a href="?blank_field=no" title="No">No</a></li>',
+                ),
+            )
         # Only "empty" item?
         items = self._get_changelist_items(response)
         self.assertEqual(
@@ -87,15 +110,26 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         # all entries
 
         response = self.client.get('/admin/test_app/createorupdatetestmodel/?blank_field=all')
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<h3>By blank_field set</h3>',
-                '<li class="selected"><a href="?blank_field=all" title="All">All</a></li>',
-                '<li><a href="?" title="Yes">Yes</a></li>',
-                '<li><a href="?blank_field=no" title="No">No</a></li>',
-            ),
-        )
+        if django.VERSION >= (4, 1):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<summary>By blank_field set</summary>',
+                    '<li class="selected"><a href="?blank_field=all">All</a></li>',
+                    '<li><a href="?">Yes</a></li>',  # Yes is default!
+                    '<li><a href="?blank_field=no">No</a></li>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<h3>By blank_field set</h3>',
+                    '<li class="selected"><a href="?blank_field=all" title="All">All</a></li>',
+                    '<li><a href="?" title="Yes">Yes</a></li>',
+                    '<li><a href="?blank_field=no" title="No">No</a></li>',
+                ),
+            )
         # Both: "filled" and "empty" items?
         items = self._get_changelist_items(response)
         self.assertEqual(
@@ -147,20 +181,35 @@ class ExistingCountedListFilterTestCase(HtmlAssertionMixin, TestCase):
         self.client.force_login(self.superuser)
 
         response = self.client.get('/admin/test_app/createorupdatetestmodel/')
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<h3>By name</h3>',
-                (
-                    '<li>'
-                    '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E"'
-                    ' title="&lt;foo&gt; / &lt;bar&gt; (1)">'
-                    '&lt;foo&gt; / &lt;bar&gt; (1)'
-                    '</a></li>'
+        if django.VERSION >= (4, 1):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<summary>By name</summary>',
+                    (
+                        '<li>'
+                        '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E">'
+                        '&lt;foo&gt; / &lt;bar&gt; (1)</a>'
+                        '</li>'
+                    ),
+                    '<li><a href="?name=Foo">Foo (2)</a></li>',
                 ),
-                '<li><a href="?name=Foo" title="Foo (2)">Foo (2)</a></li>',
-            ),
-        )
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<h3>By name</h3>',
+                    (
+                        '<li>'
+                        '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E"'
+                        ' title="&lt;foo&gt; / &lt;bar&gt; (1)">'
+                        '&lt;foo&gt; / &lt;bar&gt; (1)'
+                        '</a></li>'
+                    ),
+                    '<li><a href="?name=Foo" title="Foo (2)">Foo (2)</a></li>',
+                ),
+            )
         items = self._get_changelist_items(response)
         self.assertEqual(
             items,
@@ -188,20 +237,35 @@ class ExistingCountedListFilterTestCase(HtmlAssertionMixin, TestCase):
         response = self.client.get(
             '/admin/test_app/createorupdatetestmodel/?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E'
         )
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<h3>By name</h3>',
-                (
-                    '<li class="selected">'
-                    '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E"'
-                    ' title="&lt;foo&gt; / &lt;bar&gt; (1)">'
-                    '&lt;foo&gt; / &lt;bar&gt; (1)'
-                    '</a></li>'
+        if django.VERSION >= (4, 1):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<summary>By name</summary>',
+                    (
+                        '<li class="selected">'
+                        '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E">'
+                        '&lt;foo&gt; / &lt;bar&gt; (1)</a>'
+                        '</li>'
+                    ),
+                    '<li><a href="?name=Foo">Foo (2)</a></li>',
                 ),
-                '<li><a href="?name=Foo" title="Foo (2)">Foo (2)</a></li>',
-            ),
-        )
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<h3>By name</h3>',
+                    (
+                        '<li class="selected">'
+                        '<a href="?name=%253Cfoo%253E%2B%252F%2B%253Cbar%253E"'
+                        ' title="&lt;foo&gt; / &lt;bar&gt; (1)">'
+                        '&lt;foo&gt; / &lt;bar&gt; (1)'
+                        '</a></li>'
+                    ),
+                    '<li><a href="?name=Foo" title="Foo (2)">Foo (2)</a></li>',
+                ),
+            )
         items = self._get_changelist_items(response)
         self.assertEqual(
             items,
