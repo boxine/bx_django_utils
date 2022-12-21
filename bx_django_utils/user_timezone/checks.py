@@ -1,6 +1,6 @@
-import pytz
 from django.conf import settings
 from django.core.checks import Error, Warning, register
+from django.utils.timezone import zoneinfo
 
 
 MIDDLEWARE_STR = 'bx_django_utils.user_timezone.middleware.UserTimezoneMiddleware'
@@ -30,8 +30,8 @@ def user_timezone_check(app_configs, **kwargs):
     else:
         for tz_name in settings.VISIBLE_TIMEZONES:
             try:
-                pytz.timezone(tz_name)
-            except pytz.exceptions.UnknownTimeZoneError:
+                zoneinfo.ZoneInfo(tz_name)
+            except zoneinfo.ZoneInfoNotFoundError:
                 errors.append(
                     Error(
                         msg=f'settings.VISIBLE_TIMEZONES entry: {tz_name!r} is invalid!',

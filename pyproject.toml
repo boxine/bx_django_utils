@@ -30,7 +30,6 @@ python = '>=3.8,<4.0.0'  # Enforce 3.9 in the future
 bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
-pytz = '*'  # TODO: Remove in the future: https://github.com/boxine/bx_django_utils/pull/78
 
 [tool.poetry.dev-dependencies]
 boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
