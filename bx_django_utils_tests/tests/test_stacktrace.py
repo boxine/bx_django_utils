@@ -39,17 +39,6 @@ class StacktraceTestCase(TestCase):
     def test_get_stacktrace_output(self):
         out = baz()
 
-        if out[0].func == '<module>':
-            # cut off first entry, it's from the test runner binary and can't be
-            # ignored by exclude_modules
-            out = out[1:]
-
-        expected = [
-            ('test_get_stacktrace_output', 'out = baz()'),
-            ('baz', 'return bar()'),
-            ('bar', 'return foo()'),
-            ('foo', 'return get_stacktrace(exclude_modules=exclude_modules)'),
-        ]
         current_info = []
         for frameinfo in out:
             # only make rough assertions on file, line and locals_, they are too volatile
@@ -57,8 +46,14 @@ class StacktraceTestCase(TestCase):
             assert len(frameinfo.filename) > 0
             assert isinstance(frameinfo.line, int)
 
-            current_info.append(
-                (frameinfo.func, frameinfo.code)
-            )
+            if 'test_stacktrace.py' in frameinfo.filename:
+                # Just collect the "well known" entries
+                current_info.append((frameinfo.func, frameinfo.code))
 
+        expected = [
+            ('test_get_stacktrace_output', 'out = baz()'),
+            ('baz', 'return bar()'),
+            ('bar', 'return foo()'),
+            ('foo', 'return get_stacktrace(exclude_modules=exclude_modules)'),
+        ]
         assert_equal(current_info, expected)

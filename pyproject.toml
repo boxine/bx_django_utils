@@ -11,9 +11,9 @@ authors = [
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Topic :: Software Development :: Libraries :: Python Modules',
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
     'Intended Audience :: Developers',
@@ -26,10 +26,11 @@ readme='README.md'
 
 
 [tool.poetry.dependencies]
-python = '>=3.7,<4.0.0'  # Enforce 3.8 in the future
-bx_py_utils = '>=52'  # https://github.com/boxine/bx_py_utils
+python = '>=3.8,<4.0.0'  # Enforce 3.9 in the future
+bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
 django = '*'
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
+pytz = '*'  # TODO: Remove in the future: https://github.com/boxine/bx_django_utils/pull/78
 
 [tool.poetry.dev-dependencies]
 boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
@@ -126,7 +127,7 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{38,39,310}-django{3.2,4.0}
+envlist = py{39,310,311}-django{3.2,4.0,4.1}
 skip_missing_interpreters = True
 
 [testenv]
@@ -134,7 +135,8 @@ passenv = *
 deps =
     django3.2: django>=3.2,<3.3
     django4.0: django>=4.0,<4.1
-whitelist_externals =
+    django4.1: django>=4.1,<4.2
+allowlist_externals =
     poetry
 commands =
     python --version
