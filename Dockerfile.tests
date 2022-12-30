@@ -1,25 +1,34 @@
 # docker build -f Dockerfile.tests .
-FROM python:3.8-slim-bullseye
+FROM python:3.9-slim-bullseye
 
 WORKDIR /bx_django_utils
-RUN apt-get update && apt-get install -y make curl && rm -rf /var/lib/apt/lists/*
+RUN set -x \
+    && apt-get update \
+    && apt-get install -y git-core make curl \
+    && rm -rf /var/lib/apt/*
 
-# Install packages
-COPY Makefile poetry.lock pyproject.toml ./
-RUN make install-poetry && \
-	poetry lock && \
-	poetry show --tree && \
-	make install
+ENV PATH="/root/.local/bin:${PATH}"
+
+# Install Poetry + requirements + Playwright
+COPY Makefile pyproject.toml poetry.lock ./
+RUN set -x \
+    && make install-poetry \
+    && make install || true \
+    && make playwright-install \
+    && poetry run playwright install-deps
+
+COPY . .
 
 # List installed packages
-RUN poetry run pip freeze
+RUN set -x \
+    && poetry run pip freeze \
+    && poetry show --tree
 
-# Run tests
-ENV PYTEST_ADDOPTS: "-c pytest-ci.ini"
-COPY . .
-RUN make pytest-ci
-# Run tox tests
-RUN poetry run tox -e python-django3.2
+# Run unittests
+RUN make test
+
+# Run unittests via tox
+RUN make tox
 
 # Run linters
 RUN make lint

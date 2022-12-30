@@ -8,9 +8,6 @@ def foo():
     exclude_modules = (  # keep the test stacktrace minimal
         'unittest',
         'django.test',
-        'pluggy',
-        '_pytest',
-        'pytest',
         'runpy',
     )
     return get_stacktrace(exclude_modules=exclude_modules)

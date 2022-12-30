@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest] # TODO: windows-latest
         python-version: ["3.11", "3.10", "3.9"]
-        django: ["3.2", "4.0", "4.1"]
+        django: ["4.0", "4.1"]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -57,8 +57,6 @@ jobs:
 
     - name: 'Run tests on ${{ matrix.os }} with Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
       run: poetry run tox -e python-django${{ matrix.django }}
-      env:
-        PYTEST_ADDOPTS: "-c pytest-ci.ini"
 
     - name: 'Upload coverage report'
       run: bash <(curl -s https://codecov.io/bash)

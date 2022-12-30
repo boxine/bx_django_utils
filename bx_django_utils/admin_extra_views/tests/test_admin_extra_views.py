@@ -16,7 +16,9 @@ class AdminExtraViewsTestCase(TestCase):
     def test_anonymous_access(self):
         checked_urls = 0
         for url in iter_admin_extra_views_urls():
-            with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
+            with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs, self.assertLogs(
+                'django.request', level=logging.WARNING
+            ):
                 response = self.client.get(url)
             logs = '\n'.join(logs.output)
             self.assertIn('did not pass', logs)
