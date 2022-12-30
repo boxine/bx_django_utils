@@ -1,6 +1,8 @@
 SHELL := /bin/bash
 MAX_LINE_LENGTH := 119
 POETRY_VERSION := $(shell poetry --version 2>/dev/null)
+export DJANGO_SETTINGS_MODULE = bx_django_utils_tests.test_project.settings
+export SKIP_TEST_MIGRATION = true
 
 help: ## List all commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -34,22 +36,26 @@ fix-code-style: ## Fix code formatting
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
 
-tox: check-poetry ## Run pytest via tox with all environments
+tox: check-poetry ## Run unittests via tox with all environments
 	poetry run tox
 
-pytest: check-poetry ## Run pytest
-	poetry run pytest
+test: check-poetry  ## Run unittests
+	RAISE_LOG_OUTPUT=1 ./manage.sh test --parallel --shuffle --buffer
 
-pytest-ci: check-poetry ## Run pytest with CI settings
-	poetry run pytest -c pytest-ci.ini
+coverage_test: ## Run tests and generate coverage html report
+	poetry run coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
+	poetry run coverage html
+	poetry run coverage report
 
-test: pytest
+update-test-snapshot-files:   ## Update all snapshot files (by remove and recreate all snapshot files)
+	find . -type f -name '*.snapshot.*' -delete
+	RAISE_SNAPSHOT_ERRORS=0 ./manage.sh test --parallel
 
 publish: ## Release new version to PyPi
 	poetry run publish
 
 docker-test:  ## Run tests in docker
-	docker build -f Dockerfile.tests .
+	docker build --pull -f Dockerfile.tests .
 
 makemessages: ## Make and compile locales message files
 	./manage.sh makemessages --all --no-location --no-obsolete
@@ -65,9 +71,9 @@ playwright-install: ## Install test browser for Playwright tests
 	poetry run playwright install chromium firefox
 
 playwright-inspector:  ## Run Playwright inspector
-	PWDEBUG=1 poetry run pytest -s -m playwright -x
+	PWDEBUG=1 ./manage.sh test --parallel --shuffle --buffer --failfast
 
 playwright-tests:  ## Run only the Playwright tests
-	poetry run pytest -m playwright
+	./manage.sh test --parallel --shuffle --buffer --tag playwright
 
-.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server docker-test playwright-install playwright-inspector playwright-tests
+.PHONY: help install lint fix publish test clean makemessages start-dev-server docker-test playwright-install playwright-inspector playwright-tests
