@@ -62,7 +62,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 ##### bx_django_utils.admin_extra_views.tests.test_admin_extra_views
 
-* [`AdminExtraViewsTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/tests/test_admin_extra_views.py#L10-L37) - Integrations tests for Admin Extra Views.
+* [`AdminExtraViewsTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/tests/test_admin_extra_views.py#L10-L39) - Integrations tests for Admin Extra Views.
 
 #### bx_django_utils.admin_extra_views.utils
 

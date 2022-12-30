@@ -3,6 +3,7 @@ import pathlib
 import tempfile
 from collections import Counter
 
+from bx_py_utils.environ import OverrideEnviron
 from django.contrib.auth.models import Group, Permission
 from django.db import connection, transaction
 from django.test import TestCase
@@ -111,9 +112,10 @@ class AssertQueriesTestCase(TestCase):
             Permission.objects.all().first()
             Group.objects.all().first()
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            with self.assertRaises(FileNotFoundError):
-                queries.snapshot_table_counts(
+        with tempfile.TemporaryDirectory() as tmp_dir, OverrideEnviron(
+            RAISE_SNAPSHOT_ERRORS='1'  # Maybe it's disabled in this test run!
+        ), self.assertRaises(FileNotFoundError):
+            queries.snapshot_table_counts(
                     exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'
                 )
 
