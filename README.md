@@ -73,6 +73,16 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 * [`Redirect2AdminExtraView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/views.py#L7-L23) - Redirect to a Admin Extra Views.
 
+#### bx_django_utils.admin_utils.admin_urls
+
+Helpers to build Admin URLs
+
+* [`admin_change_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L62-L78) - Shortcut to generate Django admin "change" url for a model instance.
+* [`admin_changelist_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L119-L134) - Shortcut to generate Django admin "changelist" url for a model or instance.
+* [`admin_delete_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L100-L116) - Shortcut to generate Django admin "delete" url for a model instance.
+* [`admin_history_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L81-L97) - Shortcut to generate Django admin "history" url for a model instance.
+* [`admin_model_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L15-L59) - Build Admin change, add, changelist, etc. links with optional filter parameters.
+
 #### bx_django_utils.admin_utils.filters
 
 * [`ExistingCountedListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L26-L62) - Advanced SimpleListFilter that list only existing filter values with counts.
