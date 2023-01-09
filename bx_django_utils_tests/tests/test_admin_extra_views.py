@@ -96,7 +96,9 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(url, '/admin/pseudo-app-1/demo-view-1/')
 
         # Anonymous user can't access:
-        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
+        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs, self.assertLogs(
+            'django.request', level=logging.WARNING
+        ):
             response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
         assert logs.output == [
@@ -106,7 +108,9 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
 
         # Non-staff users can also not access:
         self.client.force_login(self.non_staff_user)
-        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
+        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs, self.assertLogs(
+            'django.request', level=logging.WARNING
+        ):
             response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
         assert logs.output == [
@@ -166,7 +170,9 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             ),
         )
         self.assert_parts_not_in_html(response, parts=(app2_demo3,))
-        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
+        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs, self.assertLogs(
+            'django.request', level=logging.WARNING
+        ):
             response = self.client.get('/admin/pseudo-app-2/demo-view-3/')
         self.assertEqual(response.status_code, 403)
         assert logs.output == [

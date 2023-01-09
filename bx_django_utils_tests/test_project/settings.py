@@ -145,6 +145,7 @@ LOGGING = {
         'formatter': 'verbose'
     }},
     'loggers': {
+        '': {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
         'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
         'django.auth': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
@@ -152,6 +153,15 @@ LOGGING = {
         'bx_django_utils': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
     },
 }
+
+
+if os.environ.get('RAISE_LOG_OUTPUT') in ('1', 'true'):
+    # Raise an error on every uncaptured log message
+    LOGGING['handlers']['raise_error'] = {
+        'class': 'bx_py_utils.test_utils.log_utils.RaiseLogUsage',
+    }
+    for logger_cfg in LOGGING['loggers'].values():
+        logger_cfg['handlers'] = ['raise_error']
 
 
 # Playwright browser tests

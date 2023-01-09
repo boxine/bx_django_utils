@@ -5,13 +5,17 @@ from unittest import mock
 
 import django
 from bx_py_utils.compat import removesuffix
+from bx_py_utils.environ import OverrideEnviron
 from bx_py_utils.test_utils.snapshot import _get_caller_names
 from django.contrib import messages
 from django.contrib.messages.storage.session import SessionStorage
 from django.template.defaulttags import CsrfTokenNode
 from django.test import RequestFactory, SimpleTestCase
 
-from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
+from bx_django_utils.test_utils.html_assertion import (
+    HtmlAssertionMixin,
+    assert_html_response_snapshot,
+)
 
 
 class FakeResponse:
@@ -68,9 +72,10 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
         messages.error(request, 'The last message.')
         response = FakeResponse(request)
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            with self.assertRaises(FileNotFoundError):
-                self.snapshot_messages(response, root_dir=tmp_dir)
+        with tempfile.TemporaryDirectory() as tmp_dir, OverrideEnviron(
+            RAISE_SNAPSHOT_ERRORS='1'  # Maybe it's disabled in this test run!
+        ), self.assertRaises(FileNotFoundError):
+            self.snapshot_messages(response, root_dir=tmp_dir)
 
             # Test that snapshot got written
             snapshot_name = 'test_html_assertion_snapshot_messages_1'

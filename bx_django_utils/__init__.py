@@ -1,1 +1,4 @@
-__version__ = '37'
+from importlib.metadata import version
+
+
+__version__ = version('bx_django_utils')
