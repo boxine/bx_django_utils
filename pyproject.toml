@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "37"
+version = "38"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -21,25 +21,21 @@ classifiers = [
 license = 'MIT'
 keywords=['django', 'utilities']
 include = ['LICENSE', 'README.md']
-
 readme='README.md'
+packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests" }]
 
 
 [tool.poetry.dependencies]
 python = '>=3.8,<4.0.0'  # Enforce 3.9 in the future
 bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
-django = '*'
+django = '>=3.2,<4.2'  # Enforce 4.0 in the future
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
 boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = '*'
 tox = '*'
-pytest = '*'
-pytest-randomly = '*'
-pytest-cov = '*'
-pytest-django = '*'
-pytest-darker = '*'  # https://github.com/akaihola/pytest-darker
+coverage = '*'  # https://github.com/nedbat/coveragepy
 darker = '*'  # https://github.com/akaihola/darker
 flake8 = '*'
 isort = '*'
@@ -47,9 +43,10 @@ poetry-publish = '*'  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = '*'
 beautifulsoup4 = '*'
 lxml = '*'
-pytest-playwright = '*'  # https://playwright.dev/python/
+playwright = '*'  # https://playwright.dev/python/
 pdoc = '*'  # https://pdoc.dev/
 model-bakery = '*'  # https://github.com/model-bakers/model_bakery
+tblib = '*'  # https://github.com/ionelmc/python-tblib
 
 [tool.poetry.scripts]
 publish = "bx_django_utils_tests.test_project.publish:publish"
@@ -61,7 +58,7 @@ build-backend = 'poetry.masonry.api'
 
 
 [tool.darker]
-src = ['.']
+src = ["bx_django_utils","bx_django_utils_tests"]
 revision = "origin/master..."
 line_length = 100
 verbose = true
@@ -77,48 +74,17 @@ log_level = "INFO"
 
 
 [tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
+# https://pycqa.github.io/isort/docs/configuration/config_files.html
 atomic=true
 profile='black'
 line_length=120
-skip_glob=["*/htmlcov/*","*/migrations/*"]
-known_first_party=["bx_django_utils","bx_django_utils_tests"]
+skip_glob=[".*", "*/htmlcov/*","*/migrations/*"]
 lines_after_imports=2
 
 
 [tool.coverage.run]
 omit=[".*"]
-
-
-[tool.pytest.ini_options]
-# https://docs.pytest.org/en/latest/customize.html#pyproject-toml
-minversion = "6.0"
-DJANGO_SETTINGS_MODULE="bx_django_utils_tests.test_project.settings"
-norecursedirs = ".* __pycache__ coverage* dist htmlcov"
-markers = [
-    "playwright: marks Playwright tests",
-]
-# sometimes helpfull "addopts" arguments:
-#    -vv
-#    --verbose
-#    --capture=no
-#    --trace-config
-#    --full-trace
-#    -p no:warnings
-addopts = """
-    --reuse-db
-    --nomigrations
-    --cov=.
-    --cov-report term-missing
-    --no-cov-on-fail
-    --showlocals
-    --darker
-    --doctest-modules
-    --failed-first
-    --last-failed-no-failures all
-    --new-first
-    -p no:randomly
-"""
+source_pkgs=["bx_django_utils"]
 
 
 [tool.tox]
@@ -126,19 +92,22 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{39,310,311}-django{3.2,4.0,4.1}
+envlist = py{39,310,311}-django{4.0,4.1}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
 deps =
-    django3.2: django>=3.2,<3.3
     django4.0: django>=4.0,<4.1
     django4.1: django>=4.1,<4.2
-allowlist_externals =
-    poetry
+    model-bakery
+    playwright
+    pdoc
+    beautifulsoup4
+    lxml
+    django-debug-toolbar
+    tblib
+allowlist_externals = make
 commands =
-    python --version
-    poetry run django-admin --version
-    poetry run pytest
+    make test
 """

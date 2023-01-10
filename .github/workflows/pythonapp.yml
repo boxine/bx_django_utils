@@ -10,16 +10,15 @@ on:
 
 jobs:
   test:
-    name: '${{ matrix.os }} Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
-    runs-on: ${{ matrix.os }}
+    name: 'Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
+    runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest] # TODO: windows-latest
         python-version: ["3.11", "3.10", "3.9"]
-        django: ["3.2", "4.0", "4.1"]
+        django: ["4.0", "4.1"]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -34,7 +33,7 @@ jobs:
     - name: Setup Github Cache
       uses: actions/cache@v3
       with:
-        key: dot-cache-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.django }}
+        key: dot-cache-${{ matrix.python-version }}-${{ matrix.django }}
         path: ~/.cache/
 
     - name: 'Bootstrap Poetry'
@@ -55,10 +54,8 @@ jobs:
     - name: 'Install Browsers for Playwright tests'
       run: make playwright-install
 
-    - name: 'Run tests on ${{ matrix.os }} with Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
+    - name: 'Run tests with Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
       run: poetry run tox -e python-django${{ matrix.django }}
-      env:
-        PYTEST_ADDOPTS: "-c pytest-ci.ini"
 
     - name: 'Upload coverage report'
       run: bash <(curl -s https://codecov.io/bash)

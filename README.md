@@ -2,7 +2,7 @@
 
 Various Django utility functions
 
-[![pytest](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml/badge.svg?branch=master)](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_django_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_django_utils)
+[![unittests](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml/badge.svg?branch=master)](https://github.com/boxine/bx_django_utils/actions/workflows/pythonapp.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_django_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_django_utils)
 
 [![bx_django_utils @ PyPi](https://img.shields.io/pypi/v/bx_django_utils?label=bx_django_utils%20%40%20PyPi)](https://pypi.org/project/bx_django_utils/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/bx_django_utils)](https://gitlab.com/boxine/bx_django_utils/-/blob/main/pyproject.toml)
@@ -236,14 +236,10 @@ Utilities to manage text fixtures in JSON files.
 
 #### bx_django_utils.test_utils.playwright
 
-Use Playwright in Pytest and Unittest + Fast Django user login
+Use Playwright in Unittest + Fast Django user login
 
-* [`PlaywrightConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L137-L155) - PlaywrightTestCase config from environment (PWBROWSER, PWHEADLESS, PWSKIP, PWSLOWMO)
-* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L158-L215) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
-* [`PyTestPlaywrightBaseTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L97-L134) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
-* [`UnittestRunnerMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L68-L94) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
-* [`fast_login()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L36-L65) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
-* [`setup_browser_context_args()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L16-L33) - DEPRECATED: Will be removed in the future! Use new "PlaywrightTestCase"
+* [`PlaywrightConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L13-L31) - PlaywrightTestCase config from environment (PWBROWSER, PWHEADLESS, PWSKIP, PWSLOWMO)
+* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L34-L91) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
 
 #### bx_django_utils.test_utils.users
 
@@ -290,20 +286,22 @@ To start developing e.g.:
 ~$ cd bx_django_utils
 ~/bx_django_utils$ make
 help                 List all commands
-install-poetry       install or update poetry via pip
+install-poetry       install poetry
 install              install via poetry
 update               Update the dependencies as according to the pyproject.toml file
 lint                 Run code formatters and linter
 fix-code-style       Fix code formatting
 tox-listenvs         List all tox test environments
-tox                  Run pytest via tox with all environments
-pytest               Run pytest
-pytest-ci            Run pytest with CI settings
+tox                  Run unittests via tox with all environments
+test                 Run unittests
 publish              Release new version to PyPi
 docker-test          Run tests in docker
 makemessages         Make and compile locales message files
 start-dev-server     Start Django dev. server with the test project
 clean                Remove created files from the test project (e.g.: SQlite, static files)
+playwright-install   Install test browser for Playwright tests
+playwright-inspector Run Playwright inspector
+playwright-tests     Run only the Playwright tests
 ```
 
 You can start the test project with the Django developing server, e.g.:
@@ -318,17 +316,6 @@ If you like to start from stretch, just delete related test project files with:
 ```
 ...and start the test server again ;)
 
-
-### update this README
-
-This README will be updated via tests ;) But currently this is only done with Python 3.9 !
-If your system Python version is not 3.9: Install this Python version and switch to it, e.g.:
-
-```bash
-~/bx_django_utils$ poetry env use python3.9
-~/bx_django_utils$ make install
-~/bx_django_utils$ make pytest
-```
 
 ## License
 
