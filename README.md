@@ -214,11 +214,11 @@ Utilities / helper for writing tests.
 
 Utilities to manage text fixtures in JSON files.
 
-* [`BaseFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L27-L60) - Base class for JSON dump fixtures.
-* [`FixturesRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L97-L127) - Registry to collect a list of all existing fixture classes.
-* [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L159-L191) - A base Django manage command to renew all existing fixture JSON dump files
-* [`SerializerFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L63-L94) - Helper to store/restore model instances serialized into a JSON file.
-* [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L133-L156) - Register all fixtures by import all **/fixtures/**/*.py files
+* [`BaseFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L28-L61) - Base class for JSON dump fixtures.
+* [`FixturesRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L98-L128) - Registry to collect a list of all existing fixture classes.
+* [`RenewAllFixturesBaseCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L160-L210) - A base Django manage command to renew all existing fixture JSON dump files
+* [`SerializerFixtures()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L64-L95) - Helper to store/restore model instances serialized into a JSON file.
+* [`autodiscover()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/fixtures.py#L134-L157) - Register all fixtures by import all **/fixtures/**/*.py files
 
 #### bx_django_utils.test_utils.forms
 

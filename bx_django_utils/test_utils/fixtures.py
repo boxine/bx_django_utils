@@ -8,6 +8,7 @@
 """
 import json
 import os
+import re
 import sys
 from importlib import import_module
 from pathlib import Path
@@ -163,6 +164,14 @@ class RenewAllFixturesBaseCommand(BaseCommand):
 
     help = 'Renew all (example) test fixtures'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-f',
+            '--filter',
+            metavar='REGEX',
+            help='Filter fixture class names or files by a regular expression',
+        )
+
     def handle(self, *args, **options):
         verbosity = options['verbosity']
 
@@ -178,8 +187,18 @@ class RenewAllFixturesBaseCommand(BaseCommand):
             self.stderr.write('No fixtures class registered!')
             sys.exit(1)
 
+        all_fixtures = list(fixtures_registry)
+
+        if filter_re := options['filter']:
+            filter_rex = re.compile(filter_re)
+            all_fixtures = [
+                f
+                for f in all_fixtures
+                if filter_rex.search(f.__class__.__name__) or filter_rex.search(f.file_name)
+            ]
+
         no = 0
-        for no, fixture in enumerate(fixtures_registry, 1):
+        for no, fixture in enumerate(all_fixtures, 1):
             if verbosity:
                 self.stdout.write('_' * 100)
                 self.stdout.write(
