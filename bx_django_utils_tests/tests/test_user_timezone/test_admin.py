@@ -1,3 +1,4 @@
+import logging
 from http.cookies import SimpleCookie
 
 from django.conf import settings
@@ -47,7 +48,10 @@ class UserTimezonePlaywrightMixin:
             locale='en_US',
             timezone_id='Europe/Berlin',
         )
-        with context.new_page() as page:
+        with context.new_page() as page, self.assertLogs('django.request', level=logging.DEBUG):
+            logger = logging.getLogger('django.request')
+            logger.debug('always_log_something')  # favicon.ico is only requested by some browsers
+
             # Use our "Dynamic View Menu" index page from our "test_app":
             page.goto(f'{self.live_server_url}')
             expect(page).to_have_title('Dynamic View Menu - Index | Django site admin')
