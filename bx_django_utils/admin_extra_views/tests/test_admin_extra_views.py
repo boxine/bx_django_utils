@@ -33,7 +33,11 @@ class AdminExtraViewsTestCase(TestCase):
         all_urls = []
         for url in iter_admin_extra_views_urls():
             respose = self.client.get(url)
-            self.assertEqual(respose.status_code, 200)
+            if url == '/admin/feature_flags/feature-flags-values-demo/':
+                self.assertRedirects(respose, expected_url='/admin/', fetch_redirect_response=False)
+            else:
+                self.assertEqual(respose.status_code, 200)
+
             all_urls.append(url)
         self.assertGreaterEqual(len(all_urls), 1)
         assert_snapshot(got=all_urls)

@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     #
     # User Timezone:
     'bx_django_utils.user_timezone.apps.UserTimezoneAppConfig',
+    #
+    # Feature Flags:
+    'bx_django_utils.feature_flags.apps.FeatureFlagsAppConfig',
 ]
 
 MIDDLEWARE = [

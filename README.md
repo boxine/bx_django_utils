@@ -62,7 +62,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 ##### bx_django_utils.admin_extra_views.tests.test_admin_extra_views
 
-* [`AdminExtraViewsTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/tests/test_admin_extra_views.py#L10-L39) - Integrations tests for Admin Extra Views.
+* [`AdminExtraViewsTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/tests/test_admin_extra_views.py#L10-L43) - Integrations tests for Admin Extra Views.
 
 #### bx_django_utils.admin_extra_views.utils
 
@@ -135,6 +135,19 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 #### bx_django_utils.dbperf.query_recorder
 
 * [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L95-L176) - A context manager that allows recording SQL queries executed during its lifetime.
+
+### bx_django_utils.feature_flags
+
+Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/README.md
+
+
+#### bx_django_utils.feature_flags.admin_views
+
+* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L21-L69) - Base admin extra view to manage all existing feature flags in admin.
+
+#### bx_django_utils.feature_flags.data_classes
+
+* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L23-L109) - A feature flag that persistent the state into django cache.
 
 ### bx_django_utils.filename
 
