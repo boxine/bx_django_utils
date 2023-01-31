@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+{% for feature_flag in feature_flags %}
+    <h2>{{ feature_flag.human_name }} - {{ feature_flag.state.name }}</h2>
+    <pre>{{ feature_flag.description }}</pre>
+    <p>(Initial default state: {{ feature_flag.initial_state.name }})</p>
+    <p>Current state: <strong>{{ feature_flag.state.name }}</strong></p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="cache_key" value="{{ feature_flag.cache_key }}">
+        <input type="hidden" name="new_value" value="{{ feature_flag.opposite_state.value }}">
+        <input type="submit" value="Set '{{ feature_flag.human_name }}' to {{ feature_flag.opposite_state.name }}">
+    </form>
+{% endfor %}
+{% endblock %}
