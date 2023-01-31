@@ -107,7 +107,7 @@ deps =
     lxml
     django-debug-toolbar
     tblib
-allowlist_externals = make
+    coverage[toml]
 commands =
-    make test
+    python -m coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
 """
