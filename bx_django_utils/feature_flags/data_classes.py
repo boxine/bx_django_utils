@@ -3,26 +3,20 @@ from collections.abc import Iterable
 from typing import Optional
 
 from django.core.cache import cache
-from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from bx_django_utils.feature_flags.exceptions import NotUniqueFlag
+from bx_django_utils.feature_flags.models import FeatureFlagModel
+from bx_django_utils.feature_flags.state import State
 from bx_django_utils.feature_flags.utils import validate_cache_key
+from bx_django_utils.models.manipulate import create_or_update2
 
 
 logger = logging.getLogger(__name__)
 
 
-class State(models.IntegerChoices):
-    """"""  # noqa - don't add in README
-
-    ENABLED = 1, _('enabled')
-    DISABLED = 0, _('disabled')
-
-
 class FeatureFlag:
     """
-    A feature flag that persistent the state into django cache.
+    A feature flag that persistent the state into django cache/database.
     """
 
     registry = {}
@@ -65,7 +59,16 @@ class FeatureFlag:
             new_state, State
         ), f'Given {new_state!r} (type: {type(new_state).__name__}) is not a State object!'
 
-        cache.set(self.cache_key, new_state.value, timeout=None)  # set forever
+        create_or_update2(
+            ModelClass=FeatureFlagModel,
+            lookup={'cache_key': self.cache_key},
+            state=new_state,
+        )
+        self._add2cache(state_value=new_state.value)
+
+    def _add2cache(self, state_value: int):
+        assert state_value in (0, 1)
+        cache.set(self.cache_key, state_value, timeout=None)  # set forever
 
     @property
     def is_enabled(self) -> bool:
@@ -76,7 +79,16 @@ class FeatureFlag:
             raw_value = None  # Use the initial state
 
         if raw_value is None:
-            # Not set, yet
+            # Not set, yet or cache was cleared -> Try to get the state from database
+            instance = (
+                FeatureFlagModel.objects.filter(cache_key=self.cache_key).values('state').first()
+            )
+            if instance:
+                # We found the flag in database -> store it in the cache
+                state_value = instance['state']
+                self._add2cache(state_value=state_value)
+                return bool(state_value)
+
             return self.initial_state is State.ENABLED
         elif raw_value == State.ENABLED.value:
             return True

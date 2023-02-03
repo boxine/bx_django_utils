@@ -1,0 +1,46 @@
+# Copyright (C) boxine.de
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bx_django_utils\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-03 12:13+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Jens Diemer\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+
+msgid "Manage Feature Flags"
+msgstr "Feature-Flags verwalten"
+
+msgid "No feature flags currently registered"
+msgstr "Derzeit keine Feature-Flags registriert"
+
+msgid "FeatureFlagModel.cache_key.verbose_name"
+msgstr "Cache-Key"
+
+msgid "FeatureFlagModel.cache_key.help_text"
+msgstr " "
+
+msgid "FeatureFlagModel.state.verbose_name"
+msgstr "State"
+
+msgid "FeatureFlagModel.state.help_text"
+msgstr " "
+
+msgid "FeatureFlagModel.verbose_name"
+msgstr "Feature Flag"
+
+msgid "FeatureFlagModel.verbose_name_plural"
+msgstr "Feature Flags"
+
+msgid "enabled"
+msgstr "aktiviert"
+
+msgid "disabled"
+msgstr "deaktiviert"

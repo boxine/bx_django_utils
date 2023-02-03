@@ -1,6 +1,8 @@
 # bx_django_utils - Feature Flags
 
-Store feature flags persistent into Django cache.
+Store feature flags persistent into Django cache/database.
+
+All flags will be stored to cache and database and only on cache miss fetched again from database.
 
 There is optional a [Admin Extra Views](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/README.md) base class to manage all flags in the admin.
 
