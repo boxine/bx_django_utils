@@ -6,8 +6,9 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from bx_django_utils.feature_flags import data_classes
-from bx_django_utils.feature_flags.data_classes import FeatureFlag, State
+from bx_django_utils.feature_flags.data_classes import FeatureFlag
 from bx_django_utils.feature_flags.exceptions import NotUniqueFlag
+from bx_django_utils.feature_flags.state import State
 from bx_django_utils.feature_flags.utils import validate_cache_key
 from bx_django_utils.test_utils.cache import ClearCacheMixin
 

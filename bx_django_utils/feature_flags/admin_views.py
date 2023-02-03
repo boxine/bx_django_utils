@@ -6,7 +6,8 @@ from django.views.generic import FormView
 
 from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
 from bx_django_utils.admin_extra_views.datatypes import AdminExtraMeta
-from bx_django_utils.feature_flags.data_classes import FeatureFlag, State
+from bx_django_utils.feature_flags.data_classes import FeatureFlag
+from bx_django_utils.feature_flags.state import State
 
 
 class ManageFeatureFlagsForm(forms.Form):
