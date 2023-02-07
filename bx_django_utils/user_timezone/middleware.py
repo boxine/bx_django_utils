@@ -1,7 +1,7 @@
 import logging
+import zoneinfo
 
 from django.utils import timezone
-from django.utils.timezone import zoneinfo
 
 
 logger = logging.getLogger(__name__)

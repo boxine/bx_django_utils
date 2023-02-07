@@ -1,7 +1,8 @@
+import zoneinfo
+
 from bx_py_utils.test_utils.datetime import parse_dt
 from django.test import SimpleTestCase, override_settings
 from django.utils import timezone, translation
-from django.utils.timezone import zoneinfo
 
 from bx_django_utils.test_utils.html_assertion import assert_html_snapshot
 from bx_django_utils.user_timezone.humanize import human_timezone_datetime

@@ -1,6 +1,7 @@
+import zoneinfo
+
 from django.conf import settings
 from django.core.checks import Error, Warning, register
-from django.utils.timezone import zoneinfo
 
 
 MIDDLEWARE_STR = 'bx_django_utils.user_timezone.middleware.UserTimezoneMiddleware'
