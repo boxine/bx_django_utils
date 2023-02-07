@@ -1,6 +1,5 @@
 SHELL := /bin/bash
 MAX_LINE_LENGTH := 119
-POETRY_VERSION := $(shell poetry --version 2>/dev/null)
 export DJANGO_SETTINGS_MODULE = bx_django_utils_tests.test_project.settings
 export SKIP_TEST_MIGRATION = true
 
@@ -8,9 +7,9 @@ help: ## List all commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 check-poetry:
-	@if [[ "${POETRY_VERSION}" == *"Poetry"* ]] ; \
+	@if [[ "$(shell poetry --version 2>/dev/null)" == *"Poetry"* ]] ; \
 	then \
-		echo "Found ${POETRY_VERSION}, ok." ; \
+		echo "Poetry found, ok." ; \
 	else \
 		echo 'Please install poetry first, with e.g.:' ; \
 		echo 'make install-poetry' ; \
@@ -29,9 +28,12 @@ update: check-poetry ## Update the dependencies as according to the pyproject.to
 
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
+	poetry run isort --check-only .
+	poetry run flake8 .
 
 fix-code-style: ## Fix code formatting
 	poetry run darker
+	poetry run isort .
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs

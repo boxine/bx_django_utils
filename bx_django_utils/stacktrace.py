@@ -53,7 +53,8 @@ def iter_frameinfo(start_no=2):
     while previous_frame:
         file, line, func, code, _ = inspect.getframeinfo(previous_frame, context=1)
         file = os.path.realpath(file)  # make it an absolute path
-        code = code[0].strip()  # 0 is safe because we always have context=1
+        if code and (code := code[0]):
+            code = code.strip()
 
         yield (file, line, func, code)
 

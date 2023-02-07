@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "41"
+version = "42"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -24,21 +24,23 @@ include = ['LICENSE', 'README.md']
 readme='README.md'
 packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests" }]
 
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/john-doh/bx_django_utils/issues"
 
 [tool.poetry.dependencies]
-python = '>=3.8,<4.0.0'  # Enforce 3.9 in the future
+python = '>=3.9,<4.0.0'
+django = '>=4.0,<4.2'
 bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
-django = '>=3.2,<4.2'  # Enforce 4.0 in the future
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
 boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = '*'
-tox = '*'
+tox = '>=4.4.4'  # https://github.com/tox-dev/tox
 coverage = '*'  # https://github.com/nedbat/coveragepy
 darker = '*'  # https://github.com/akaihola/darker
-flake8 = '*'
-isort = '*'
+isort = '*'  # https://github.com/pycqa/isort
+flake8 = '*'  # https://github.com/pycqa/flake8
 poetry-publish = '*'  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = '*'
 beautifulsoup4 = '*'
@@ -53,14 +55,14 @@ publish = "bx_django_utils_tests.test_project.publish:publish"
 
 
 [build-system]
-requires = ['poetry>=0.12']
-build-backend = 'poetry.masonry.api'
+requires = ['poetry-core>=1.0.0']
+build-backend = 'poetry.core.masonry.api'
 
 
 [tool.darker]
-src = ["bx_django_utils","bx_django_utils_tests"]
 revision = "origin/master..."
-line_length = 100
+src = ['.']
+line_length = 119
 verbose = true
 skip_string_normalization = true
 diff = false
@@ -77,14 +79,21 @@ log_level = "INFO"
 # https://pycqa.github.io/isort/docs/configuration/config_files.html
 atomic=true
 profile='black'
-line_length=120
 skip_glob=[".*", "*/htmlcov/*","*/migrations/*"]
+known_first_party=['bx_django_utils']
+line_length=119
 lines_after_imports=2
 
 
 [tool.coverage.run]
-omit=[".*"]
-source_pkgs=["bx_django_utils"]
+branch = true
+source_pkgs=['bx_django_utils']
+omit = ['.*', '*/tests/*','*/migrations/*']
+command_line = 'manage.py test --parallel --shuffle'
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 45
 
 
 [tool.tox]
@@ -111,3 +120,31 @@ deps =
 commands =
     python -m coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
 """
+
+
+[tool.mypy]
+warn_unused_configs = true
+ignore_missing_imports = true
+allow_redefinition = true  # https://github.com/python/mypy/issues/7165
+show_error_codes = true
+plugins = []
+exclude = ['.venv', 'tests', 'migrations']
+
+
+[manageprojects] # https://github.com/jedie/manageprojects
+initial_revision = "70663ef"
+initial_date = 2023-02-07T09:52:21+01:00
+cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
+cookiecutter_directory = "poetry-django-app"
+
+[manageprojects.cookiecutter_context.cookiecutter]
+full_name = "Jens Diemer"
+github_username = "jedie"
+author_email = "jens.diemer@boxine.de"
+package_name = "bx_django_utils"
+package_version = "0.0.1"
+package_description = "Various Django utility functions"
+package_url = "https://github.com/boxine/bx_django_utils"
+issues_url = "https://github.com/boxine/bx_django_utils/issues"
+license = "MIT"
+_template = "https://github.com/jedie/cookiecutter_templates/"

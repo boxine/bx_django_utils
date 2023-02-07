@@ -12,10 +12,7 @@ from django.contrib.messages.storage.session import SessionStorage
 from django.template.defaulttags import CsrfTokenNode
 from django.test import RequestFactory, SimpleTestCase
 
-from bx_django_utils.test_utils.html_assertion import (
-    HtmlAssertionMixin,
-    assert_html_response_snapshot,
-)
+from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
 
 
 class FakeResponse:

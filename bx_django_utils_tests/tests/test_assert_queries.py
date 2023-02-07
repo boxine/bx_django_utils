@@ -116,8 +116,10 @@ class AssertQueriesTestCase(TestCase):
             RAISE_SNAPSHOT_ERRORS='1'  # Maybe it's disabled in this test run!
         ), self.assertRaises(FileNotFoundError):
             queries.snapshot_table_counts(
-                    exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'
-                )
+                exclude=('auth_group',),
+                root_dir=tmp_dir,
+                snapshot_name='test',
+            )
 
             queries.snapshot_table_counts(
                 exclude=('auth_group',), root_dir=tmp_dir, snapshot_name='test'

@@ -1,5 +1,4 @@
 [flake8]
-exclude = .tox/, */migrations/*
+exclude = .*, migrations, dist, htmlcov
 ignore = E402, E731, W504
-# Max line length of 119 is the same as the Django project:
 max-line-length = 119

@@ -53,14 +53,14 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
             )
         else:
             self.assert_html_parts(
-            response,
-            parts=(
-                '<h3>By blank_field set</h3>',
-                '<li><a href="?blank_field=all" title="All">All</a></li>',
-                '<li class="selected"><a href="?" title="Yes">Yes</a></li>',  # Yes is default!
-                '<li><a href="?blank_field=no" title="No">No</a></li>',
-            ),
-        )
+                response,
+                parts=(
+                    '<h3>By blank_field set</h3>',
+                    '<li><a href="?blank_field=all" title="All">All</a></li>',
+                    '<li class="selected"><a href="?" title="Yes">Yes</a></li>',  # Yes is default!
+                    '<li><a href="?blank_field=no" title="No">No</a></li>',
+                ),
+            )
         # Only "filled" item?
         items = self._get_changelist_items(response)
         self.assertEqual(

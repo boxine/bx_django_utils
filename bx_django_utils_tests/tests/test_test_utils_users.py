@@ -3,11 +3,7 @@ from unittest import mock
 from bx_py_utils.test_utils.mock_uuid import MockUUIDGenerator
 from django.test import TestCase
 
-from bx_django_utils.test_utils.users import (
-    assert_user_properties,
-    filter_permission_names,
-    make_test_user,
-)
+from bx_django_utils.test_utils.users import assert_user_properties, filter_permission_names, make_test_user
 
 
 class UserUtilsTestCase(TestCase):

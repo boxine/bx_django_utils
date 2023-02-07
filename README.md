@@ -194,8 +194,8 @@ Utilities to manipulate objects in database via models:
 ### bx_django_utils.stacktrace
 
 * [`StackTrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L21-L22) - Built-in mutable sequence.
-* [`StacktraceAfter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L83-L111) - Generate a stack trace after a package was visited.
-* [`get_stacktrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L63-L80) - Returns a StackTrace object, which is a list of FrameInfo objects.
+* [`StacktraceAfter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L84-L112) - Generate a stack trace after a package was visited.
+* [`get_stacktrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L64-L81) - Returns a StackTrace object, which is a list of FrameInfo objects.
 
 #### bx_django_utils.templatetags.humanize_time
 
