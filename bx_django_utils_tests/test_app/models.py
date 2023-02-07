@@ -43,7 +43,6 @@ class ColorFieldTestModel(models.Model):
     optional_color = ColorModelField(blank=True, null=True)
 
 
-
 class StoreSaveModel(models.Model):
     name = models.CharField(max_length=64)
     _save_calls = threading.local()

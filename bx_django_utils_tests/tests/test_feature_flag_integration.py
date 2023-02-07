@@ -6,10 +6,7 @@ from django.test import TestCase
 
 from bx_django_utils.feature_flags.models import FeatureFlagModel
 from bx_django_utils.test_utils.cache import ClearCacheMixin
-from bx_django_utils.test_utils.html_assertion import (
-    HtmlAssertionMixin,
-    assert_html_response_snapshot,
-)
+from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
 from bx_django_utils.test_utils.users import make_test_user
 from bx_django_utils_tests.test_app.feature_flags import bar_feature_flag, foo_feature_flag
 

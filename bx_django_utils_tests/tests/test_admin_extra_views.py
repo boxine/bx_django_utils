@@ -11,21 +11,13 @@ from django.views import View
 from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
 from bx_django_utils.admin_extra_views.checks import admin_extra_views_check
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
-from bx_django_utils.admin_extra_views.datatypes import (
-    _APP_LABELS,
-    _URL_NAMES,
-    AdminExtraMeta,
-    PseudoApp,
-)
+from bx_django_utils.admin_extra_views.datatypes import _APP_LABELS, _URL_NAMES, AdminExtraMeta, PseudoApp
 from bx_django_utils.admin_extra_views.management.commands import admin_extra_views
 from bx_django_utils.admin_extra_views.registry import extra_view_registry, register_admin_view
 from bx_django_utils.admin_extra_views.site import ExtraViewAdminSite
 from bx_django_utils.admin_extra_views.utils import reverse_admin_extra_view
 from bx_django_utils.admin_extra_views.views import Redirect2AdminExtraView
-from bx_django_utils.test_utils.html_assertion import (
-    HtmlAssertionMixin,
-    assert_html_response_snapshot,
-)
+from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
 from bx_django_utils.test_utils.users import make_max_test_user, make_minimal_test_user
 from bx_django_utils_tests.test_app.admin_views import (
     DemoView1,

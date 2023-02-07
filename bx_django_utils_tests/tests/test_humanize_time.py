@@ -23,4 +23,3 @@ class HumanizeTimeTestCase(SimpleTestCase):
             assert human_timedelta(2.5) == '2.5\xa0Sekunden'
             assert human_timedelta(datetime.timedelta(days=3, hours=12)) == '3.5\xa0Tage'
             assert human_timedelta(datetime.timedelta(days=5 * 365)) == '5.0\xa0Jahre'
-
