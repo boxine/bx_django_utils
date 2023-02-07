@@ -6,6 +6,7 @@ from django.db import models
 from bx_django_utils.data_types.gtin.model_fields import GtinModelField
 from bx_django_utils.models.color_field import ColorModelField
 from bx_django_utils.models.timetracking import TimetrackingBaseModel
+from bx_django_utils.translation import MultilineTranslationWidget, TranslationField
 
 
 class TimetrackingTestModel(TimetrackingBaseModel):
@@ -58,3 +59,17 @@ class StoreSaveModel(models.Model):
             del kwargs['other_arg']
 
         return super().save(**kwargs)
+
+
+class TranslatedModel(models.Model):
+    LANGUAGE_CODES = ['de-de', 'en-us', 'es']
+
+    translated = TranslationField(
+        language_codes=LANGUAGE_CODES,
+        blank=False,
+    )
+    translated_multiline = TranslationField(
+        language_codes=LANGUAGE_CODES,
+        blank=True,
+        widget_class=MultilineTranslationWidget,
+    )
