@@ -53,7 +53,7 @@ update-test-snapshot-files:   ## Update all snapshot files (by remove and recrea
 	find . -type f -name '*.snapshot.*' -delete
 	RAISE_SNAPSHOT_ERRORS=0 ./manage.sh test --parallel
 
-publish: ## Release new version to PyPi
+publish: install  ## Release new version to PyPi
 	poetry run publish
 
 docker-test:  ## Run tests in docker
