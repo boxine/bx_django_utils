@@ -1,8 +1,8 @@
 import logging
+import zoneinfo
 
 from django.test import RequestFactory, SimpleTestCase
 from django.utils import timezone
-from django.utils.timezone import zoneinfo
 
 from bx_django_utils.user_timezone.middleware import UserTimezoneMiddleware
 
