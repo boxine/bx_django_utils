@@ -1,0 +1,13 @@
+{% load accessors %}
+<table>
+    <tbody>
+    {% for code in widget.language_codes %}
+        <tr>
+            <td>{{ code }}</td>
+            <td>
+                <input type="text" id="id_{{ widget.name }}__{{ code }}" name="{{ widget.name }}__{{ code }}" value="{{ widget.value|dict_get:code }}">
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

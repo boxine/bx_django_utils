@@ -197,6 +197,10 @@ Utilities to manipulate objects in database via models:
 * [`StacktraceAfter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L84-L112) - Generate a stack trace after a package was visited.
 * [`get_stacktrace()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/stacktrace.py#L64-L81) - Returns a StackTrace object, which is a list of FrameInfo objects.
 
+#### bx_django_utils.templatetags.accessors
+
+* [`dict_get()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/templatetags/accessors.py#L7-L26) - Returns the wanted member of a dict-like container, or an empty string
+
 #### bx_django_utils.templatetags.humanize_time
 
 * [`human_duration()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/templatetags/humanize_time.py#L15-L45) - Verbose time since template tag, e.g.: `<span title="Jan. 1, 2000, noon">2.0 seconds</span>`
@@ -262,6 +266,13 @@ Use Playwright in Unittest + Fast Django user login
 * [`make_max_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L112-L146) - Create a test user with all permissions *except* the {exclude_permissions} ones.
 * [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L85-L109) - Create a test user and set given permissions.
 * [`make_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L49-L82) - Create a test user and set given permissions.
+
+### bx_django_utils.translation
+
+* [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L68-L81) - Dict-like container that maps language codes to a translated string.
+* [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L84-L142) - A field designed to hold translations for a given set of language codes.
+* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L145-L206) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
+* [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L40-L65) - Default form field for TranslationField.
 
 ### bx_django_utils.user_timezone
 
