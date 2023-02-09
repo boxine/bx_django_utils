@@ -1,0 +1,6 @@
+Found 2 fixtures files.
+____________________________________________________________________________________________________
+1. renew "fixture2" file "/path/to/fixture2...
+Mocked renew "fixture2"
+
+1 Fixtures updated, ok.

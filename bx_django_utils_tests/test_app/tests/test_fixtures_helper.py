@@ -1,11 +1,14 @@
-import io
 import tempfile
 from pathlib import Path
+from typing import Union
+from unittest.mock import patch
 
+from bx_py_utils.test_utils.redirect import RedirectOut
 from bx_py_utils.test_utils.snapshot import assert_text_snapshot
 from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase
 
+from bx_django_utils.test_utils import fixtures
 from bx_django_utils.test_utils.fixtures import (
     FIXTURES_FILE_PATHS,
     BaseFixtures,
@@ -42,6 +45,21 @@ class FixturesHelperTestCase(SimpleTestCase):
     def test_registry(self):
         assert sorted(fixtures_registry.fixtures.keys()) == ['ExampleFixtures1', 'ExampleFixtures2']
 
+    def test_str_repr(self):
+        self.assertEqual(
+            repr(fixtures_registry),
+            '<FixturesRegistry:ExampleFixtures1,ExampleFixtures2>',
+        )
+        self.assertEqual(
+            str(fixtures_registry),
+            '<FixturesRegistry:ExampleFixtures1,ExampleFixtures2>',
+        )
+
+        fixtures = next(iter(fixtures_registry))
+        self.assertIsInstance(fixtures, BaseFixtures)
+        self.assertEqual(repr(fixtures), '<Fixture:ExampleFixtures1>')
+        self.assertEqual(str(fixtures), '<Fixture:ExampleFixtures1>')
+
     def test_renew(self):
         fixture = ExampleFixtures1()
 
@@ -54,23 +72,6 @@ class FixturesHelperTestCase(SimpleTestCase):
 
         # The "old" data?
         assert fixture.get_fixture_data() == EXAMPLE_FIXTURES_DATA1
-
-    def test_renew_command(self):
-        # Change fixtures file content:
-        ExampleFixtures1().store_fixture_data(data=['something else!'])
-        assert ExampleFixtures1().get_fixture_data() == ['something else!']
-
-        # Call "renew" command:
-        capture_stdout = io.StringIO()
-        capture_stderr = io.StringIO()
-        call_command(renew_fixtures.Command(), stdout=capture_stdout, stderr=capture_stderr)
-        stdout_output = capture_stdout.getvalue()
-        stderr_output = capture_stderr.getvalue()
-        assert '2 Fixtures updated, ok.' in stdout_output
-        assert stderr_output == ''
-        assert_text_snapshot(got=stdout_output)
-
-        assert ExampleFixtures1().get_fixture_data() == EXAMPLE_FIXTURES_DATA1
 
     def test_overwriting(self):
         class Foo(BaseFixtures):
@@ -142,3 +143,131 @@ class SerializerFixturesTestCase(TestCase):
             self.assertEqual(ColorFieldTestModel.objects.count(), 1)
             created_instance = ColorFieldTestModel.objects.first()
             self.assertEqual(instances, [created_instance])
+
+
+class FixtureMock(BaseFixtures):
+    def __init__(self, name):
+        self.name = name
+        self.file_name = f'/path/to/{name}'
+
+    def renew(self):
+        print(f'Mocked renew "{self.name}"')
+
+
+class RegistryMock(FixturesRegistry):
+    def __init__(self):
+        self.fixtures = {
+            'fixture1': FixtureMock('fixture1'),
+            'fixture2': FixtureMock('fixture2'),
+            'fixture3': FixtureMock('fixture3'),
+        }
+
+
+class InputMock:
+    def __init__(self, input):
+        self.input = input
+
+    def __call__(self, text):
+        print(text, self.input)
+        return self.input
+
+
+class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
+    def call_command(
+        self,
+        *,
+        options=None,
+        expected_stdout: Union[str, list[str]],
+        expected_stderr='',
+        strip_output=True,
+        input=None,
+    ):
+        if options is None:
+            options = {}
+        reg_mock = RegistryMock()
+        input_mock = InputMock(input)
+        with patch.object(fixtures, 'fixtures_registry', reg_mock), patch.object(fixtures, 'input', input_mock):
+            with RedirectOut(strip=strip_output) as buffer:
+                call_command(
+                    renew_fixtures.Command(),
+                    stdout=buffer._stdout_buffer,
+                    stderr=buffer._stderr_buffer,
+                    **options,
+                )
+            stderr_output = buffer.stderr
+            stdout_output = buffer.stdout
+            try:
+                self.assertEqual(stderr_output, expected_stderr)
+
+                if isinstance(expected_stdout, list):
+                    for part in expected_stdout:
+                        self.assertIn(part, stdout_output)
+                else:
+                    self.assertEqual(stdout_output, expected_stdout)
+            except AssertionError:
+                print('=' * 100)
+                print('stdout:')
+                print('-' * 100)
+                print(stdout_output)
+                print('-' * 100)
+                print('stderr:')
+                print('-' * 100)
+                print(stderr_output)
+                print('=' * 100)
+                raise
+        return stdout_output
+
+    def test_renew_all(self):
+        stdout_output = self.call_command(
+            options=dict(all=True),
+            expected_stdout=[
+                '1. renew "fixture1" file "/path/to/fixture1...',
+                'Mocked renew "fixture1"',
+                '2. renew "fixture2" file "/path/to/fixture2...',
+                'Mocked renew "fixture2"',
+                '3. renew "fixture3" file "/path/to/fixture3...',
+                'Mocked renew "fixture3"',
+                '3 Fixtures updated, ok.',
+            ],
+        )
+        assert_text_snapshot(got=stdout_output)
+
+    def test_renew_all_with_regex(self):
+        stdout_output = self.call_command(
+            options=dict(all=True, filter='fixture2'),
+            expected_stdout=[
+                '1. renew "fixture2" file "/path/to/fixture2...',
+                'Mocked renew "fixture2"',
+                '1 Fixtures updated, ok.',
+            ],
+        )
+        assert_text_snapshot(got=stdout_output)
+
+    def test_select_fixtures(self):
+        # Select only a few:
+        stdout_output = self.call_command(
+            expected_stdout=[
+                '0 - fixture1',
+                '1 - fixture2',
+                '2 - fixture3',
+                'Input one or more numbers seperated with spaces: 1 2',
+                'You selection: fixture2, fixture3',
+                '1. renew "fixture2" file "/path/to/fixture2...',
+                'Mocked renew "fixture2"',
+                '2. renew "fixture3" file "/path/to/fixture3...',
+                'Mocked renew "fixture3"',
+                '2 Fixtures updated, ok.',
+            ],
+            input='1 2',
+        )
+        assert_text_snapshot(got=stdout_output)
+
+        # Select all by hit ENTER:
+        stdout_output = self.call_command(
+            expected_stdout=[
+                'Renew all fixtures:',
+                '3 Fixtures updated, ok.',
+            ],
+            input='',
+        )
+        assert_text_snapshot(got=stdout_output)
