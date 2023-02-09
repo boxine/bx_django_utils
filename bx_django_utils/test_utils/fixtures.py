@@ -30,6 +30,7 @@ class BaseFixtures:
     Base class for JSON dump fixtures.
     """
 
+    name = None  # Will be set by registry
     base_path = None
     file_name = None
 
@@ -59,6 +60,9 @@ class BaseFixtures:
         Should be use self.store_fixture_data()
         """
         raise NotImplementedError
+
+    def __repr__(self):
+        return f'<Fixture:{self.name}>'
 
 
 class SerializerFixtures(BaseFixtures):
@@ -113,6 +117,9 @@ class FixturesRegistry:
                 raise RuntimeError(f'Fixture class "{class_name}" already registered!')
 
             fixtures = FixtureClass()
+            if fixtures.name is None:
+                fixtures.name = class_name
+
             file_path = fixtures.file_path
             if file_path in FIXTURES_FILE_PATHS:
                 raise RuntimeError(f'File path "{file_path}" from "{class_name}" already used!')
@@ -124,8 +131,13 @@ class FixturesRegistry:
         return _class_wrapper
 
     def __iter__(self):
-        for class_name, fixtures in self.fixtures.items():
-            yield fixtures
+        yield from self.fixtures.values()
+
+    def items(self):
+        return self.fixtures.items()
+
+    def __repr__(self):
+        return f'<FixturesRegistry:{",".join(sorted(self.fixtures.keys()))}>'
 
 
 fixtures_registry = FixturesRegistry()
@@ -171,6 +183,12 @@ class RenewAllFixturesBaseCommand(BaseCommand):
             metavar='REGEX',
             help='Filter fixture class names or files by a regular expression',
         )
+        parser.add_argument(
+            '-a',
+            '--all',
+            action='store_true',
+            help='Renew all fixtures and do not ask for them',
+        )
 
     def handle(self, *args, **options):
         verbosity = options['verbosity']
@@ -192,18 +210,38 @@ class RenewAllFixturesBaseCommand(BaseCommand):
         if filter_re := options['filter']:
             filter_rex = re.compile(filter_re)
             all_fixtures = [
-                f
-                for f in all_fixtures
-                if filter_rex.search(f.__class__.__name__) or filter_rex.search(f.file_name)
+                fixtures
+                for fixtures in fixtures_registry
+                if filter_rex.search(fixtures.name) or filter_rex.search(fixtures.file_name)
             ]
+
+        if not options['all']:
+            # Ask the user what fixtures should be updated.
+            print('Please select:\n')
+            fixture_map = {}
+            for number, fixtures in enumerate(fixtures_registry):
+                fixture_map[str(number)] = fixtures
+                print(f'{number:>3} - {fixtures.name}')
+            print('\n(ENTER nothing for renew all fixtures)')
+            selection = input('Input one or more numbers seperated with spaces:')
+            print()
+            if not selection:
+                print('Renew all fixtures:')
+            else:
+                all_fixtures = []
+                for number in selection.split():
+                    if fixture := fixture_map.get(number):
+                        all_fixtures.append(fixture)
+                    else:
+                        print(f'Ignore: {number!r}')
+
+                print(f'You selection: {", ".join(fixture.name for fixture in all_fixtures)}')
 
         no = 0
         for no, fixture in enumerate(all_fixtures, 1):
             if verbosity:
                 self.stdout.write('_' * 100)
-                self.stdout.write(
-                    f'{no}. renew "{fixture.__class__.__name__}" file "{fixture.file_name}...'
-                )
+                self.stdout.write(f'{no}. renew "{fixture.name}" file "{fixture.file_name}...')
             fixture.renew()
 
         if verbosity:
