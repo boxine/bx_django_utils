@@ -3,7 +3,11 @@ import random
 from django.test import TestCase
 
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
-from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin, get_feature_flag_states
+from bx_django_utils.feature_flags.test_utils import (
+    FeatureFlagTestCaseMixin,
+    get_feature_flag_cache_info,
+    get_feature_flag_db_info,
+)
 
 
 TEST_CACHE_KEY = 'feature-flags-test_atomic'
@@ -12,17 +16,15 @@ TEST_CACHE_KEY = 'feature-flags-test_atomic'
 class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
     """"""  # noqa - Don't add to README
 
-    @classmethod
-    def setUpClass(cls):
-        # "Snapshot" the current FeatureFlag.registry:
-        cls.feature_flag_states = get_feature_flag_states()
-        super().setUpClass()
-
     def _test_atomic(self):
-        # No garbage entry + no "bar" entry?
-        self.assertEqual(get_feature_flag_states(), self.feature_flag_states)
+        # We always start fresh: Only with existing entries:
+        self.assertEqual(FeatureFlag.registry.keys(), {'feature-flags-foo', 'feature-flags-bar'})
 
-        # Add a new entry in FeatureFlag.registry:
+        # Cache and DB empty?
+        self.assertEqual(get_feature_flag_cache_info(), {})
+        self.assertEqual(get_feature_flag_db_info(), {})
+
+        # Add a new "test_atomic" entry in FeatureFlag.registry:
         self.assertNotIn(TEST_CACHE_KEY, FeatureFlag.registry)
         bar_feature_flag = FeatureFlag(cache_key='test_atomic', human_name='bar', initial_enabled=True)
         self.assertEqual(bar_feature_flag.cache_key, TEST_CACHE_KEY)
@@ -30,6 +32,10 @@ class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
         self.assertTrue(bar_feature_flag.is_enabled)  # Nothing persistent?
         bar_feature_flag.disable()  # Add persistent state in cache + database
         self.assertFalse(bar_feature_flag.is_enabled)
+
+        # Only our "test_atomic" stored?
+        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-test_atomic': 0})
+        self.assertEqual(get_feature_flag_db_info(), {'feature-flags-test_atomic': 0})
 
         # Add garbage to registry -> FeatureFlagTestCaseMixin should reset it:
         FeatureFlag.registry[random.randrange(1000)] = random.randrange(1000)
