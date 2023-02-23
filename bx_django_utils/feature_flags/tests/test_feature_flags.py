@@ -1,4 +1,3 @@
-import copy
 import logging
 from unittest.mock import patch
 
@@ -9,25 +8,13 @@ from bx_django_utils.feature_flags import data_classes
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
 from bx_django_utils.feature_flags.exceptions import NotUniqueFlag
 from bx_django_utils.feature_flags.state import State
+from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin
 from bx_django_utils.feature_flags.utils import validate_cache_key
-from bx_django_utils.test_utils.cache import ClearCacheMixin
 
 
-class FeatureFlagsBaseTestCase(ClearCacheMixin, TestCase):
+class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
     """"""  # noqa - Don't add to README
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.origin_registry = copy.deepcopy(FeatureFlag.registry)
-
-    @classmethod
-    def tearDownClass(cls):
-        super().tearDownClass()
-        FeatureFlag.registry = cls.origin_registry
-
-
-class FeatureFlagsTestCase(FeatureFlagsBaseTestCase):
     def setUp(self):
         super().setUp()
 
