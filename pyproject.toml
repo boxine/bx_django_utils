@@ -40,6 +40,7 @@ tox = '>=4.4.4'  # https://github.com/tox-dev/tox
 coverage = '*'  # https://github.com/nedbat/coveragepy
 darker = '*'  # https://github.com/akaihola/darker
 isort = '*'  # https://github.com/pycqa/isort
+flynt = "*"  # https://github.com/ikamensh/flynt
 flake8 = '*'  # https://github.com/pycqa/flake8
 poetry-publish = '*'  # https://github.com/jedie/poetry-publish
 django-debug-toolbar = '*'
@@ -64,11 +65,13 @@ revision = "origin/master..."
 src = ['.']
 line_length = 119
 verbose = true
+color = true
 skip_string_normalization = true
 diff = false
 check = false
 stdout = false
 isort = true
+flynt = true
 lint = [
     "flake8",
 ]
@@ -96,8 +99,7 @@ skip_empty = true
 fail_under = 45
 
 
-[tool.tox]
-# https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
+[tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
 legacy_tox_ini = """
 [tox]
 isolated_build = True
@@ -118,6 +120,7 @@ deps =
     django-debug-toolbar
     tblib
     coverage[toml]
+    poetry-publish
 commands =
     python -m coverage run --rcfile=pyproject.toml manage.py test --parallel
 """
@@ -149,3 +152,6 @@ package_url = "https://github.com/boxine/bx_django_utils"
 issues_url = "https://github.com/boxine/bx_django_utils/issues"
 license = "MIT"
 _template = "https://github.com/jedie/cookiecutter_templates/"
+applied_migrations = [
+    "d970456", # 2023-02-20T16:19:35+01:00
+]
