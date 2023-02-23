@@ -1,7 +1,8 @@
 SHELL := /bin/bash
-MAX_LINE_LENGTH := 119
 export DJANGO_SETTINGS_MODULE = bx_django_utils_tests.test_project.settings
 export SKIP_TEST_MIGRATION = true
+
+all: help
 
 help: ## List all commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -16,6 +17,9 @@ check-poetry:
 		exit 1 ; \
 	fi
 
+install-base-req:  ## Install needed base packages via apt
+	sudo apt install python3-pip python3-venv
+
 install-poetry: ## install poetry
 	curl -sSL https://install.python-poetry.org | python3 -
 
@@ -24,7 +28,10 @@ install: check-poetry ## install via poetry
 	poetry install
 
 update: check-poetry ## Update the dependencies as according to the pyproject.toml file
-	poetry update
+	python3 -m venv .venv
+	poetry self update
+	poetry update -v
+	poetry install
 
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
