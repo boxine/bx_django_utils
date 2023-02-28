@@ -221,7 +221,7 @@ class RenewAllFixturesBaseCommand(BaseCommand):
             fixture_map = {}
             for number, fixtures in enumerate(fixtures_registry):
                 fixture_map[str(number)] = fixtures
-                print(f'{number:>3} - {fixtures.name}')
+                print(f'{number:>3} - {fixtures.name} - {fixtures.file_name}')
             print('\n(ENTER nothing for renew all fixtures)')
             selection = input('Input one or more numbers seperated with spaces:')
             print()
@@ -241,7 +241,7 @@ class RenewAllFixturesBaseCommand(BaseCommand):
         for no, fixture in enumerate(all_fixtures, 1):
             if verbosity:
                 self.stdout.write('_' * 100)
-                self.stdout.write(f'{no}. renew "{fixture.name}" file "{fixture.file_name}...')
+                self.stdout.write(f'{no}. renew "{fixture.name}" file "{fixture.file_path} ...')
             fixture.renew()
 
         if verbosity:

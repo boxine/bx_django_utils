@@ -148,7 +148,8 @@ class SerializerFixturesTestCase(TestCase):
 class FixtureMock(BaseFixtures):
     def __init__(self, name):
         self.name = name
-        self.file_name = f'/path/to/{name}'
+        self.file_name = f'{name}.json'
+        self.file_path = Path(f'/path/to/{name}.json')
 
     def renew(self):
         print(f'Mocked renew "{self.name}"')
@@ -221,11 +222,11 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
         stdout_output = self.call_command(
             options=dict(all=True),
             expected_stdout=[
-                '1. renew "fixture1" file "/path/to/fixture1...',
+                '1. renew "fixture1" file "/path/to/fixture1.json ...',
                 'Mocked renew "fixture1"',
-                '2. renew "fixture2" file "/path/to/fixture2...',
+                '2. renew "fixture2" file "/path/to/fixture2.json ...',
                 'Mocked renew "fixture2"',
-                '3. renew "fixture3" file "/path/to/fixture3...',
+                '3. renew "fixture3" file "/path/to/fixture3.json ...',
                 'Mocked renew "fixture3"',
                 '3 Fixtures updated, ok.',
             ],
@@ -236,7 +237,7 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
         stdout_output = self.call_command(
             options=dict(all=True, filter='fixture2'),
             expected_stdout=[
-                '1. renew "fixture2" file "/path/to/fixture2...',
+                '1. renew "fixture2" file "/path/to/fixture2.json ...',
                 'Mocked renew "fixture2"',
                 '1 Fixtures updated, ok.',
             ],
@@ -247,14 +248,14 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
         # Select only a few:
         stdout_output = self.call_command(
             expected_stdout=[
-                '0 - fixture1',
-                '1 - fixture2',
-                '2 - fixture3',
+                '0 - fixture1 - fixture1.json',
+                '1 - fixture2 - fixture2.json',
+                '2 - fixture3 - fixture3.json',
                 'Input one or more numbers seperated with spaces: 1 2',
                 'You selection: fixture2, fixture3',
-                '1. renew "fixture2" file "/path/to/fixture2...',
+                '1. renew "fixture2" file "/path/to/fixture2.json ...',
                 'Mocked renew "fixture2"',
-                '2. renew "fixture3" file "/path/to/fixture3...',
+                '2. renew "fixture3" file "/path/to/fixture3.json ...',
                 'Mocked renew "fixture3"',
                 '2 Fixtures updated, ok.',
             ],
