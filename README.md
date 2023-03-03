@@ -159,6 +159,10 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 * [`clean_filename()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L34-L64) - Convert filename to ASCII only via slugify.
 * [`filename2human_name()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L7-L31) - Convert filename to a capitalized name.
 
+### bx_django_utils.http
+
+* [`build_url_parameters()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/http.py#L4-L30) - Return an encoded string of all given parameters.
+
 #### bx_django_utils.humanize.pformat
 
 * [`pformat()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/humanize/pformat.py#L6-L20) - Better `pretty-print-format` using `DjangoJSONEncoder` with fallback to `pprint.pformat()`
