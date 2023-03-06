@@ -90,9 +90,10 @@ lines_after_imports=2
 
 [tool.coverage.run]
 branch = true
+parallel = true
 source_pkgs=['bx_django_utils']
 omit = ['.*', '*/tests/*','*/migrations/*']
-command_line = 'manage.py test --parallel --shuffle'
+command_line = 'manage.py test --parallel'
 
 [tool.coverage.report]
 skip_empty = true
@@ -122,7 +123,8 @@ deps =
     coverage[toml]
     poetry-publish
 commands =
-    python -m coverage run --rcfile=pyproject.toml manage.py test --parallel
+    python -m coverage run --rcfile=pyproject.toml
+    python -m coverage combine
 """
 
 
