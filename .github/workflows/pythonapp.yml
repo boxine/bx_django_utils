@@ -61,5 +61,6 @@ jobs:
     - name: 'Run tests with Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
       run: poetry run tox -e python-django${{ matrix.django }}
 
-    - name: 'Upload coverage report'
-      run: bash <(curl -s https://codecov.io/bash)
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      # https://github.com/marketplace/actions/codecov

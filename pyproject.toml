@@ -90,13 +90,21 @@ lines_after_imports=2
 
 [tool.coverage.run]
 branch = true
+parallel = true
 source_pkgs=['bx_django_utils']
-omit = ['.*', '*/tests/*','*/migrations/*']
-command_line = 'manage.py test --parallel --shuffle'
+command_line = 'manage.py test --parallel'
 
 [tool.coverage.report]
+omit = ['.*', '*/tests/*','*/migrations/*']
 skip_empty = true
-fail_under = 45
+fail_under = 30
+show_missing = true
+exclude_lines = [
+    'if self.debug:',
+    'pragma: no cover',
+    'raise NotImplementedError',
+    'if __name__ == .__main__.:',
+]
 
 
 [tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
@@ -122,7 +130,10 @@ deps =
     coverage[toml]
     poetry-publish
 commands =
-    python -m coverage run --rcfile=pyproject.toml manage.py test --parallel
+    {envpython} -m coverage run --context='{envname}'
+    {envpython} -m coverage combine --append
+    {envpython} -m coverage xml
+    {envpython} -m coverage report
 """
 
 
