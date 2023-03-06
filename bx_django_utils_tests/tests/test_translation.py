@@ -2,10 +2,13 @@ import json
 import re
 from itertools import product
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import translation
 
+from bx_django_utils.models.manipulate import create_or_update2
 from bx_django_utils.test_utils.users import make_test_user
+from bx_django_utils.translation import FieldTranslation
 from bx_django_utils_tests.test_app.models import TranslatedModel
 
 
@@ -13,14 +16,61 @@ class TranslationFieldTestCase(TestCase):
     def test_stores_only_wanted_languages(self):
         obj = TranslatedModel(
             translated={'de-de': 'Hallo', 'en-us': 'Hello', 'es': 'Hola', 'it': 'Ciao'},
-            translated_multiline={'de-de': 'Hallo', 'en-us': 'Hello', 'es': 'Hola', 'it': 'Ciao'},
+            translated_multiline={'de-de': 'Hallo'},
         )
-        obj.full_clean()
+        with self.assertRaisesMessage(ValidationError, 'Unknown translation language(s): it'):
+            obj.full_clean()
 
-        # italian translation should not be in the database because it wasn't listed
-        # as language code in the field definition on the model
-        self.assertEqual(obj.translated, {'de-de': 'Hallo', 'en-us': 'Hello', 'es': 'Hola'})
-        self.assertEqual(obj.translated_multiline, {'de-de': 'Hallo', 'en-us': 'Hello', 'es': 'Hola'})
+        obj = TranslatedModel(
+            translated={'de-de': 'Hallo'},
+            translated_multiline={'de-de': 'Hallo', 'en-us': 'Hello', 'es': 'Hola', 'it-it': 'Ciao', 'xx': 'foo'},
+        )
+        with self.assertRaisesMessage(ValidationError, 'Unknown translation language(s): it-it, xx'):
+            obj.full_clean()
+
+    def test_field_translation(self):
+        translated = FieldTranslation()
+        self.assertEqual(translated.get_first([1, 2, 3]), FieldTranslation.UNTRANSLATED)
+        self.assertEqual(repr(translated), 'FieldTranslation({})')
+
+        translated = FieldTranslation({'de-de': 'Hallo'})
+        self.assertEqual(repr(translated), "FieldTranslation({'de-de': 'Hallo'})")
+        self.assertEqual(translated.get_first(['foo', 'bar', 'en-gb', 'de-de']), 'Hallo')
+
+        obj1 = TranslatedModel.objects.create(translated={'de-de': 'Hallo 1', 'en-us': 'Hello 1'})
+        obj1.full_clean()
+        self.assertEqual(repr(obj1.translated), "FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1'})")
+
+        obj2 = TranslatedModel.objects.create(translated={'de-de': 'Hallo 2', 'en-us': 'Hello 2'})
+        obj2.full_clean()
+
+        self.assertNotEqual(obj1.translated, obj2.translated)
+
+        qs = TranslatedModel.objects.order_by('translated').values('translated')
+        self.assertQuerysetEqual(
+            qs,
+            [
+                {'translated': FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1'})},
+                {'translated': FieldTranslation({'de-de': 'Hallo 2', 'en-us': 'Hello 2'})},
+            ],
+        )
+
+    def test_create_or_update(self):
+        # Create via create_or_update2():
+        result = create_or_update2(ModelClass=TranslatedModel, translated={'de-de': 'Hallo'})
+        self.assertTrue(result.created)
+        instance = result.instance
+        self.assertEqual(instance.translated, {'de-de': 'Hallo'})
+
+        # Update existing entry:
+        result = create_or_update2(
+            ModelClass=TranslatedModel,
+            lookup=dict(pk=instance.pk),
+            translated={'de-de': 'Hallo', 'en-us': 'Hello'},
+        )
+        self.assertFalse(result.created)
+        instance = result.instance
+        self.assertEqual(instance.translated, {'de-de': 'Hallo', 'en-us': 'Hello'})
 
 
 class TranslationAdminTestCase(TestCase):

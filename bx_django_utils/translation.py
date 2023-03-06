@@ -71,6 +71,8 @@ class FieldTranslation(dict):
     Is returned when accessing the value of TranslationField.
     """
 
+    UNTRANSLATED = '<UNTRANSLATED>'
+
     def get_first(self, codes):
         """
         Returns the first translation found for the given language codes.
@@ -78,7 +80,10 @@ class FieldTranslation(dict):
         for code in codes:
             if translation := self.get(code):
                 return translation
-        return '<UNTRANSLATED>'
+        return self.UNTRANSLATED
+
+    def __repr__(self):
+        return f'FieldTranslation({super().__repr__()})'
 
 
 class TranslationField(models.JSONField):
@@ -98,7 +103,7 @@ class TranslationField(models.JSONField):
     def __init__(self, language_codes, *args, **kwargs):
         kwargs['null'] = False
         kwargs['default'] = FieldTranslation
-        self.language_codes = language_codes
+        self.language_codes = frozenset(language_codes)
         self.widget_class = kwargs.pop('widget_class', TranslationWidget)
         super().__init__(*args, **kwargs)
 
@@ -117,8 +122,13 @@ class TranslationField(models.JSONField):
             return FieldTranslation()
         return FieldTranslation(**value)
 
-    def _reduce_to_known_languages(self, value):
-        return {code: trans for code, trans in value.items() if code in self.language_codes and trans}
+    def clean(self, value, model_instance):
+        value = super().clean(value, model_instance)
+        existing_codes = value.keys()
+        unknown_codes = existing_codes - self.language_codes
+        if unknown_codes:
+            raise ValidationError(f'Unknown translation language(s): {", ".join(sorted(unknown_codes))}')
+        return value
 
     def to_python(self, value):
         if value is None:
@@ -126,11 +136,11 @@ class TranslationField(models.JSONField):
         if isinstance(value, FieldTranslation):
             return value
         if isinstance(value, dict):
-            return FieldTranslation(**self._reduce_to_known_languages(value))
+            return FieldTranslation(**value)
         err = ValidationError('Invalid input for FieldTranslation instance.')
         if isinstance(value, str):
             try:
-                return FieldTranslation(**self._reduce_to_known_languages(json.loads(value, cls=self.decoder)))
+                return FieldTranslation(**json.loads(value, cls=self.decoder))
             except json.JSONDecodeError as ex:
                 raise err from ex
         raise err
