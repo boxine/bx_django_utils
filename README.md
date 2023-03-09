@@ -185,11 +185,13 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 Utilities to manipulate objects in database via models:
 
-* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L39-L63) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L50-L77) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L39-L47) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
 * [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19-L23) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
 * [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L26-L36) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L197-L217) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
-* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L66-L194) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L235-L249) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L98-L232) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
+* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L80-L95) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
 #### bx_django_utils.models.queryset_utils
 
@@ -278,10 +280,11 @@ Use Playwright in Unittest + Fast Django user login
 
 ### bx_django_utils.translation
 
-* [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L68-L86) - Dict-like container that maps language codes to a translated string.
-* [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L89-L152) - A field designed to hold translations for a given set of language codes.
-* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L155-L216) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
-* [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L40-L65) - Default form field for TranslationField.
+* [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L70-L88) - Dict-like container that maps language codes to a translated string.
+* [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L91-L154) - A field designed to hold translations for a given set of language codes.
+* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L157-L218) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
+* [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L42-L67) - Default form field for TranslationField.
+* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L221-L244) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
 
 ### bx_django_utils.user_timezone
 

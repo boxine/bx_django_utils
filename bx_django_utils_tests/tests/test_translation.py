@@ -6,9 +6,9 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import translation
 
-from bx_django_utils.models.manipulate import create_or_update2
+from bx_django_utils.models.manipulate import FieldUpdate, create_or_update2
 from bx_django_utils.test_utils.users import make_test_user
-from bx_django_utils.translation import FieldTranslation
+from bx_django_utils.translation import FieldTranslation, create_or_update_translation_callback
 from bx_django_utils_tests.test_app.models import TranslatedModel
 
 
@@ -68,9 +68,51 @@ class TranslationFieldTestCase(TestCase):
             lookup=dict(pk=instance.pk),
             translated={'de-de': 'Hallo', 'en-us': 'Hello'},
         )
-        self.assertFalse(result.created)
+        self.assertFalse(result.created)  # updated?
         instance = result.instance
+        self.assertEqual(result.updated_fields, ['translated'])
+        self.assertEqual(
+            result.update_info,
+            [
+                FieldUpdate(
+                    field_name='translated',
+                    old_value=FieldTranslation({'de-de': 'Hallo'}),
+                    new_value={'de-de': 'Hallo', 'en-us': 'Hello'},
+                )
+            ],
+        )
         self.assertEqual(instance.translated, {'de-de': 'Hallo', 'en-us': 'Hello'})
+
+        # We have a special callback to avoid deleting translations:
+        result = create_or_update2(
+            ModelClass=TranslatedModel,
+            lookup=dict(pk=instance.pk),
+            update_model_field_callback=create_or_update_translation_callback,
+            translated={'de-de': 'Hallo !', 'es': 'Hola'},
+        )
+        self.assertFalse(result.created)  # updated?
+        instance = result.instance
+        self.assertEqual(result.updated_fields, ['translated'])
+        self.assertEqual(
+            result.update_info,
+            [
+                FieldUpdate(
+                    field_name='translated',
+                    old_value=FieldTranslation({'de-de': 'Hallo', 'en-us': 'Hello'}),
+                    new_value={'de-de': 'Hallo !', 'en-us': 'Hello', 'es': 'Hola'},
+                )
+            ],
+        )
+        self.assertEqual(
+            instance.translated,
+            FieldTranslation(
+                {
+                    'de-de': 'Hallo !',  # <<< changed
+                    'en-us': 'Hello',  # <<< untouched
+                    'es': 'Hola',  # <<< added
+                }
+            ),
+        )
 
 
 class TranslationAdminTestCase(TestCase):

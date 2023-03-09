@@ -11,6 +11,8 @@ from bx_django_utils.models.manipulate import (
     STORE_BEHAVIOR_IGNORE,
     STORE_BEHAVIOR_SET_IF_EMPTY,
     STORE_BEHAVIOR_SKIP_EMPTY,
+    CreateOrUpdateResult,
+    FieldUpdate,
     InvalidStoreBehavior,
     create,
     create_or_update,
@@ -44,6 +46,7 @@ class ModelManipulateTestCase(TestCase):
                 name='First entry',
                 slug='first'
             )
+            self.assertIsInstance(result, CreateOrUpdateResult)
             instance = result.instance
             assert isinstance(instance, CreateOrUpdateTestModel)
             assert instance.id == 1
@@ -52,9 +55,11 @@ class ModelManipulateTestCase(TestCase):
             assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')
             assert instance.update_dt == parse_dt('2001-01-01T00:00:00+0000')
             assert result.created is True
-            assert result.updated_fields == []
             assert result.ignored_fields == []
             assert result.not_overwritten_fields == []
+            # Not set if new instance created:
+            self.assertEqual(result.updated_fields, [])
+            self.assertEqual(result.update_info, [])
         cm.assert_no_missing_cleans()
 
         # Change only 'slug'
@@ -74,9 +79,12 @@ class ModelManipulateTestCase(TestCase):
             assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')  # not changed!
             assert instance.update_dt == parse_dt('2002-01-01T00:00:00+0000')
             assert result.created is False
-            assert result.updated_fields == ['slug']
             assert result.ignored_fields == []
             assert result.not_overwritten_fields == []
+            self.assertEqual(result.updated_fields, ['slug'])
+            self.assertEqual(
+                result.update_info, [FieldUpdate(field_name='slug', old_value='first', new_value='change-value')]
+            )
         cm.assert_no_missing_cleans()
 
         # Change 'name' and 'slug':
@@ -96,9 +104,16 @@ class ModelManipulateTestCase(TestCase):
             assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')  # not changed!
             assert instance.update_dt == parse_dt('2003-01-01T00:00:00+0000')
             assert result.created is False
-            assert result.updated_fields == ['name', 'slug']
             assert result.ignored_fields == []
             assert result.not_overwritten_fields == []
+            self.assertEqual(result.updated_fields, ['name', 'slug'])
+            self.assertEqual(
+                result.update_info,
+                [
+                    FieldUpdate(field_name='name', old_value='First entry', new_value='New name !'),
+                    FieldUpdate(field_name='slug', old_value='change-value', new_value='new-slug'),
+                ],
+            )
         cm.assert_no_missing_cleans()
 
         # Nothing changed:
@@ -117,9 +132,10 @@ class ModelManipulateTestCase(TestCase):
         assert instance.create_dt == parse_dt('2001-01-01T00:00:00+0000')
         assert instance.update_dt == parse_dt('2003-01-01T00:00:00+0000')  # not changed!
         assert result.created is False
-        assert result.updated_fields == []
         assert result.ignored_fields == []
         assert result.not_overwritten_fields == []
+        self.assertEqual(result.updated_fields, [])
+        self.assertEqual(result.update_info, [])
 
     def test_non_valid(self):
         msg = str(validate_slug.message)

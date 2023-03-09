@@ -5,7 +5,7 @@
 """
 import dataclasses
 import warnings
-from typing import Optional, Type
+from typing import Any, Callable, Optional
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
@@ -37,6 +37,17 @@ def create(*, ModelClass, call_full_clean=True, save_kwargs=None, **values):
 
 
 @dataclasses.dataclass
+class FieldUpdate:
+    """
+    Information about updated model field values. Used for CreateOrUpdateResult.update_info
+    """
+
+    field_name: str
+    old_value: Any
+    new_value: Any
+
+
+@dataclasses.dataclass
 class CreateOrUpdateResult:
     """
     Result object returned by create_or_update2() with all information about create/save a model.
@@ -45,13 +56,16 @@ class CreateOrUpdateResult:
         List of model field names that are: Updated / ignored / not overwritten
     """
     # Model instance object that was created or updated:
-    instance: Type[models.Model] = None
+    instance: type[models.Model] = None
 
     # If True: new instance was created else: existing was updated:
     created: bool = False
 
     # Fields that are updated (Empty list if model was created!):
     updated_fields: list = dataclasses.field(default_factory=list)
+
+    # Old and new values if a existing instance was updates (Empty if new instance created):
+    update_info: list[FieldUpdate] = dataclasses.field(default_factory=list)
 
     # Field names that ignored by "STORE_BEHAVIOR_IGNORE":
     ignored_fields: list = dataclasses.field(default_factory=list)
@@ -63,14 +77,33 @@ class CreateOrUpdateResult:
     skip_empty_values: list = dataclasses.field(default_factory=list)
 
 
+def update_model_field(*, instance, field_name, old_value, new_value, result: CreateOrUpdateResult):
+    """
+    Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
+    """
+    if old_value == new_value:
+        # Nothing to update -> we are done.
+        return
+
+    # The model field value has been changed -> set it on the model instance:
+    setattr(instance, field_name, new_value)
+
+    # Expand the list of updated fields, used for result and save() call:
+    result.updated_fields.append(field_name)
+
+    # Store update information:
+    result.update_info.append(FieldUpdate(field_name=field_name, old_value=old_value, new_value=new_value))
+
+
 def create_or_update2(
     *,
-    ModelClass: Type[models.Model],
+    ModelClass: type[models.Model],
     lookup: dict = None,
     call_full_clean: bool = True,
     store_behavior: Optional[dict] = None,
     save_kwargs: Optional[dict] = None,
-    **values
+    update_model_field_callback: Callable = update_model_field,
+    **values,
 ) -> CreateOrUpdateResult:
     """
     Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
@@ -79,7 +112,8 @@ def create_or_update2(
      * Use "update_fields" in save() call to store only changed fields.
      * return the information about changed field names.
      * validate before save.
-     * Accept a optional "store_behavior"
+     * Accept optional "store_behavior"
+     * Accept optional callback for every updated model field value
 
      "store_behavior" is a dict with information about overwriting field values, e.g.:
 
@@ -180,9 +214,13 @@ def create_or_update2(
             result.not_overwritten_fields.append(field_name)
             continue
 
-        if old_value != value:
-            setattr(instance, field_name, value)
-            result.updated_fields.append(field_name)
+        update_model_field_callback(
+            instance=instance,
+            field_name=field_name,
+            old_value=old_value,
+            new_value=value,
+            result=result,
+        )
 
     if result.updated_fields:
         if call_full_clean:
@@ -194,13 +232,7 @@ def create_or_update2(
     return result
 
 
-def create_or_update(
-    *,
-    ModelClass: Type[models.Model],
-    lookup: dict = None,
-    call_full_clean: bool = True,
-    **values
-):
+def create_or_update(*, ModelClass: type[models.Model], lookup: dict = None, call_full_clean: bool = True, **values):
     """
     Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
     """
