@@ -9,6 +9,8 @@ from django.db import models
 from django.forms.fields import InvalidJSONInput
 from django.utils.translation import get_language
 
+from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate
+
 
 class TranslationWidget(forms.Widget):
     template_name = 'bx_django_utils/translation_input.html'
@@ -214,3 +216,29 @@ class TranslationFieldAdmin(admin.ModelAdmin):
         self.list_display = patch_fieldnames(self.list_display)
         self.list_display_links = patch_fieldnames(self.list_display_links)
         self.readonly_fields = patch_fieldnames(self.readonly_fields)
+
+
+def create_or_update_translation_callback(*, instance, field_name, old_value, new_value, result: CreateOrUpdateResult):
+    """
+    Callback for create_or_update2() for TranslationField, that will never remove existing translation.
+    """
+    if old_value == new_value:
+        # Nothing to update -> we are done.
+        return
+
+    # Merge translations:
+    merged_value = old_value.copy()
+    merged_value.update(new_value)
+
+    if old_value == merged_value:
+        # Nothing to update -> we are done.
+        return
+
+    # The model field value has been changed -> set it on the model instance:
+    setattr(instance, field_name, merged_value)
+
+    # Expand the list of updated fields, used for result and save() call:
+    result.updated_fields.append(field_name)
+
+    # Store update information:
+    result.update_info.append(FieldUpdate(field_name=field_name, old_value=old_value, new_value=merged_value))
