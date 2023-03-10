@@ -73,3 +73,4 @@ class TranslatedModel(models.Model):
         blank=True,
         widget_class=MultilineTranslationWidget,
     )
+    not_translated = models.TextField(default='A Default Value')

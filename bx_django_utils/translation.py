@@ -9,7 +9,7 @@ from django.db import models
 from django.forms.fields import InvalidJSONInput
 from django.utils.translation import get_language
 
-from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate
+from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
 
 class TranslationWidget(forms.Widget):
@@ -225,6 +225,17 @@ def create_or_update_translation_callback(*, instance, field_name, old_value, ne
     if old_value == new_value:
         # Nothing to update -> we are done.
         return
+
+    model_field = instance._meta.get_field(field_name)
+    if not isinstance(model_field, TranslationField):
+        # Normal model field -> use origin callback
+        return update_model_field(
+            instance=instance,
+            field_name=field_name,
+            old_value=old_value,
+            new_value=new_value,
+            result=result,
+        )
 
     # Merge translations:
     merged_value = old_value.copy()
