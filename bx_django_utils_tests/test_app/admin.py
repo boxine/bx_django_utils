@@ -34,5 +34,5 @@ class ColorFieldTestModelAdmin(admin.ModelAdmin):
 
 @admin.register(TranslatedModel)
 class TranslatedModelAdmin(TranslationFieldAdmin):
-    list_display = ['translated', 'translated_multiline']
+    list_display = ['translated', 'translated_multiline', 'not_translated']
     list_display_links = ['translated', 'translated_multiline']

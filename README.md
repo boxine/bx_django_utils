@@ -284,7 +284,7 @@ Use Playwright in Unittest + Fast Django user login
 * [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L91-L154) - A field designed to hold translations for a given set of language codes.
 * [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L157-L218) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
 * [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L42-L67) - Default form field for TranslationField.
-* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L221-L244) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
+* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L221-L255) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
 
 ### bx_django_utils.user_timezone
 

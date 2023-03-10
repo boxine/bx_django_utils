@@ -1,5 +1,4 @@
 import json
-import re
 from itertools import product
 
 from django.core.exceptions import ValidationError
@@ -61,16 +60,18 @@ class TranslationFieldTestCase(TestCase):
         self.assertTrue(result.created)
         instance = result.instance
         self.assertEqual(instance.translated, {'de-de': 'Hallo'})
+        self.assertEqual(instance.not_translated, 'A Default Value')
 
         # Update existing entry:
         result = create_or_update2(
             ModelClass=TranslatedModel,
             lookup=dict(pk=instance.pk),
             translated={'de-de': 'Hallo', 'en-us': 'Hello'},
+            not_translated='Not the default.',
         )
         self.assertFalse(result.created)  # updated?
         instance = result.instance
-        self.assertEqual(result.updated_fields, ['translated'])
+        self.assertEqual(result.updated_fields, ['translated', 'not_translated'])
         self.assertEqual(
             result.update_info,
             [
@@ -78,10 +79,12 @@ class TranslationFieldTestCase(TestCase):
                     field_name='translated',
                     old_value=FieldTranslation({'de-de': 'Hallo'}),
                     new_value={'de-de': 'Hallo', 'en-us': 'Hello'},
-                )
+                ),
+                FieldUpdate(field_name='not_translated', old_value='A Default Value', new_value='Not the default.'),
             ],
         )
         self.assertEqual(instance.translated, {'de-de': 'Hallo', 'en-us': 'Hello'})
+        self.assertEqual(instance.not_translated, 'Not the default.')
 
         # We have a special callback to avoid deleting translations:
         result = create_or_update2(
@@ -113,15 +116,14 @@ class TranslationFieldTestCase(TestCase):
                 }
             ),
         )
+        self.assertEqual(instance.not_translated, 'Not the default.')  # unchanged?
 
 
 class TranslationAdminTestCase(TestCase):
     # test admin base class and widgets
 
-    def setUp(self):
-        super().setUp()
-        self.user = make_test_user(is_superuser=True)
-        self.obj = TranslatedModel(
+    def create_test_obj(self):
+        obj = TranslatedModel(
             translated={'de-de': 'Zug', 'en-us': 'Train', 'es': 'Tren'},
             translated_multiline={
                 'de-de': 'Ein Zug ist sehr schnell.\nZüge können schneller sein als Autos.',
@@ -129,11 +131,18 @@ class TranslationAdminTestCase(TestCase):
                 'es': 'Un tren es muy rápido.\nLos trenes pueden ser más rápidos que los automóviles.',
             },
         )
-        self.obj.full_clean()
-        self.obj.save()
+        obj.full_clean()
+        obj.save()
+        return obj
+
+    def setUp(self):
+        super().setUp()
+        self.user = make_test_user(is_superuser=True)
         self.client.force_login(self.user)
 
     def test_changelist(self):
+        obj = self.create_test_obj()
+
         CODE = 'de-de'
         with translation.override(CODE):
             response = self.client.get('/admin/test_app/translatedmodel/')
@@ -141,13 +150,15 @@ class TranslationAdminTestCase(TestCase):
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
         response_content = response.content.decode()
         self.assertIn('class="field-get_translated"', response_content)
-        self.assertInHTML(self.obj.translated[CODE], response_content)
+        self.assertInHTML(obj.translated[CODE], response_content)
         self.assertIn('class="field-get_translated_multiline"', response_content)
-        self.assertInHTML(self.obj.translated_multiline[CODE], response_content)
+        self.assertInHTML(obj.translated_multiline[CODE], response_content)
 
     def test_change(self):
+        obj = self.create_test_obj()
+
         # view existing record's change form
-        response = self.client.get(f'/admin/test_app/translatedmodel/{self.obj.pk}/change/')
+        response = self.client.get(f'/admin/test_app/translatedmodel/{obj.pk}/change/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
         response_content = response.content.decode()
@@ -160,7 +171,7 @@ class TranslationAdminTestCase(TestCase):
                     f' id="id_{fieldname}__{code}"'
                     f' type="text"'
                     f' name="{fieldname}__{code}"'
-                    f' value="{getattr(self.obj, fieldname)[code]}">'
+                    f' value="{getattr(obj, fieldname)[code]}">'
                 ),
                 response_content,
             )
@@ -171,7 +182,7 @@ class TranslationAdminTestCase(TestCase):
                     f'<textarea'
                     f' id="id_{fieldname}__{code}"'
                     f' name="{fieldname}__{code}">'
-                    f'{getattr(self.obj, fieldname)[code]}'
+                    f'{getattr(obj, fieldname)[code]}'
                     f'</textarea>'
                 ),
                 response_content,
@@ -179,23 +190,24 @@ class TranslationAdminTestCase(TestCase):
 
         # change all translations via form
         data = {
-            'initial-translated': json.dumps(self.obj.translated),
-            'initial-translated_multiline': json.dumps(self.obj.translated_multiline),
+            'initial-translated': json.dumps(obj.translated),
+            'initial-translated_multiline': json.dumps(obj.translated_multiline),
+            'not_translated': 'Foo Bar',
         }
         for code in ['de-de', 'en-us', 'es']:
-            data[f'translated__{code}'] = self.obj.translated[code].upper()
-            data[f'translated_multiline__{code}'] = self.obj.translated_multiline[code].upper()
-        response = self.client.post(f'/admin/test_app/translatedmodel/{self.obj.pk}/change/', data, follow=True)
+            data[f'translated__{code}'] = obj.translated[code].upper()
+            data[f'translated_multiline__{code}'] = obj.translated_multiline[code].upper()
+        response = self.client.post(f'/admin/test_app/translatedmodel/{obj.pk}/change/', data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
         self.assertIn('was changed successfully', [str(m) for m in messages][0])
 
-        self.obj.refresh_from_db()
-        self.assertEqual(self.obj.translated, {'de-de': 'ZUG', 'en-us': 'TRAIN', 'es': 'TREN'})
+        obj.refresh_from_db()
+        self.assertEqual(obj.translated, {'de-de': 'ZUG', 'en-us': 'TRAIN', 'es': 'TREN'})
         self.assertEqual(
-            self.obj.translated_multiline,
+            obj.translated_multiline,
             {
                 'de-de': 'EIN ZUG IST SEHR SCHNELL.\nZÜGE KÖNNEN SCHNELLER SEIN ALS AUTOS.',
                 'en-us': 'A TRAIN IS VERY FAST.\nTRAINS CAN BE FASTER THAN CARS.',
@@ -211,13 +223,15 @@ class TranslationAdminTestCase(TestCase):
         self.assertInHTML(
             '<li>This field is required.</li>',
             response.content.decode(),
-            count=1,  # error from blank TranslatedModel.translated
+            count=2,  # error from blank translated and not_translated TranslatedModel fields
         )
+        self.assertEqual(TranslatedModel.objects.count(), 0)
 
         # save with some data
         data = {
             'initial-translated': '{}',
             'initial-translated_multiline': '{}',
+            'not_translated': 'Foo Bar',
             '_continue': 'Save and continue editing',
         }
         for code, field in product(['de-de', 'en-us', 'es'], ['translated', 'translated_multiline']):
@@ -231,8 +245,8 @@ class TranslationAdminTestCase(TestCase):
         self.assertIn('was added successfully', [str(m) for m in messages][0])
 
         # was persisted?
-        id_ = re.search('[0-9]+', response.request['PATH_INFO']).group()
-        obj = TranslatedModel.objects.get(id=int(id_))
+        self.assertEqual(TranslatedModel.objects.count(), 1)
+        obj = TranslatedModel.objects.first()
         self.assertEqual(
             obj.translated,
             {
@@ -249,3 +263,4 @@ class TranslationAdminTestCase(TestCase):
                 'es': 'translated_multiline__es',
             },
         )
+        self.assertEqual(obj.not_translated, 'Foo Bar')
