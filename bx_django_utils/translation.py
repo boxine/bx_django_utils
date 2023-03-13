@@ -15,7 +15,7 @@ from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate,
 class TranslationWidget(forms.Widget):
     template_name = 'bx_django_utils/translation_input.html'
 
-    def __init__(self, language_codes, attrs=None):
+    def __init__(self, language_codes: tuple, attrs=None):
         self.language_codes = language_codes
         super().__init__(attrs=attrs)
 
@@ -102,10 +102,10 @@ class TranslationField(models.JSONField):
     a regular dict (much like FileField returns a FieldFile instance).
     """
 
-    def __init__(self, language_codes, *args, **kwargs):
+    def __init__(self, language_codes: tuple, *args, **kwargs):
         kwargs['null'] = False
         kwargs['default'] = FieldTranslation
-        self.language_codes = frozenset(language_codes)
+        self.language_codes = language_codes
         self.widget_class = kwargs.pop('widget_class', TranslationWidget)
         super().__init__(*args, **kwargs)
 
