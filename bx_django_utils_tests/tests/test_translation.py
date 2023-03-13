@@ -1,13 +1,21 @@
 import json
+import re
 from itertools import product
 
+from bx_py_utils.test_utils.snapshot import assert_html_snapshot
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import translation
 
 from bx_django_utils.models.manipulate import FieldUpdate, create_or_update2
 from bx_django_utils.test_utils.users import make_test_user
-from bx_django_utils.translation import FieldTranslation, create_or_update_translation_callback
+from bx_django_utils.translation import (
+    FieldTranslation,
+    TranslationField,
+    TranslationFormField,
+    TranslationWidget,
+    create_or_update_translation_callback,
+)
 from bx_django_utils_tests.test_app.models import TranslatedModel
 
 
@@ -117,6 +125,25 @@ class TranslationFieldTestCase(TestCase):
             ),
         )
         self.assertEqual(instance.not_translated, 'Not the default.')  # unchanged?
+
+    def test_language_codes_order(self):
+        language_codes = ('fr-fr', 'de-de', 'en-us')
+        model_field = TranslationField(language_codes=language_codes)
+        form_field = model_field.formfield()
+        self.assertIsInstance(form_field, TranslationFormField)
+
+        widget = form_field.widget
+        self.assertIsInstance(widget, TranslationWidget)
+
+        # language_codes pass to the widget?
+        self.assertIsInstance(widget.language_codes, tuple)
+        self.assertIs(widget.language_codes, language_codes)
+
+        html = widget.render(name='foobar', value=b'{}')
+
+        # Is the order the same as specifies in TranslationField() ?
+        self.assertEqual(tuple(re.findall(r'<td>(.{5})</td>', html)), language_codes)
+        assert_html_snapshot(got=html, validate=False)
 
 
 class TranslationAdminTestCase(TestCase):
