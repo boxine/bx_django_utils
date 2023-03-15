@@ -28,7 +28,7 @@ class HumanizeTimeTestCase(SimpleTestCase):
                 parse_dt('2000-01-01T12:00:00+0000'),
                 parse_dt('2000-01-01T12:10:00+0000'),
             )
-            assert result == '<span title="1. Januar 2000 12:00">10.0\xa0minutes</span>'
+            self.assertEqual(result, '<span title="1. Januar 2000 12:00">10.0\xa0Minuten</span>')
 
         with translation.override('en'):
             result = human_duration(

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bx_django_utils\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-21 11:34+0000\n"
+"POT-Creation-Date: 2023-03-15 13:45+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Jens Diemer\n"
 "Language-Team: \n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "GTIN number"
 msgstr "GTIN Nummer"
@@ -40,7 +40,7 @@ msgstr "%.1f Stunden"
 
 #, python-format
 msgid "%.1f minutes"
-msgstr ""
+msgstr "%.1f Minuten"
 
 #, python-format
 msgid "%.1f ms"
@@ -49,6 +49,12 @@ msgstr ""
 #, python-format
 msgid "%.1f seconds"
 msgstr "%.1f Sekunden"
+
+msgid "Enter a valid seven-character hexadecimal color value."
+msgstr "Geben Sie einen gültigen siebenstelligen hexadezimalen Farbwert ein."
+
+msgid "Color field (seven-character hexadecimal notation) e.g.: \"#0055ff\""
+msgstr "Farbfeld (siebenstellige hexadezimale Schreibweise) z.B.: \"#0055ff\""
 
 msgid "ModelTimetrackingMixin.create_dt.verbose_name"
 msgstr "Erstellungsdatum"
@@ -61,3 +67,12 @@ msgstr "Aktualisierungsdatum"
 
 msgid "ModelTimetrackingMixin.update_dt.help_text"
 msgstr "(wird automatisch gesetzt)"
+
+msgid "At least one translation is required."
+msgstr "Mindestens eine Übersetzung ist erforderlich."
+
+msgid "SHORT_DATETIME_FORMAT"
+msgstr ""
+
+msgid "Feature Flags"
+msgstr "Feature-Flags"
