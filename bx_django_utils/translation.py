@@ -1,5 +1,6 @@
 import json
 from functools import partial
+from typing import Union
 
 from django import forms
 from django.conf import settings
@@ -8,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms.fields import InvalidJSONInput
 from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
@@ -102,6 +104,11 @@ class TranslationField(models.JSONField):
     a regular dict (much like FileField returns a FieldFile instance).
     """
 
+    default_error_messages = {
+        # Replace "This field cannot be blank." a more appropriate message:
+        'blank': _('At least one translation is required.'),
+    }
+
     def __init__(self, language_codes: tuple, *args, **kwargs):
         kwargs['null'] = False
         kwargs['default'] = FieldTranslation
@@ -122,10 +129,16 @@ class TranslationField(models.JSONField):
         value = super().from_db_value(value, expression, connection)
         if value is None:
             return FieldTranslation()
-        return FieldTranslation(**value)
+        value = remove_empty_translations(value)  # Ignore empty translation from DB
+        return FieldTranslation(value)
+
+    def get_db_prep_save(self, value, *args, **kwargs):
+        value = remove_empty_translations(value)  # Don't store empty translations to DB
+        return super().get_db_prep_save(value, *args, **kwargs)
 
     def clean(self, value, model_instance):
         value = super().clean(value, model_instance)
+        value = remove_empty_translations(value)
         existing_codes = value.keys()
         unknown_codes = existing_codes - self.language_codes
         if unknown_codes:
@@ -133,19 +146,19 @@ class TranslationField(models.JSONField):
         return value
 
     def to_python(self, value):
-        if value is None:
+        if not value:
             return FieldTranslation()
-        if isinstance(value, FieldTranslation):
-            return value
-        if isinstance(value, dict):
-            return FieldTranslation(**value)
-        err = ValidationError('Invalid input for FieldTranslation instance.')
+
         if isinstance(value, str):
             try:
-                return FieldTranslation(**json.loads(value, cls=self.decoder))
-            except json.JSONDecodeError as ex:
-                raise err from ex
-        raise err
+                value = json.loads(value, cls=self.decoder)
+            except json.JSONDecodeError as err:
+                raise ValidationError(f'Invalid JSON data: {err}')
+        if not isinstance(value, dict):
+            raise ValidationError(f'Invalid input type: {type(value).__name__}')
+
+        value = remove_empty_translations(value)
+        return FieldTranslation(value)
 
     def formfield(self, **kwargs):
         kwargs['form_class'] = TranslationFormField
@@ -238,8 +251,7 @@ def create_or_update_translation_callback(*, instance, field_name, old_value, ne
         )
 
     # Merge translations:
-    merged_value = old_value.copy()
-    merged_value.update(new_value)
+    merged_value = merge_translations(old_value, new_value)
 
     if old_value == merged_value:
         # Nothing to update -> we are done.
@@ -253,3 +265,28 @@ def create_or_update_translation_callback(*, instance, field_name, old_value, ne
 
     # Store update information:
     result.update_info.append(FieldUpdate(field_name=field_name, old_value=old_value, new_value=merged_value))
+
+
+def remove_empty_translations(translations: Union[dict, FieldTranslation]) -> FieldTranslation:
+    """
+    Remove all empty/None from a FieldTranslation, e.g.:
+
+    >>> remove_empty_translations({'de-de': 'Hallo', 'en': 'Hello', 'es':'', 'mx': None})
+    FieldTranslation({'de-de': 'Hallo', 'en': 'Hello'})
+    """
+    filtered = {lang_code: text for lang_code, text in translations.items() if text}
+    return FieldTranslation(filtered)
+
+
+def merge_translations(
+    translations1: Union[dict, FieldTranslation], translations2: Union[dict, FieldTranslation]
+) -> FieldTranslation:
+    """
+    Merge two FieldTranslation and ignore all empty/None values, e.g.:
+
+    >>> merge_translations({'de': 'Hallo', 'en': '', 'es': 'Hola'}, {'de': '', 'es': 'HOLA'})
+    FieldTranslation({'de': 'Hallo', 'es': 'HOLA'})
+    """
+    merged = remove_empty_translations(translations1)
+    merged.update(remove_empty_translations(translations2))
+    return FieldTranslation(merged)

@@ -74,3 +74,13 @@ class TranslatedModel(models.Model):
         widget_class=MultilineTranslationWidget,
     )
     not_translated = models.TextField(default='A Default Value')
+
+
+class RawTranslatedModel(models.Model):
+    translated = models.JSONField()
+    translated_multiline = models.JSONField(blank=True, default=dict)
+    not_translated = models.TextField(default='A Default Value')
+
+    class Meta:
+        managed = False
+        db_table = TranslatedModel._meta.db_table

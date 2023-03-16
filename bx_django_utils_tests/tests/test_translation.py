@@ -4,6 +4,7 @@ from itertools import product
 
 from bx_py_utils.test_utils.snapshot import assert_html_snapshot
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.test import TestCase
 from django.utils import translation
 
@@ -16,7 +17,7 @@ from bx_django_utils.translation import (
     TranslationWidget,
     create_or_update_translation_callback,
 )
-from bx_django_utils_tests.test_app.models import TranslatedModel
+from bx_django_utils_tests.test_app.models import RawTranslatedModel, TranslatedModel
 
 
 class TranslationFieldTestCase(TestCase):
@@ -61,6 +62,43 @@ class TranslationFieldTestCase(TestCase):
                 {'translated': FieldTranslation({'de-de': 'Hallo 2', 'en-us': 'Hello 2'})},
             ],
         )
+
+    def test_blank(self):
+        obj = TranslatedModel()
+        with self.assertRaisesMessage(ValidationError, 'At least one translation is required.'):
+            obj.full_clean()
+
+        obj.translated = {}
+        with self.assertRaisesMessage(ValidationError, 'At least one translation is required.'):
+            obj.full_clean()
+
+        obj.translated = {'de-de': ''}
+        with self.assertRaisesMessage(ValidationError, 'At least one translation is required.'):
+            obj.full_clean()
+
+        obj.translated = {'de-de': 'a value'}
+        obj.full_clean()
+
+    def test_empty_translations_from_db(self):
+        # Store empty values using the RawTranslatedModel:
+        RawTranslatedModel.objects.create(translated={'de-de': 'A value', 'en-gb': '', 'en-us': None})
+        raw_obj = RawTranslatedModel.objects.first()
+        self.assertEqual(raw_obj.translated, {'de-de': 'A value', 'en-gb': '', 'en-us': None})
+
+        # Empty values from DB will be ignored:
+        obj = TranslatedModel.objects.first()
+        self.assertEqual(obj.translated, FieldTranslation({'de-de': 'A value'}))
+
+    def test_empty_translations_to_db(self):
+        # Clean removes double entries:
+        obj = TranslatedModel(translated={'de-de': 'A value', 'en-gb': '', 'en-us': None})
+        obj.full_clean()
+        self.assertEqual(obj.translated, {'de-de': 'A value'})
+
+        # It's also not possible to store empty translation in this way:
+        TranslatedModel.objects.create(translated={'de-de': 'A value', 'en-gb': '', 'en-us': None})
+        raw_obj = RawTranslatedModel.objects.first()
+        self.assertEqual(raw_obj.translated, {'de-de': 'A value'})
 
     def test_create_or_update(self):
         # Create via create_or_update2():
@@ -144,6 +182,32 @@ class TranslationFieldTestCase(TestCase):
         # Is the order the same as specifies in TranslationField() ?
         self.assertEqual(tuple(re.findall(r'<td>(.{5})</td>', html)), language_codes)
         assert_html_snapshot(got=html, validate=False)
+
+    def test_query(self):
+        TranslatedModel.objects.create(translated={'de-de': 'Hallo 1'})
+        TranslatedModel.objects.create(translated={'de-de': 'Hallo 2', 'en-us': 'Hello 2'})
+        TranslatedModel.objects.create(translated={'de-de': 'Hallo 3', 'en-us': 'Hello 3'})
+        self.assertEqual(
+            list(TranslatedModel.objects.filter(translated={'de-de': 'Hallo 1'}).values('translated')),
+            [{'translated': FieldTranslation({'de-de': 'Hallo 1'})}],
+        )
+
+        qs = TranslatedModel.objects.filter(**{'translated__de-de': 'Hallo 1'})
+        self.assertEqual(
+            list(qs.values('translated')),
+            [{'translated': FieldTranslation({'de-de': 'Hallo 1'})}],
+        )
+
+        qs = TranslatedModel.objects.order_by('translated').filter(
+            Q(**{'translated__de-de': 'Hallo 1'}) | Q(**{'translated__en-us': 'Hello 3'})
+        )
+        self.assertEqual(
+            list(qs.values('translated')),
+            [
+                {'translated': FieldTranslation({'de-de': 'Hallo 1'})},
+                {'translated': FieldTranslation({'de-de': 'Hallo 3', 'en-us': 'Hello 3'})},
+            ],
+        )
 
 
 class TranslationAdminTestCase(TestCase):
