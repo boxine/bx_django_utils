@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "51"
+version = "52.rc1"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -42,7 +42,8 @@ darker = '*'  # https://github.com/akaihola/darker
 isort = '*'  # https://github.com/pycqa/isort
 flynt = "*"  # https://github.com/ikamensh/flynt
 flake8 = '*'  # https://github.com/pycqa/flake8
-poetry-publish = '*'  # https://github.com/jedie/poetry-publish
+manageprojects = '*'  # https://github.com/jedie/manageprojects
+twine = '*'  # https://github.com/pypa/twine/
 django-debug-toolbar = '*'
 beautifulsoup4 = '*'
 lxml = '*'
@@ -91,8 +92,9 @@ lines_after_imports=2
 [tool.coverage.run]
 branch = true
 parallel = true
+concurrency = ["multiprocessing"]
 source_pkgs=['bx_django_utils']
-command_line = 'manage.py test --parallel'
+command_line = 'manage.py test --parallel'  # Add --shuffle if we remove Django v3.2 support
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*','*/migrations/*']
@@ -128,7 +130,7 @@ deps =
     django-debug-toolbar
     tblib
     coverage[toml]
-    poetry-publish
+    manageprojects
 commands =
     {envpython} -m coverage run --context='{envname}'
     {envpython} -m coverage combine --append
@@ -165,4 +167,5 @@ license = "MIT"
 _template = "https://github.com/jedie/cookiecutter_templates/"
 applied_migrations = [
     "d970456", # 2023-02-20T16:19:35+01:00
+    "89aadc0", # 2023-03-17T09:44:50+01:00
 ]
