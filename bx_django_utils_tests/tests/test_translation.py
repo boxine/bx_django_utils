@@ -4,8 +4,9 @@ from itertools import product
 
 from bx_py_utils.test_utils.snapshot import assert_html_snapshot
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.db.models import Q
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils import translation
 
 from bx_django_utils.models.manipulate import FieldUpdate, create_or_update2
@@ -14,10 +15,12 @@ from bx_django_utils.translation import (
     FieldTranslation,
     TranslationField,
     TranslationFormField,
+    TranslationSlugField,
     TranslationWidget,
     create_or_update_translation_callback,
+    slug_generator,
 )
-from bx_django_utils_tests.test_app.models import RawTranslatedModel, TranslatedModel
+from bx_django_utils_tests.test_app.models import RawTranslatedModel, TranslatedModel, TranslatedSlugTestModel
 
 
 class TranslationFieldTestCase(TestCase):
@@ -355,3 +358,117 @@ class TranslationAdminTestCase(TestCase):
             },
         )
         self.assertEqual(obj.not_translated, 'Foo Bar')
+
+
+class SlugUtilsTestCase(SimpleTestCase):
+    def test_slug_generator(self):
+        slugs = []
+        for number, slug in enumerate(slug_generator(source_text='Foo Bar !')):
+            slugs.append(slug)
+            if number > 2:
+                break
+
+        self.assertEqual(slugs, ['foo-bar', 'foo-bar-2', 'foo-bar-3', 'foo-bar-4'])
+
+
+class TranslationSlugTestCase(TestCase):
+    def test_translation_slug_field(self):
+        obj = TranslationSlugField(language_codes=('de-de', 'en'), populate_from='foobar')
+        value = obj.clean(value={}, model_instance=None)
+        self.assertEqual(value, {})
+
+    @override_settings(MAX_UNIQUE_QUERY_ATTEMPTS=3)
+    def test_get_unique_translation_slug(self):
+        with self.assertRaisesMessage(RuntimeError, 'Can not find a unique slug'):
+            for _ in range(4):
+                with transaction.atomic():
+                    instance = TranslatedSlugTestModel.objects.create(translated={'de-de': 'Hallo !'})
+
+        self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': 'hallo-3'}))
+
+        slugs = list(TranslatedSlugTestModel.objects.values_list('translated_slug', flat=True))
+        self.assertEqual(
+            slugs,
+            [
+                FieldTranslation({'de-de': 'hallo'}),
+                FieldTranslation({'de-de': 'hallo-2'}),
+                FieldTranslation({'de-de': 'hallo-3'}),
+            ],
+        )
+
+    def test_uniqueness(self):
+        instance = TranslatedSlugTestModel(translated={'de-de': 'Hallo !', 'es': 'Hola !'})
+        self.assertEqual(instance.translated, {'de-de': 'Hallo !', 'es': 'Hola !'})
+        self.assertEqual(instance.translated_slug, FieldTranslation({}))
+        instance.full_clean()
+        self.assertEqual(instance.translated, {'de-de': 'Hallo !', 'es': 'Hola !'})
+        self.assertEqual(instance.translated_slug, FieldTranslation({}))
+        instance.save()
+        self.assertEqual(instance.translated, {'de-de': 'Hallo !', 'es': 'Hola !'})
+        self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': 'hallo', 'es': 'hola'}))
+
+        instance2 = TranslatedSlugTestModel.objects.create(translated={'de-de': 'Hallo !', 'en-us': 'Hello !'})
+        self.assertEqual(instance2.translated, {'de-de': 'Hallo !', 'en-us': 'Hello !'})
+        self.assertEqual(
+            instance2.translated_slug,
+            FieldTranslation(
+                {
+                    'de-de': 'hallo-2',  # <<< not 'hallo' !
+                    'en-us': 'hello',
+                }
+            ),
+        )
+
+        instance3 = TranslatedSlugTestModel.objects.create(
+            translated={'de-de': 'Hallo !', 'en-us': 'Hello !', 'es': 'Hola !'}
+        )
+        self.assertEqual(instance3.translated, {'de-de': 'Hallo !', 'en-us': 'Hello !', 'es': 'Hola !'})
+        self.assertEqual(
+            instance3.translated_slug,
+            FieldTranslation(
+                {
+                    'de-de': 'hallo-3',  # <<< not 'hallo' or 'hallo-2'
+                    'en-us': 'hello-2',  # <<< not 'hello'
+                    'es': 'hola-2',  # <<< not 'holla'
+                }
+            ),
+        )
+
+    def test_make_existing_slugs_unique(self):
+        instance1 = TranslatedSlugTestModel.objects.create(translated_slug={'de-de': 'foo', 'es': '1'})
+        self.assertEqual(instance1.translated_slug, {'de-de': 'foo', 'es': '1'})
+
+        instance2 = TranslatedSlugTestModel.objects.create(
+            translated_slug={
+                'de-de': 'foo',  # <<< e.g.: User has add this slug in admin
+                'es': '2',
+            }
+        )
+        self.assertEqual(instance2.translated_slug, {'de-de': 'foo-2', 'es': '2'})
+
+    def test_known_bug(self):
+        # With bulk create/update it's possible to make non-unique slugs,
+        # if not all translations are the same, e.g.:
+        TranslatedSlugTestModel.objects.bulk_create(
+            [
+                TranslatedSlugTestModel(translated_slug={'de-de': 'foo', 'es': '1'}),
+                TranslatedSlugTestModel(translated_slug={'de-de': 'foo', 'es': '2'}),
+            ]
+        )
+        slugs = list(TranslatedSlugTestModel.objects.values_list('translated_slug', flat=True))
+        self.assertEqual(
+            slugs,
+            [
+                FieldTranslation({'de-de': 'foo', 'es': '1'}),
+                FieldTranslation({'de-de': 'foo', 'es': '2'}),
+            ],
+        )
+
+        # Unique check on database level will only work if *all* translation are the same, e.g.:
+        with self.assertRaisesMessage(IntegrityError, 'UNIQUE constraint failed'):
+            TranslatedSlugTestModel.objects.bulk_create(
+                [
+                    TranslatedSlugTestModel(translated_slug={'de-de': 'same'}),
+                    TranslatedSlugTestModel(translated_slug={'de-de': 'same'}),
+                ]
+            )

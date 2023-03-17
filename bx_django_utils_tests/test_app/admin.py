@@ -3,7 +3,12 @@ from django.contrib import admin
 from bx_django_utils.admin_utils.filters import ExistingCountedListFilter
 from bx_django_utils.translation import TranslationFieldAdmin
 from bx_django_utils_tests.test_app.admin_filters_demo import NotAllSimpleListFilterDemo
-from bx_django_utils_tests.test_app.models import ColorFieldTestModel, CreateOrUpdateTestModel, TranslatedModel
+from bx_django_utils_tests.test_app.models import (
+    ColorFieldTestModel,
+    CreateOrUpdateTestModel,
+    TranslatedModel,
+    TranslatedSlugTestModel,
+)
 
 
 class NameListFilter(ExistingCountedListFilter):
@@ -36,3 +41,8 @@ class ColorFieldTestModelAdmin(admin.ModelAdmin):
 class TranslatedModelAdmin(TranslationFieldAdmin):
     list_display = ['translated', 'translated_multiline', 'not_translated']
     list_display_links = ['translated', 'translated_multiline']
+
+
+@admin.register(TranslatedSlugTestModel)
+class TranslatedSlugTestModelAdmin(TranslationFieldAdmin):
+    list_display = ['translated', 'translated_slug']
