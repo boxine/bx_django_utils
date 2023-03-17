@@ -10,6 +10,7 @@ from django.db import models
 from django.forms.fields import InvalidJSONInput
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from slugify import slugify
 
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
@@ -165,6 +166,88 @@ class TranslationField(models.JSONField):
         kwargs['widget_class'] = self.widget_class
         kwargs['language_codes'] = self.language_codes
         return super().formfield(**kwargs)
+
+
+def slug_generator(source_text):
+    slug = slugify(source_text)
+    yield slug
+    max_loops = getattr(settings, 'MAX_UNIQUE_QUERY_ATTEMPTS', 1000)
+    for number in range(2, max_loops + 1):
+        yield f'{slug}-{number}'
+
+
+def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_code):
+    ModelClass = model_instance.__class__
+    base_qs = ModelClass.objects.all()
+    if pk := model_instance.pk:
+        base_qs = base_qs.exclude(pk=pk)
+
+    for slug_candidate in slug_generator(source_text):
+        qs = base_qs.filter(**{f'{attr_name}__{lang_code}': slug_candidate})
+        if not qs.exists():
+            return slug_candidate
+
+    raise RuntimeError(f'Can not find a unique slug for {model_instance} {attr_name=} {lang_code=}, {source_text=}')
+
+
+class TranslationSlugField(TranslationField):
+    """
+    A unique translation slug field, useful in combination with TranslationField()
+    e.g.:
+
+        class TranslatedSlugTestModel(models.Model):
+            LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+
+            translated = TranslationField(language_codes=LANGUAGE_CODES)
+            translated_slug = TranslationSlugField(
+                language_codes=LANGUAGE_CODES,
+                populate_from='translated',
+            )
+
+    All slugs will be unique for every language, by adding a number, started with the second one.
+    But Note:
+          The field set `unique=True`, but the database level will only deny
+          create non-unique slugs, if *all* translations are the same!
+          So be careful if you use bulk create/update with not unique data!
+          See Tests.
+    """
+
+    def __init__(self, *args, populate_from: str = None, **kwargs):
+        self.populate_from = populate_from
+
+        kwargs['blank'] = True
+        kwargs['unique'] = True
+        super().__init__(*args, **kwargs)
+        assert self.blank is True, 'TranslationSlugField must always set blank=True !'
+
+    def create_slug(self, model_instance, add):
+        slug_translations = getattr(model_instance, self.attname)
+        assert isinstance(
+            slug_translations, (FieldTranslation, dict)
+        ), f'Unexpected type: {type(slug_translations).__name__}'
+
+        populate_translations = getattr(model_instance, self.populate_from)
+        assert isinstance(
+            populate_translations, (FieldTranslation, dict)
+        ), f'Unexpected type: {type(populate_translations).__name__}'
+
+        for lang_code in self.language_codes:
+            source_text = slug_translations.get(lang_code) or populate_translations.get(lang_code)
+            if source_text:
+                slug = get_unique_translation_slug(
+                    model_instance=model_instance,
+                    attr_name=self.attname,
+                    source_text=source_text,
+                    lang_code=lang_code,
+                )
+                assert slug
+                slug_translations[lang_code] = slug
+
+        return slug_translations
+
+    def pre_save(self, model_instance, add):
+        value = self.create_slug(model_instance, add)
+        return value
 
 
 class TranslationFieldAdmin(admin.ModelAdmin):
