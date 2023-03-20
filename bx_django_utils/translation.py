@@ -8,9 +8,9 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms.fields import InvalidJSONInput
+from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from slugify import slugify
 
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
