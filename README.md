@@ -282,12 +282,12 @@ Use Playwright in Unittest + Fast Django user login
 
 * [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L73-L91) - Dict-like container that maps language codes to a translated string.
 * [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L94-L168) - A field designed to hold translations for a given set of language codes.
-* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L253-L314) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
+* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L257-L318) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
 * [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L45-L70) - Default form field for TranslationField.
-* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L193-L250) - A unique translation slug field, useful in combination with TranslationField()
-* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L317-L350) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
-* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L364-L375) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
-* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L353-L361) - Remove all empty/None from a FieldTranslation, e.g.:
+* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L193-L254) - A unique translation slug field, useful in combination with TranslationField()
+* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L321-L354) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
+* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L368-L379) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
+* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L357-L365) - Remove all empty/None from a FieldTranslation, e.g.:
 
 ### bx_django_utils.user_timezone
 

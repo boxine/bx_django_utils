@@ -8,6 +8,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils import translation
+from model_bakery import baker
 
 from bx_django_utils.models.manipulate import FieldUpdate, create_or_update2
 from bx_django_utils.test_utils.users import make_test_user
@@ -20,7 +21,12 @@ from bx_django_utils.translation import (
     create_or_update_translation_callback,
     slug_generator,
 )
-from bx_django_utils_tests.test_app.models import RawTranslatedModel, TranslatedModel, TranslatedSlugTestModel
+from bx_django_utils_tests.test_app.models import (
+    NonUniqueTranslatedSlugTestModel,
+    RawTranslatedModel,
+    TranslatedModel,
+    TranslatedSlugTestModel,
+)
 
 
 class TranslationFieldTestCase(TestCase):
@@ -445,6 +451,50 @@ class TranslationSlugTestCase(TestCase):
             }
         )
         self.assertEqual(instance2.translated_slug, {'de-de': 'foo-2', 'es': '2'})
+
+    def test_non_unique(self):
+        # It should be possible to create empty, non unique slugs, if needed:
+        baker.make(NonUniqueTranslatedSlugTestModel)
+        self.assertEqual(
+            list(NonUniqueTranslatedSlugTestModel.objects.values_list('translated_slug', flat=True)),
+            [FieldTranslation({})],
+        )
+        baker.make(NonUniqueTranslatedSlugTestModel)
+        self.assertEqual(
+            list(NonUniqueTranslatedSlugTestModel.objects.values_list('translated_slug', flat=True)),
+            [FieldTranslation({}), FieldTranslation({})],
+        )
+        baker.make(NonUniqueTranslatedSlugTestModel, _quantity=2)
+        self.assertEqual(
+            list(NonUniqueTranslatedSlugTestModel.objects.values_list('translated_slug', flat=True)),
+            [FieldTranslation({}), FieldTranslation({}), FieldTranslation({}), FieldTranslation({})],
+        )
+
+        # Nevertheless, generated slugs will be created unique:
+
+        baker.make(NonUniqueTranslatedSlugTestModel, translated={'de-de': 'Hallo !'})
+        self.assertEqual(
+            list(NonUniqueTranslatedSlugTestModel.objects.values_list('translated_slug', flat=True)),
+            [
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({'de-de': 'hallo'}),
+            ],
+        )
+        baker.make(NonUniqueTranslatedSlugTestModel, translated={'de-de': 'Hallo !'})
+        self.assertEqual(
+            list(NonUniqueTranslatedSlugTestModel.objects.values_list('translated_slug', flat=True)),
+            [
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({}),
+                FieldTranslation({'de-de': 'hallo'}),
+                FieldTranslation({'de-de': 'hallo-2'}),
+            ],
+        )
 
     def test_known_bug(self):
         # With bulk create/update it's possible to make non-unique slugs,
