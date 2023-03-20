@@ -94,3 +94,14 @@ class TranslatedSlugTestModel(models.Model):
         language_codes=LANGUAGE_CODES,
         populate_from='translated',
     )
+
+
+class NonUniqueTranslatedSlugTestModel(models.Model):
+    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+
+    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated_slug = TranslationSlugField(
+        language_codes=LANGUAGE_CODES,
+        populate_from='translated',
+        unique=False,
+    )

@@ -212,13 +212,17 @@ class TranslationSlugField(TranslationField):
           See Tests.
     """
 
-    def __init__(self, *args, populate_from: str = None, **kwargs):
+    def __init__(self, *args, populate_from: str = None, unique=True, **kwargs):
         self.populate_from = populate_from
 
         kwargs['blank'] = True
-        kwargs['unique'] = True
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, unique=unique, **kwargs)
         assert self.blank is True, 'TranslationSlugField must always set blank=True !'
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        kwargs['unique'] = self.unique
+        return name, path, args, kwargs
 
     def create_slug(self, model_instance, add):
         slug_translations = getattr(model_instance, self.attname)
