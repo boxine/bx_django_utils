@@ -7,11 +7,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.forms.fields import InvalidJSONInput
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
+from bx_django_utils.admin_utils.admin_urls import admin_change_url
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
 
@@ -377,3 +380,36 @@ def merge_translations(
     merged = remove_empty_translations(translations1)
     merged.update(remove_empty_translations(translations2))
     return FieldTranslation(merged)
+
+
+def validate_unique_translations(*, ModelClass, instance, field_name, translated_value) -> None:
+    """
+    Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
+    Useable for Form/Model clean methods.
+    See: bx_django_utils_tests.test_app.admin.TranslatedSlugTestModelForm()
+    """
+    if not translated_value:
+        raise ValidationError({'translated_name': _('At least one translation is required.')})
+
+    q_filters = Q()
+    for lang_code, value in translated_value.items():
+        if value:
+            q_filters |= Q(**{f'{field_name}__{lang_code}': value})
+
+    if not q_filters:
+        raise ValidationError({field_name: _('At least one translation is required.')})
+
+    qs = ModelClass.objects.filter(q_filters)
+    if instance and (own_pk := instance.pk):
+        qs = qs.exclude(pk=own_pk)
+
+    if other_instance := qs.first():
+        url = admin_change_url(instance=other_instance)
+        msg = mark_safe(
+            _('A <a href="%(url)s">other %(model_name)s</a> with one of these translation already exists!')
+            % {
+                'url': url,
+                'model_name': ModelClass._meta.verbose_name_plural,
+            }
+        )
+        raise ValidationError({field_name: msg})

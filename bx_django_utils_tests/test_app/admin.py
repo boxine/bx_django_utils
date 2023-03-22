@@ -1,7 +1,8 @@
+from django import forms
 from django.contrib import admin
 
 from bx_django_utils.admin_utils.filters import ExistingCountedListFilter
-from bx_django_utils.translation import TranslationFieldAdmin
+from bx_django_utils.translation import TranslationFieldAdmin, validate_unique_translations
 from bx_django_utils_tests.test_app.admin_filters_demo import NotAllSimpleListFilterDemo
 from bx_django_utils_tests.test_app.models import (
     ColorFieldTestModel,
@@ -43,6 +44,29 @@ class TranslatedModelAdmin(TranslationFieldAdmin):
     list_display_links = ['translated', 'translated_multiline']
 
 
+class TranslatedSlugTestModelForm(forms.ModelForm):
+    """
+    Demonstrate the usage of validate_unique_translations()
+    """
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        validate_unique_translations(
+            ModelClass=TranslatedSlugTestModel,
+            instance=self.instance,
+            field_name='translated',
+            translated_value=cleaned_data.get('translated'),
+        )
+
+        return cleaned_data
+
+    class Meta:
+        model = TranslatedSlugTestModel
+        exclude = ()
+
+
 @admin.register(TranslatedSlugTestModel)
 class TranslatedSlugTestModelAdmin(TranslationFieldAdmin):
+    form = TranslatedSlugTestModelForm
     list_display = ['translated', 'translated_slug']
