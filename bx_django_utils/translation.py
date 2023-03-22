@@ -1,17 +1,21 @@
 import json
 from functools import partial
-from typing import Union
+from typing import Optional, Union
 
 from django import forms
+from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.forms.fields import InvalidJSONInput
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
+from bx_django_utils.admin_utils.admin_urls import admin_change_url
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
 
@@ -176,7 +180,23 @@ def slug_generator(source_text):
         yield f'{slug}-{number}'
 
 
-def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_code):
+def additional_uniqueness_exists(*, additional_uniqueness: tuple[dict], lang_code, slug_candidate):
+    for info in additional_uniqueness:
+        ModelClass = apps.get_model(app_label=info['app_label'], model_name=info['model_name'])
+        qs = ModelClass.objects.filter(**{f'{info["field_name"]}__{lang_code}': slug_candidate})
+        if qs.exists():
+            return True
+    return False
+
+
+def get_unique_translation_slug(
+    *,
+    model_instance,
+    attr_name,
+    source_text,
+    lang_code,
+    additional_uniqueness: Optional[tuple[dict]] = None,
+):
     ModelClass = model_instance.__class__
     base_qs = ModelClass.objects.all()
     if pk := model_instance.pk:
@@ -184,8 +204,17 @@ def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_
 
     for slug_candidate in slug_generator(source_text):
         qs = base_qs.filter(**{f'{attr_name}__{lang_code}': slug_candidate})
-        if not qs.exists():
-            return slug_candidate
+        if qs.exists():
+            # Slug already exists in the same model -> try next candidate
+            continue
+
+        if additional_uniqueness and additional_uniqueness_exists(
+            additional_uniqueness=additional_uniqueness, lang_code=lang_code, slug_candidate=slug_candidate
+        ):
+            # Slug already exists one of the other models -> try next candidate
+            continue
+
+        return slug_candidate
 
     raise RuntimeError(f'Can not find a unique slug for {model_instance} {attr_name=} {lang_code=}, {source_text=}')
 
@@ -193,6 +222,8 @@ def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_
 class TranslationSlugField(TranslationField):
     """
     A unique translation slug field, useful in combination with TranslationField()
+    All slugs will be unique for every language, by adding a number, started with the second one.
+
     e.g.:
 
         class TranslatedSlugTestModel(models.Model):
@@ -204,7 +235,23 @@ class TranslationSlugField(TranslationField):
                 populate_from='translated',
             )
 
-    All slugs will be unique for every language, by adding a number, started with the second one.
+    Optional: Uniqueness between more than one Model
+    e.g.:
+
+        class TranslatedSlugTestModel(models.Model):
+            #...
+            translated_slug = TranslationSlugField(
+                language_codes=LANGUAGE_CODES,
+                populate_from='translated',
+                additional_uniqueness=(
+                    dict(
+                        app_label='foo_bar_app',
+                        model_name='FooBarModel',
+                        field_name='translated_slug',
+                    ),
+                ),
+            )
+
     But Note:
           The field set `unique=True`, but the database level will only deny
           create non-unique slugs, if *all* translations are the same!
@@ -212,8 +259,16 @@ class TranslationSlugField(TranslationField):
           See Tests.
     """
 
-    def __init__(self, *args, populate_from: str = None, unique=True, **kwargs):
+    def __init__(
+        self,
+        *args,
+        populate_from: str = None,
+        unique=True,
+        additional_uniqueness: Optional[tuple[dict]] = None,
+        **kwargs,
+    ):
         self.populate_from = populate_from
+        self.additional_uniqueness = additional_uniqueness
 
         kwargs['blank'] = True
         super().__init__(*args, unique=unique, **kwargs)
@@ -222,6 +277,7 @@ class TranslationSlugField(TranslationField):
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
         kwargs['unique'] = self.unique
+        kwargs['additional_uniqueness'] = self.additional_uniqueness
         return name, path, args, kwargs
 
     def create_slug(self, model_instance, add):
@@ -243,6 +299,7 @@ class TranslationSlugField(TranslationField):
                     attr_name=self.attname,
                     source_text=source_text,
                     lang_code=lang_code,
+                    additional_uniqueness=self.additional_uniqueness,
                 )
                 assert slug
                 slug_translations[lang_code] = slug
@@ -377,3 +434,36 @@ def merge_translations(
     merged = remove_empty_translations(translations1)
     merged.update(remove_empty_translations(translations2))
     return FieldTranslation(merged)
+
+
+def validate_unique_translations(*, ModelClass, instance, field_name, translated_value) -> None:
+    """
+    Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
+    Useable for Form/Model clean methods.
+    See: bx_django_utils_tests.test_app.admin.TranslatedSlugTestModelForm()
+    """
+    if not translated_value:
+        raise ValidationError({'translated_name': _('At least one translation is required.')})
+
+    q_filters = Q()
+    for lang_code, value in translated_value.items():
+        if value:
+            q_filters |= Q(**{f'{field_name}__{lang_code}': value})
+
+    if not q_filters:
+        raise ValidationError({field_name: _('At least one translation is required.')})
+
+    qs = ModelClass.objects.filter(q_filters)
+    if instance and (own_pk := instance.pk):
+        qs = qs.exclude(pk=own_pk)
+
+    if other_instance := qs.first():
+        url = admin_change_url(instance=other_instance)
+        msg = mark_safe(
+            _('A <a href="%(url)s">other %(model_name)s</a> with one of these translation already exists!')
+            % {
+                'url': url,
+                'model_name': ModelClass._meta.verbose_name_plural,
+            }
+        )
+        raise ValidationError({field_name: msg})

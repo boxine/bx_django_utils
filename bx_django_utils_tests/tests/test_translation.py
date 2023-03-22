@@ -11,6 +11,7 @@ from django.utils import translation
 from model_bakery import baker
 
 from bx_django_utils.models.manipulate import FieldUpdate, create_or_update2
+from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 from bx_django_utils.test_utils.users import make_test_user
 from bx_django_utils.translation import (
     FieldTranslation,
@@ -20,8 +21,11 @@ from bx_django_utils.translation import (
     TranslationWidget,
     create_or_update_translation_callback,
     slug_generator,
+    validate_unique_translations,
 )
 from bx_django_utils_tests.test_app.models import (
+    ConnectedUniqueSlugModel1,
+    ConnectedUniqueSlugModel2,
     NonUniqueTranslatedSlugTestModel,
     RawTranslatedModel,
     TranslatedModel,
@@ -377,7 +381,7 @@ class SlugUtilsTestCase(SimpleTestCase):
         self.assertEqual(slugs, ['foo-bar', 'foo-bar-2', 'foo-bar-3', 'foo-bar-4'])
 
 
-class TranslationSlugTestCase(TestCase):
+class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
     def test_translation_slug_field(self):
         obj = TranslationSlugField(language_codes=('de-de', 'en'), populate_from='foobar')
         value = obj.clean(value={}, model_instance=None)
@@ -522,3 +526,92 @@ class TranslationSlugTestCase(TestCase):
                     TranslatedSlugTestModel(translated_slug={'de-de': 'same'}),
                 ]
             )
+
+    def test_validate_unique_translations(self):
+        instance = TranslatedSlugTestModel(translated={'de-de': 'foo'})
+        self.assertIs(instance.pk, None)
+        # No other instance exists with this translation -> pass validation:
+        validate_unique_translations(
+            ModelClass=TranslatedSlugTestModel,
+            instance=instance,
+            field_name='translated',
+            translated_value={'de-de': 'foo'},
+        )
+        instance.save()
+
+        # "User edit the same instance" -> pass validation:
+        validate_unique_translations(
+            ModelClass=TranslatedSlugTestModel,
+            instance=instance,
+            field_name='translated',
+            translated_value={'de-de': 'foo'},
+        )
+
+        # Try to "add" a double entry -> validation not successful:
+        instance2 = TranslatedSlugTestModel(translated={'de-de': 'foo'})
+        with self.assertRaisesMessage(
+            ValidationError,
+            (
+                f'A <a href="/admin/test_app/translatedslugtestmodel/{instance.pk}/change/">'
+                'other translated slug test models</a>'
+                ' with one of these translation already exists!'
+            ),
+        ):
+            validate_unique_translations(
+                ModelClass=TranslatedSlugTestModel,
+                instance=instance2,
+                field_name='translated',
+                translated_value={'de-de': 'foo'},
+            )
+
+        # A value is needed:
+
+        with self.assertRaisesMessage(ValidationError, 'At least one translation is required.'):
+            validate_unique_translations(
+                ModelClass=TranslatedSlugTestModel,
+                instance=instance,
+                field_name='translated',
+                translated_value=None,  # <<< case 1
+            )
+
+        with self.assertRaisesMessage(ValidationError, 'At least one translation is required.'):
+            validate_unique_translations(
+                ModelClass=TranslatedSlugTestModel,
+                instance=instance,
+                field_name='translated',
+                translated_value={'de-de': ''},  # <<< case 2
+            )
+
+        # Test the usage in Django Admin:
+        self.client.force_login(make_test_user(is_superuser=True))
+        response = self.client.post(
+            path='/admin/test_app/translatedslugtestmodel/add/',
+            data={
+                'translated__de-de': 'foo',
+                '_continue': 'Save and continue editing',
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assert_html_parts(
+            response,
+            parts=(
+                f'''
+                <li>A <a href="/admin/test_app/translatedslugtestmodel/{instance.pk}/change/">
+                other translated slug test models</a> with one of these translation already exists!
+                </li>
+                ''',
+            ),
+        )
+
+    def test_additional_uniqueness_via_models(self):
+        def test(ModelClass, source, expected_slug):
+            instance = ModelClass.objects.create(translated={'de-de': source})
+            self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': expected_slug}))
+
+        test(ConnectedUniqueSlugModel1, 'Test A', 'test-a')
+        test(ConnectedUniqueSlugModel1, 'Test B', 'test-b')
+        test(ConnectedUniqueSlugModel2, 'Test A', 'test-a-2')  # clash with model 1
+        test(ConnectedUniqueSlugModel2, 'Test B', 'test-b-2')  # clash with model 1
+        test(ConnectedUniqueSlugModel2, 'Test C', 'test-c')
+        test(ConnectedUniqueSlugModel1, 'Test C', 'test-c-2')  # clash with model 2
