@@ -24,6 +24,8 @@ from bx_django_utils.translation import (
     validate_unique_translations,
 )
 from bx_django_utils_tests.test_app.models import (
+    ConnectedUniqueSlugModel1,
+    ConnectedUniqueSlugModel2,
     NonUniqueTranslatedSlugTestModel,
     RawTranslatedModel,
     TranslatedModel,
@@ -601,3 +603,15 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
                 ''',
             ),
         )
+
+    def test_additional_uniqueness_via_models(self):
+        def test(ModelClass, source, expected_slug):
+            instance = ModelClass.objects.create(translated={'de-de': source})
+            self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': expected_slug}))
+
+        test(ConnectedUniqueSlugModel1, 'Test A', 'test-a')
+        test(ConnectedUniqueSlugModel1, 'Test B', 'test-b')
+        test(ConnectedUniqueSlugModel2, 'Test A', 'test-a-2')  # clash with model 1
+        test(ConnectedUniqueSlugModel2, 'Test B', 'test-b-2')  # clash with model 1
+        test(ConnectedUniqueSlugModel2, 'Test C', 'test-c')
+        test(ConnectedUniqueSlugModel1, 'Test C', 'test-c-2')  # clash with model 2

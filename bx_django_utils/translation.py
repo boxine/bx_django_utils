@@ -1,8 +1,9 @@
 import json
 from functools import partial
-from typing import Union
+from typing import Optional, Union
 
 from django import forms
+from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
@@ -179,7 +180,23 @@ def slug_generator(source_text):
         yield f'{slug}-{number}'
 
 
-def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_code):
+def additional_uniqueness_exists(*, additional_uniqueness: tuple[dict], lang_code, slug_candidate):
+    for info in additional_uniqueness:
+        ModelClass = apps.get_model(app_label=info['app_label'], model_name=info['model_name'])
+        qs = ModelClass.objects.filter(**{f'{info["field_name"]}__{lang_code}': slug_candidate})
+        if qs.exists():
+            return True
+    return False
+
+
+def get_unique_translation_slug(
+    *,
+    model_instance,
+    attr_name,
+    source_text,
+    lang_code,
+    additional_uniqueness: Optional[tuple[dict]] = None,
+):
     ModelClass = model_instance.__class__
     base_qs = ModelClass.objects.all()
     if pk := model_instance.pk:
@@ -187,8 +204,17 @@ def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_
 
     for slug_candidate in slug_generator(source_text):
         qs = base_qs.filter(**{f'{attr_name}__{lang_code}': slug_candidate})
-        if not qs.exists():
-            return slug_candidate
+        if qs.exists():
+            # Slug already exists in the same model -> try next candidate
+            continue
+
+        if additional_uniqueness and additional_uniqueness_exists(
+            additional_uniqueness=additional_uniqueness, lang_code=lang_code, slug_candidate=slug_candidate
+        ):
+            # Slug already exists one of the other models -> try next candidate
+            continue
+
+        return slug_candidate
 
     raise RuntimeError(f'Can not find a unique slug for {model_instance} {attr_name=} {lang_code=}, {source_text=}')
 
@@ -196,6 +222,8 @@ def get_unique_translation_slug(*, model_instance, attr_name, source_text, lang_
 class TranslationSlugField(TranslationField):
     """
     A unique translation slug field, useful in combination with TranslationField()
+    All slugs will be unique for every language, by adding a number, started with the second one.
+
     e.g.:
 
         class TranslatedSlugTestModel(models.Model):
@@ -207,7 +235,23 @@ class TranslationSlugField(TranslationField):
                 populate_from='translated',
             )
 
-    All slugs will be unique for every language, by adding a number, started with the second one.
+    Optional: Uniqueness between more than one Model
+    e.g.:
+
+        class TranslatedSlugTestModel(models.Model):
+            #...
+            translated_slug = TranslationSlugField(
+                language_codes=LANGUAGE_CODES,
+                populate_from='translated',
+                additional_uniqueness=(
+                    dict(
+                        app_label='foo_bar_app',
+                        model_name='FooBarModel',
+                        field_name='translated_slug',
+                    ),
+                ),
+            )
+
     But Note:
           The field set `unique=True`, but the database level will only deny
           create non-unique slugs, if *all* translations are the same!
@@ -215,8 +259,16 @@ class TranslationSlugField(TranslationField):
           See Tests.
     """
 
-    def __init__(self, *args, populate_from: str = None, unique=True, **kwargs):
+    def __init__(
+        self,
+        *args,
+        populate_from: str = None,
+        unique=True,
+        additional_uniqueness: Optional[tuple[dict]] = None,
+        **kwargs,
+    ):
         self.populate_from = populate_from
+        self.additional_uniqueness = additional_uniqueness
 
         kwargs['blank'] = True
         super().__init__(*args, unique=unique, **kwargs)
@@ -225,6 +277,7 @@ class TranslationSlugField(TranslationField):
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
         kwargs['unique'] = self.unique
+        kwargs['additional_uniqueness'] = self.additional_uniqueness
         return name, path, args, kwargs
 
     def create_slug(self, model_instance, add):
@@ -246,6 +299,7 @@ class TranslationSlugField(TranslationField):
                     attr_name=self.attname,
                     source_text=source_text,
                     lang_code=lang_code,
+                    additional_uniqueness=self.additional_uniqueness,
                 )
                 assert slug
                 slug_translations[lang_code] = slug

@@ -105,3 +105,37 @@ class NonUniqueTranslatedSlugTestModel(models.Model):
         populate_from='translated',
         unique=False,
     )
+
+
+class ConnectedUniqueSlugModel1(models.Model):
+    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+
+    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated_slug = TranslationSlugField(
+        language_codes=LANGUAGE_CODES,
+        populate_from='translated',
+        additional_uniqueness=(
+            dict(
+                app_label='test_app',
+                model_name='ConnectedUniqueSlugModel2',
+                field_name='translated_slug',
+            ),
+        ),
+    )
+
+
+class ConnectedUniqueSlugModel2(models.Model):
+    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+
+    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated_slug = TranslationSlugField(
+        language_codes=LANGUAGE_CODES,
+        populate_from='translated',
+        additional_uniqueness=(
+            dict(
+                app_label='test_app',
+                model_name='ConnectedUniqueSlugModel1',
+                field_name='translated_slug',
+            ),
+        ),
+    )
