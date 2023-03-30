@@ -175,7 +175,7 @@ class AssertQueries(SQLQueryRecorder):
             raise AssertionError(self.build_error_message(f'Table names does not match:\n{diff}'))
 
     def assert_table_counts(self, table_counts: Union[Counter, dict],
-                            exclude: Optional[Tuple[str]] = None):
+                            exclude: Optional[Tuple[str, ...]] = None):
         if not isinstance(table_counts, Counter):
             table_counts = Counter(table_counts)
         table_name_count = self.count_table_names()
