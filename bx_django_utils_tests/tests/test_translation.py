@@ -177,23 +177,51 @@ class TranslationFieldTestCase(TestCase):
         )
         self.assertEqual(instance.not_translated, 'Not the default.')  # unchanged?
 
-    def test_language_codes_order(self):
-        language_codes = ('fr-fr', 'de-de', 'en-us')
-        model_field = TranslationField(language_codes=language_codes)
+    def test_language_codes_order_old(self):
+        with self.assertWarns(DeprecationWarning) as cm:
+            model_field = TranslationField(
+                language_codes=('fr-fr', 'de-de', 'en-us'),  # Old, deprecated argument
+            )
+        self.assertEqual(str(cm.warning), 'language_codes argument is deprecated in favour of languages')
         form_field = model_field.formfield()
         self.assertIsInstance(form_field, TranslationFormField)
 
         widget = form_field.widget
         self.assertIsInstance(widget, TranslationWidget)
 
-        # language_codes pass to the widget?
-        self.assertIsInstance(widget.language_codes, tuple)
-        self.assertIs(widget.language_codes, language_codes)
+        # languages pass to the widget?
+        self.assertIsInstance(widget.languages, tuple)
+        self.assertEqual(widget.languages, (('fr-fr', 'fr-fr'), ('de-de', 'de-de'), ('en-us', 'en-us')))
 
         html = widget.render(name='foobar', value=b'{}')
 
         # Is the order the same as specifies in TranslationField() ?
-        self.assertEqual(tuple(re.findall(r'<td>(.{5})</td>', html)), language_codes)
+        self.assertEqual(tuple(re.findall(r'<td>(.{5})</td>', html)), ('fr-fr', 'de-de', 'en-us'))
+        assert_html_snapshot(got=html, validate=False)
+
+    def test_language_codes_order(self):
+        model_field = TranslationField(
+            # language_codes=...  Old, deprecated argument, not specified
+            languages=(
+                ('fr-fr', 'French'),
+                ('de-de', 'German'),
+                ('en-us', 'US-English'),
+            )
+        )
+        form_field = model_field.formfield()
+        self.assertIsInstance(form_field, TranslationFormField)
+
+        widget = form_field.widget
+        self.assertIsInstance(widget, TranslationWidget)
+
+        # languages pass to the widget?
+        self.assertIsInstance(widget.languages, tuple)
+        self.assertEqual(widget.languages, (('fr-fr', 'French'), ('de-de', 'German'), ('en-us', 'US-English')))
+
+        html = widget.render(name='foobar', value=b'{}')
+
+        # Is the order the same as specifies in TranslationField() ?
+        self.assertEqual(tuple(re.findall(r'<td>(.+)</td>', html)), ('French', 'German', 'US-English'))
         assert_html_snapshot(got=html, validate=False)
 
     def test_query(self):
@@ -223,7 +251,7 @@ class TranslationFieldTestCase(TestCase):
         )
 
 
-class TranslationAdminTestCase(TestCase):
+class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
     # test admin base class and widgets
 
     def create_test_obj(self):
@@ -265,31 +293,40 @@ class TranslationAdminTestCase(TestCase):
         response = self.client.get(f'/admin/test_app/translatedmodel/{obj.pk}/change/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
-        response_content = response.content.decode()
 
         fieldname = 'translated'
         for code in ['de-de', 'en-us', 'es']:
-            self.assertInHTML(
-                (
+            self.assert_html_parts(
+                response,
+                parts=(
                     f'<input'
                     f' id="id_{fieldname}__{code}"'
                     f' type="text"'
                     f' name="{fieldname}__{code}"'
-                    f' value="{getattr(obj, fieldname)[code]}">'
+                    f' value="{getattr(obj, fieldname)[code]}">',
                 ),
-                response_content,
             )
         fieldname = 'translated_multiline'
         for code in ['de-de', 'en-us', 'es']:
-            self.assertInHTML(
-                (
+            self.assert_html_parts(
+                response,
+                parts=(
                     f'<textarea'
                     f' id="id_{fieldname}__{code}"'
                     f' name="{fieldname}__{code}">'
                     f'{getattr(obj, fieldname)[code]}'
-                    f'</textarea>'
+                    f'</textarea>',
                 ),
-                response_content,
+            )
+            self.assert_html_parts(
+                response,
+                parts=(
+                    f'<textarea'
+                    f' id="id_{fieldname}__{code}"'
+                    f' name="{fieldname}__{code}">'
+                    f'{getattr(obj, fieldname)[code]}'
+                    f'</textarea>',
+                ),
             )
 
         # change all translations via form
