@@ -46,19 +46,23 @@ tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
 
 tox: check-poetry ## Run unittests via tox with all environments
-	poetry run tox
+	poetry run tox p
+	poetry run coverage combine --append
+	poetry run coverage html
+	poetry run coverage report
 
 test: check-poetry  ## Run unittests
 	RAISE_LOG_OUTPUT=1 ./manage.sh test --parallel --shuffle --buffer
 
 coverage_test: ## Run tests and generate coverage html report
 	poetry run coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
+	poetry run coverage combine --append
 	poetry run coverage html
 	poetry run coverage report
 
 update-test-snapshot-files:   ## Update all snapshot files (by remove and recreate all snapshot files)
 	find . -type f -name '*.snapshot.*' -delete
-	RAISE_SNAPSHOT_ERRORS=0 ./manage.sh test --parallel
+	RAISE_SNAPSHOT_ERRORS=0 $(MAKE) tox
 
 publish: install  ## Release new version to PyPi
 	poetry run publish
