@@ -1,4 +1,5 @@
 import json
+import warnings
 from functools import partial
 from typing import Optional, Union
 
@@ -22,8 +23,8 @@ from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate,
 class TranslationWidget(forms.Widget):
     template_name = 'bx_django_utils/translation_input.html'
 
-    def __init__(self, language_codes: tuple, attrs=None):
-        self.language_codes = language_codes
+    def __init__(self, languages: tuple, attrs=None):
+        self.languages = languages
         super().__init__(attrs=attrs)
 
     def format_value(self, value):
@@ -31,14 +32,16 @@ class TranslationWidget(forms.Widget):
         return json.loads(value)
 
     def value_from_datadict(self, data, files, name):
-        fieldnames = {f'{name}__{code}': code for code in self.language_codes}  # e.g. "fieldname__de-de" -> "de-de"
+        fieldnames = {  # e.g. "fieldname__de-de" -> "de-de"
+            f'{name}__{entry[0]}': entry[0] for entry in self.languages
+        }
         return {  # e.g. "de-de" -> "the translation string"
             fieldnames[fieldname]: data[fieldname] for fieldname in data if fieldname in fieldnames
         }
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context['widget']['language_codes'] = self.language_codes
+        context['widget']['languages'] = self.languages
         return context
 
 
@@ -53,12 +56,12 @@ class TranslationFormField(forms.JSONField):
 
     widget = None  # set by __init__
 
-    def __init__(self, *args, language_codes, widget_class=TranslationWidget, **kwargs):
+    def __init__(self, *args, languages: tuple, widget_class=TranslationWidget, **kwargs):
         self.widget = widget_class
         # self.widget can be a class or an instance.
         # abuse that to pass the language codes of the related TranslationField
         # to the widget.
-        self.widget = self.widget(language_codes=language_codes)
+        self.widget = self.widget(languages=languages)
         super().__init__(*args, **kwargs)
 
     def bound_data(self, data, initial):
@@ -114,10 +117,17 @@ class TranslationField(models.JSONField):
         'blank': _('At least one translation is required.'),
     }
 
-    def __init__(self, language_codes: tuple, *args, **kwargs):
+    def __init__(self, *args, language_codes: Optional[tuple] = None, languages: tuple = None, **kwargs):
         kwargs['null'] = False
         kwargs['default'] = FieldTranslation
-        self.language_codes = language_codes
+
+        if language_codes:
+            warnings.warn('language_codes argument is deprecated in favour of languages', DeprecationWarning)
+            assert not languages, 'Remove language_codes argument!'
+            self.languages = tuple((code, code) for code in language_codes)
+        else:
+            self.languages = languages
+
         self.widget_class = kwargs.pop('widget_class', TranslationWidget)
         super().__init__(*args, **kwargs)
 
@@ -127,7 +137,8 @@ class TranslationField(models.JSONField):
             # TranslationField hardcodes values for these kwargs in __init__,
             # so omit them from deconstruction
             kwargs.pop(override, None)
-        args = [self.language_codes, *args]
+
+        kwargs['languages'] = self.languages
         return name, path, args, kwargs
 
     def from_db_value(self, value, expression, connection):
@@ -145,7 +156,8 @@ class TranslationField(models.JSONField):
         value = super().clean(value, model_instance)
         value = remove_empty_translations(value)
         existing_codes = value.keys()
-        unknown_codes = existing_codes - self.language_codes
+        known_codes = {entry[0] for entry in self.languages}
+        unknown_codes = existing_codes - known_codes
         if unknown_codes:
             raise ValidationError(f'Unknown translation language(s): {", ".join(sorted(unknown_codes))}')
         return value
@@ -168,7 +180,7 @@ class TranslationField(models.JSONField):
     def formfield(self, **kwargs):
         kwargs['form_class'] = TranslationFormField
         kwargs['widget_class'] = self.widget_class
-        kwargs['language_codes'] = self.language_codes
+        kwargs['languages'] = self.languages
         return super().formfield(**kwargs)
 
 
@@ -291,7 +303,7 @@ class TranslationSlugField(TranslationField):
             populate_translations, (FieldTranslation, dict)
         ), f'Unexpected type: {type(populate_translations).__name__}'
 
-        for lang_code in self.language_codes:
+        for lang_code, lang_name in self.languages:
             source_text = slug_translations.get(lang_code) or populate_translations.get(lang_code)
             if source_text:
                 slug = get_unique_translation_slug(
@@ -353,7 +365,7 @@ class TranslationFieldAdmin(admin.ModelAdmin):
             if not isinstance(field, TranslationField):
                 continue
             translation_fields.append(field.name)
-            translation_codes[field.name] = field.language_codes
+            translation_codes[field.name] = field.languages
 
         # add a 'get_<fieldname>' method to the admin for each TranslationField found in the last step.
         # the method returns its most suitable translation.

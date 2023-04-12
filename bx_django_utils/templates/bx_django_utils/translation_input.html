@@ -1,9 +1,9 @@
 {% load accessors %}
 <table>
     <tbody>
-    {% for code in widget.language_codes %}
+    {% for code, lang_name in widget.languages %}
         <tr>
-            <td>{{ code }}</td>
+            <td>{{ lang_name }}</td>
             <td>
                 <input type="text" id="id_{{ widget.name }}__{{ code }}" name="{{ widget.name }}__{{ code }}" value="{{ widget.value|dict_get:code }}">
             </td>

@@ -62,14 +62,19 @@ class StoreSaveModel(models.Model):
 
 
 class TranslatedModel(models.Model):
-    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+    LANGUAGE_CODES = ('de-de', 'en-us', 'es')  # Old, deprecated
+    LANGUAGES = (
+        ('de-de', 'German'),
+        ('en-us', 'US-English'),
+        ('es', 'Spanish'),
+    )
 
     translated = TranslationField(
-        language_codes=LANGUAGE_CODES,
+        language_codes=LANGUAGE_CODES,  # Old, deprecated argument
         blank=False,
     )
     translated_multiline = TranslationField(
-        language_codes=LANGUAGE_CODES,
+        languages=LANGUAGES,
         blank=True,
         widget_class=MultilineTranslationWidget,
     )
@@ -87,32 +92,45 @@ class RawTranslatedModel(models.Model):
 
 
 class TranslatedSlugTestModel(models.Model):
-    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+    LANGUAGE_CODES = ('de-de', 'en-us', 'es')  # Old, deprecated
+    LANGUAGES = (
+        ('de-de', 'German'),
+        ('en-us', 'US-English'),
+        ('es', 'Spanish'),
+    )
 
-    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated = TranslationField(languages=LANGUAGES)
     translated_slug = TranslationSlugField(
-        language_codes=LANGUAGE_CODES,
+        language_codes=LANGUAGE_CODES,  # Old, deprecated argument
         populate_from='translated',
     )
 
 
 class NonUniqueTranslatedSlugTestModel(models.Model):
-    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+    LANGUAGES = (
+        ('de-de', 'German'),
+        ('en-us', 'US-English'),
+        ('es', 'Spanish'),
+    )
 
-    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated = TranslationField(languages=LANGUAGES)
     translated_slug = TranslationSlugField(
-        language_codes=LANGUAGE_CODES,
+        languages=LANGUAGES,
         populate_from='translated',
         unique=False,
     )
 
 
 class ConnectedUniqueSlugModel1(models.Model):
-    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+    LANGUAGES = (
+        ('de-de', 'German'),
+        ('en-us', 'US-English'),
+        ('es', 'Spanish'),
+    )
 
-    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated = TranslationField(languages=LANGUAGES)
     translated_slug = TranslationSlugField(
-        language_codes=LANGUAGE_CODES,
+        languages=LANGUAGES,
         populate_from='translated',
         additional_uniqueness=(
             dict(
@@ -125,11 +143,15 @@ class ConnectedUniqueSlugModel1(models.Model):
 
 
 class ConnectedUniqueSlugModel2(models.Model):
-    LANGUAGE_CODES = ('de-de', 'en-us', 'es')
+    LANGUAGES = (
+        ('de-de', 'German'),
+        ('en-us', 'US-English'),
+        ('es', 'Spanish'),
+    )
 
-    translated = TranslationField(language_codes=LANGUAGE_CODES)
+    translated = TranslationField(languages=LANGUAGES)
     translated_slug = TranslationSlugField(
-        language_codes=LANGUAGE_CODES,
+        languages=LANGUAGES,
         populate_from='translated',
         additional_uniqueness=(
             dict(
