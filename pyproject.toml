@@ -25,7 +25,7 @@ readme='README.md'
 packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests" }]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/john-doh/bx_django_utils/issues"
+"Bug Tracker" = "https://github.com/boxine/bx_django_utils/issues"
 
 [tool.poetry.dependencies]
 python = '>=3.9,<4.0.0'
@@ -38,9 +38,6 @@ boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = '*'
 tox = '>=4.4.4'  # https://github.com/tox-dev/tox
 coverage = '*'  # https://github.com/nedbat/coveragepy
-darker = '*'  # https://github.com/akaihola/darker
-isort = '*'  # https://github.com/pycqa/isort
-flynt = "*"  # https://github.com/ikamensh/flynt
 flake8 = '*'  # https://github.com/pycqa/flake8
 manageprojects = '*'  # https://github.com/jedie/manageprojects
 twine = '*'  # https://github.com/pypa/twine/
@@ -51,7 +48,14 @@ playwright = '*'  # https://playwright.dev/python/
 pdoc = '*'  # https://pdoc.dev/
 model-bakery = '*'  # https://github.com/model-bakers/model_bakery
 tblib = '*'  # https://github.com/ionelmc/python-tblib
+packaging = '*'  # https://pypi.org/project/packaging/
+EditorConfig = '*'  # https://pypi.org/project/EditorConfig/
 
+# https://github.com/akaihola/darker
+# https://github.com/ikamensh/flynt
+# https://github.com/pycqa/isort
+# https://github.com/pygments/pygments
+darker = { version = "*", extras = ["flynt", "isort", "color"] }
 [tool.poetry.scripts]
 publish = "bx_django_utils_tests.test_project.publish:publish"
 
@@ -131,11 +135,12 @@ deps =
     tblib
     coverage[toml]
     manageprojects
+    packaging
+    editorconfig
+commands_pre =
+    {envpython} -m playwright install chromium firefox
 commands =
     {envpython} -m coverage run --context='{envname}'
-    {envpython} -m coverage combine --append
-    {envpython} -m coverage xml
-    {envpython} -m coverage report
 """
 
 
@@ -168,4 +173,5 @@ _template = "https://github.com/jedie/cookiecutter_templates/"
 applied_migrations = [
     "d970456", # 2023-02-20T16:19:35+01:00
     "89aadc0", # 2023-03-17T09:44:50+01:00
+    "53a7e85", # 2023-04-10T19:08:56+02:00
 ]

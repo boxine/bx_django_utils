@@ -1,6 +1,7 @@
 import io
 import logging
 
+import django
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.core.management import call_command
@@ -148,7 +149,12 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
                 app2_demo3,
             ),
         )
-        assert_html_response_snapshot(response, query_selector='#content-main', validate=False)
+        assert_html_response_snapshot(
+            response,
+            query_selector='#content-main',
+            validate=False,
+            name_suffix=f'django{django.__version__}',
+        )
 
         ############################################################################
         # Staff user that is not "john" can not see/access demo view 3:

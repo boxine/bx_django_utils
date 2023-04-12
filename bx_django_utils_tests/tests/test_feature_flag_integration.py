@@ -1,5 +1,6 @@
 from unittest import mock
 
+import django
 from django.core.cache import cache
 from django.template.defaulttags import CsrfTokenNode
 from django.test import TestCase
@@ -47,7 +48,12 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
                 '<input type="submit" value="Set \'Bar\' to ENABLED">',
             ),
         )
-        assert_html_response_snapshot(response, query_selector='#content', validate=False)
+        assert_html_response_snapshot(
+            response,
+            query_selector='#content',
+            validate=False,
+            name_suffix=f'django{django.__version__}',
+        )
 
         response = self.client.get('/admin/feature_flags/feature-flags-values-demo/')
         self.assertRedirects(response, expected_url='/admin/', fetch_redirect_response=False)

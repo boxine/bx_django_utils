@@ -4,9 +4,7 @@ import tempfile
 from unittest import mock
 
 import django
-from bx_py_utils.compat import removesuffix
 from bx_py_utils.environ import OverrideEnviron
-from bx_py_utils.test_utils.snapshot import _get_caller_names
 from django.contrib import messages
 from django.contrib.messages.storage.session import SessionStorage
 from django.template.defaulttags import CsrfTokenNode
@@ -85,20 +83,13 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
             self.snapshot_messages(response, root_dir=tmp_dir, snapshot_name=snapshot_name)
 
     def test_assert_html_response_snapshot(self):
-        # Add the Django version to snapshot name, because they have different outputs ;)
-        root_dir, snapshot_name = _get_caller_names()
-        snapshot_name = removesuffix(snapshot_name, '.snapshot')
-        version = django.__version__[:3]
-        snapshot_name += f'-django{version}'
-
         with mock.patch.object(CsrfTokenNode, 'render', return_value='MockedCsrfTokenNode'):
             assert_html_response_snapshot(
                 response=self.client.get(path='/admin/login/'),
                 status_code=200,
-                root_dir=root_dir,
-                snapshot_name=snapshot_name,
                 validate=False,
-                query_selector=None
+                query_selector=None,
+                name_suffix=f'django{django.__version__}',
             )
 
         response = self.client.get(path='/admin/')
@@ -108,8 +99,7 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
 
         # A redirect has no content, so no snapshot file will be created,
         # but the status code is checked, too:
-        assert_html_response_snapshot(
-            response, status_code=302, validate=False, query_selector=None)
+        assert_html_response_snapshot(response, status_code=302, validate=False, query_selector=None)
 
         msg = 'Status code is 302 but excepted 200'
         with self.assertRaisesMessage(AssertionError, msg):
