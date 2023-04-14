@@ -20,7 +20,9 @@ from bx_django_utils.translation import (
     TranslationSlugField,
     TranslationWidget,
     create_or_update_translation_callback,
+    get_user_priorities,
     slug_generator,
+    user_language_priorities,
     validate_unique_translations,
 )
 from bx_django_utils_tests.test_app.models import (
@@ -652,3 +654,57 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
         test(ConnectedUniqueSlugModel2, 'Test B', 'test-b-2')  # clash with model 1
         test(ConnectedUniqueSlugModel2, 'Test C', 'test-c')
         test(ConnectedUniqueSlugModel1, 'Test C', 'test-c-2')  # clash with model 2
+
+    def test_get_user_priorities(self):
+        existing_codes = ('de-de', 'de-at', 'en-int', 'en')
+
+        matrix = {
+            # If language code/part supported -> Use it first:
+            'en': ('en', 'en-int'),
+            'en-gb': ('en', 'en-int'),
+            'en-int': ('en-int', 'en'),
+            'de-at': ('de-at', 'de-de'),
+            'de': ('de-de', 'de-at'),
+            # Complete unsupported languages -> no user priorities
+            'fr-fr': (),
+            'fr': (),
+            'it': (),
+            'es': (),
+            'pt-br': (),
+        }
+        for django_code, expected_codes in matrix.items():
+            with self.subTest(django_code=django_code):
+                with translation.override(django_code):
+                    self.assertEqual(
+                        get_user_priorities(existing_codes),
+                        expected_codes,
+                        f'Requested {django_code=}',
+                    )
+
+    def test_user_language_priorities(self):
+        fallback_codes = ('en-int', 'en')
+        existing_codes = ('de-de', 'de-at', 'en-int', 'en')
+
+        matrix = {
+            # If language code/part supported -> Use it first:
+            'en': ('en', 'en-int', 'de-de', 'de-at'),
+            'en-gb': ('en', 'en-int', 'de-de', 'de-at'),
+            'en-int': ('en-int', 'en', 'de-de', 'de-at'),
+            #
+            'de-at': ('de-at', 'de-de', 'en-int', 'en'),
+            'de': ('de-de', 'de-at', 'en-int', 'en'),
+            # Complete unsupported languages -> Use fallback + existing codes:
+            'fr-fr': ('en-int', 'en', 'de-de', 'de-at'),
+            'fr': ('en-int', 'en', 'de-de', 'de-at'),
+            'it': ('en-int', 'en', 'de-de', 'de-at'),
+            'es': ('en-int', 'en', 'de-de', 'de-at'),
+            'pt-br': ('en-int', 'en', 'de-de', 'de-at'),
+        }
+        for django_code, content_codes in matrix.items():
+            with self.subTest(django_code=django_code):
+                with translation.override(django_code):
+                    self.assertEqual(
+                        user_language_priorities(fallback_codes, existing_codes),
+                        content_codes,
+                        f'Requested {django_code=}',
+                    )
