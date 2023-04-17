@@ -1,6 +1,7 @@
 import json
 import warnings
 from functools import partial
+from itertools import chain
 from typing import Optional, Union
 
 from django import forms
@@ -11,9 +12,9 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.forms.fields import InvalidJSONInput
+from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
-from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from bx_django_utils.admin_utils.admin_urls import admin_change_url
@@ -342,7 +343,7 @@ class TranslationFieldAdmin(admin.ModelAdmin):
         than those the Django translation system uses.
         """
         return [
-            get_language(),  # equal to current locale of user
+            translation.get_language(),  # equal to current locale of user
             settings.LANGUAGE_CODE,
             *fallback_codes,
         ]
@@ -479,3 +480,65 @@ def validate_unique_translations(*, ModelClass, instance, field_name, translated
             }
         )
         raise ValidationError({field_name: msg})
+
+
+def make_unique(*args) -> tuple:
+    """
+    Flat args and remove duplicate entries while keeping the order intact.
+
+    >>> make_unique(['de', 'de-de'], 'en', ('en', 'en-gb'), 'de', ['en-gb', 'en-gb', 'en-int'])
+    ('de', 'de-de', 'en', 'en-gb', 'en-int')
+    """
+    args = [[args] if isinstance(args, str) else args for args in args]
+    entries = tuple(chain.from_iterable(args))
+    return tuple(sorted(set(entries), key=entries.index))
+
+
+def expand_languages_codes(languages_codes) -> list:
+    """
+    Build a complete list if language code with and without dialects.
+
+    >>> expand_languages_codes(languages_codes=['de'])
+    ['de', 'de-de']
+    >>> expand_languages_codes(languages_codes=['en-us', 'en-gb'])
+    ['en-us', 'en-gb', 'en']
+    >>> expand_languages_codes(languages_codes=['de', 'en-us', 'en-gb'])
+    ['de', 'en-us', 'en-gb', 'de-de', 'en']
+    """
+    assert isinstance(languages_codes, (list, tuple)), f'No list/tuple: {languages_codes=}'
+    expanded = list(languages_codes)
+    for code in languages_codes:
+        if '-' in code:
+            code = code.split('-')[0]
+        else:
+            code = f'{code}-{code}'
+        if code not in expanded:
+            expanded.append(code)
+    return expanded
+
+
+def get_user_priorities(existing_codes) -> tuple:
+    """
+    Collect usable language codes the current user
+    """
+    user_codes = []
+    if dj_language := translation.get_language():
+        for user_code in expand_languages_codes(languages_codes=[dj_language]):
+            if user_code in existing_codes:
+                user_codes.append(user_code)
+
+            for code in existing_codes:
+                if code.startswith(user_code):
+                    user_codes.append(code)
+    return make_unique(user_codes)
+
+
+def user_language_priorities(fallback_codes, existing_codes) -> tuple:
+    """
+    Returns the order in which to attempt resolving translations of a FieldTranslation model field.
+    """
+    return make_unique(
+        *get_user_priorities(existing_codes),  # Lookup user preferred language with and without dialect first
+        *fallback_codes,  # use fallback
+        *existing_codes,  # at the end: try any existing language
+    )
