@@ -186,11 +186,18 @@ class TranslationField(models.JSONField):
 
 
 def slug_generator(source_text):
-    slug = slugify(source_text)
-    yield slug
     max_loops = getattr(settings, 'MAX_UNIQUE_QUERY_ATTEMPTS', 1000)
-    for number in range(2, max_loops + 1):
-        yield f'{slug}-{number}'
+
+    slug = slugify(source_text)
+    if not slug:
+        # The source text doesn't contain any normal character
+        # Fallback and yield numbers
+        for number in range(1, max_loops + 1):
+            yield str(number)
+    else:
+        yield slug
+        for number in range(2, max_loops + 1):
+            yield f'{slug}-{number}'
 
 
 def additional_uniqueness_exists(*, additional_uniqueness: tuple[dict], lang_code, slug_candidate):
@@ -314,7 +321,7 @@ class TranslationSlugField(TranslationField):
                     lang_code=lang_code,
                     additional_uniqueness=self.additional_uniqueness,
                 )
-                assert slug
+                assert slug, f'Can not find a slug from {source_text=}'
                 slug_translations[lang_code] = slug
 
         return slug_translations

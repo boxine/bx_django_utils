@@ -1,3 +1,4 @@
+import itertools
 import json
 import re
 from itertools import product
@@ -411,13 +412,16 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
 
 class SlugUtilsTestCase(SimpleTestCase):
     def test_slug_generator(self):
-        slugs = []
-        for number, slug in enumerate(slug_generator(source_text='Foo Bar !')):
-            slugs.append(slug)
-            if number > 2:
-                break
+        self.assertEqual(
+            list(itertools.islice(slug_generator(source_text='Foo Bar !'), 4)),
+            ['foo-bar', 'foo-bar-2', 'foo-bar-3', 'foo-bar-4'],
+        )
 
-        self.assertEqual(slugs, ['foo-bar', 'foo-bar-2', 'foo-bar-3', 'foo-bar-4'])
+        # What happen if the source test doesn't contain any useable character?
+        self.assertEqual(
+            list(itertools.islice(slug_generator(source_text='<*)))><'), 4)),
+            ['1', '2', '3', '4'],
+        )
 
 
 class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
@@ -427,7 +431,7 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(value, {})
 
     @override_settings(MAX_UNIQUE_QUERY_ATTEMPTS=3)
-    def test_get_unique_translation_slug(self):
+    def test_create_unique_translation_slugs(self):
         with self.assertRaisesMessage(RuntimeError, 'Can not find a unique slug'):
             for _ in range(4):
                 with transaction.atomic():
@@ -442,6 +446,23 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
                 FieldTranslation({'de-de': 'hallo'}),
                 FieldTranslation({'de-de': 'hallo-2'}),
                 FieldTranslation({'de-de': 'hallo-3'}),
+            ],
+        )
+
+    @override_settings(MAX_UNIQUE_QUERY_ATTEMPTS=3)
+    def test_create_unique_translation_slugs_from_non_usable_characters(self):
+        with self.assertRaisesMessage(RuntimeError, 'Can not find a unique slug'):
+            for _ in range(4):
+                with transaction.atomic():
+                    TranslatedSlugTestModel.objects.create(translated={'de-de': '<*)))><'})
+
+        slugs = list(TranslatedSlugTestModel.objects.values_list('translated_slug', flat=True))
+        self.assertEqual(
+            slugs,
+            [
+                FieldTranslation({'de-de': '1'}),
+                FieldTranslation({'de-de': '2'}),
+                FieldTranslation({'de-de': '3'}),
             ],
         )
 
@@ -708,3 +729,18 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
                         content_codes,
                         f'Requested {django_code=}',
                     )
+
+    def test_fill_missing_slugs(self):
+        instance = TranslatedSlugTestModel.objects.create(translated={'de-de': 'One !'})
+        self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': 'one'}))
+        instance.full_clean()
+
+        instance.translated = {'de-de': 'New One', 'en-us': 'Two !'}
+        instance.save()
+        instance.refresh_from_db()
+        self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': 'one', 'en-us': 'two'}))
+
+        instance.translated = {'de-de': 'New One', 'en-us': 'New Two', 'es': 'Three !'}
+        instance.save()
+        instance.refresh_from_db()
+        self.assertEqual(instance.translated_slug, FieldTranslation({'de-de': 'one', 'en-us': 'two', 'es': 'three'}))

@@ -282,17 +282,17 @@ Use Playwright in Unittest + Fast Django user login
 
 * [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L81-L99) - Dict-like container that maps language codes to a translated string.
 * [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L102-L185) - A field designed to hold translations for a given set of language codes.
-* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L327-L388) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
+* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L334-L395) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
 * [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L53-L78) - Default form field for TranslationField.
-* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L235-L324) - A unique translation slug field, useful in combination with TranslationField()
-* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L391-L424) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
-* [`expand_languages_codes()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L497-L517) - Build a complete list if language code with and without dialects.
-* [`get_user_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L520-L533) - Collect usable language codes the current user
-* [`make_unique()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L485-L494) - Flat args and remove duplicate entries while keeping the order intact.
-* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L438-L449) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
-* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L427-L435) - Remove all empty/None from a FieldTranslation, e.g.:
-* [`user_language_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L536-L544) - Returns the order in which to attempt resolving translations of a FieldTranslation model field.
-* [`validate_unique_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L452-L482) - Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
+* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L242-L331) - A unique translation slug field, useful in combination with TranslationField()
+* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L398-L431) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
+* [`expand_languages_codes()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L504-L524) - Build a complete list if language code with and without dialects.
+* [`get_user_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L527-L540) - Collect usable language codes the current user
+* [`make_unique()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L492-L501) - Flat args and remove duplicate entries while keeping the order intact.
+* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L445-L456) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
+* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L434-L442) - Remove all empty/None from a FieldTranslation, e.g.:
+* [`user_language_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L543-L551) - Returns the order in which to attempt resolving translations of a FieldTranslation model field.
+* [`validate_unique_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L459-L489) - Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
 
 ### bx_django_utils.user_timezone
 
