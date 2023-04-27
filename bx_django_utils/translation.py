@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import json
 import warnings
 from functools import partial
 from itertools import chain
-from typing import Optional, Union
 
 from django import forms
 from django.apps import apps
@@ -57,7 +58,18 @@ class TranslationFormField(forms.JSONField):
 
     widget = None  # set by __init__
 
-    def __init__(self, *args, languages: tuple, widget_class=TranslationWidget, **kwargs):
+    def __init__(
+        self,
+        *args,
+        languages: tuple,
+        min_value_length: int | None = None,
+        max_value_length: int | None = None,
+        widget_class=TranslationWidget,
+        **kwargs,
+    ):
+        self.min_value_length = min_value_length
+        self.max_value_length = max_value_length
+
         self.widget = widget_class
         # self.widget can be a class or an instance.
         # abuse that to pass the language codes of the related TranslationField
@@ -76,6 +88,14 @@ class TranslationFormField(forms.JSONField):
             except json.JSONDecodeError:
                 return InvalidJSONInput(data)
         return data
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if self.max_value_length is not None and not widget.is_hidden:
+            attrs["maxlength"] = str(self.max_value_length)
+        if self.min_value_length is not None and not widget.is_hidden:
+            attrs["minlength"] = str(self.min_value_length)
+        return attrs
 
 
 class FieldTranslation(dict):
@@ -111,6 +131,8 @@ class TranslationField(models.JSONField):
 
     Accessing this field's value returns a FieldTranslation instance instead of
     a regular dict (much like FileField returns a FieldFile instance).
+
+    The optional `min_value_length` and `max_value_length` options will apply to the individual translated text.
     """
 
     default_error_messages = {
@@ -118,7 +140,15 @@ class TranslationField(models.JSONField):
         'blank': _('At least one translation is required.'),
     }
 
-    def __init__(self, *args, language_codes: Optional[tuple] = None, languages: tuple = None, **kwargs):
+    def __init__(
+        self,
+        *args,
+        language_codes: tuple | None = None,
+        languages: tuple = None,
+        min_value_length: int | None = None,
+        max_value_length: int | None = None,
+        **kwargs,
+    ):
         kwargs['null'] = False
         kwargs['default'] = FieldTranslation
 
@@ -129,6 +159,8 @@ class TranslationField(models.JSONField):
         else:
             self.languages = languages
 
+        self.min_value_length = min_value_length
+        self.max_value_length = max_value_length
         self.widget_class = kwargs.pop('widget_class', TranslationWidget)
         super().__init__(*args, **kwargs)
 
@@ -140,6 +172,8 @@ class TranslationField(models.JSONField):
             kwargs.pop(override, None)
 
         kwargs['languages'] = self.languages
+        kwargs['min_value_length'] = self.min_value_length
+        kwargs['max_value_length'] = self.max_value_length
         return name, path, args, kwargs
 
     def from_db_value(self, value, expression, connection):
@@ -161,6 +195,29 @@ class TranslationField(models.JSONField):
         unknown_codes = existing_codes - known_codes
         if unknown_codes:
             raise ValidationError(f'Unknown translation language(s): {", ".join(sorted(unknown_codes))}')
+
+        if self.min_value_length is not None or self.max_value_length is not None:
+            errors = []
+            for language_code, text in value.items():
+                length = len(text)
+                if self.max_value_length is not None and length > self.max_value_length:
+                    errors.append(
+                        ValidationError(
+                            f'Ensure "{language_code}" translation has at most {self.max_value_length} character'
+                            f' (it has {length}).'
+                        )
+                    )
+                if self.min_value_length is not None and length < self.min_value_length:
+                    errors.append(
+                        ValidationError(
+                            f'Ensure "{language_code}" translation has at least {self.min_value_length} character'
+                            f' (it has {length}).'
+                        )
+                    )
+
+            if errors:
+                raise ValidationError(errors)
+
         return value
 
     def to_python(self, value):
@@ -182,6 +239,10 @@ class TranslationField(models.JSONField):
         kwargs['form_class'] = TranslationFormField
         kwargs['widget_class'] = self.widget_class
         kwargs['languages'] = self.languages
+
+        kwargs['min_value_length'] = self.min_value_length
+        kwargs['max_value_length'] = self.max_value_length
+
         return super().formfield(**kwargs)
 
 
@@ -215,7 +276,7 @@ def get_unique_translation_slug(
     attr_name,
     source_text,
     lang_code,
-    additional_uniqueness: Optional[tuple[dict]] = None,
+    additional_uniqueness: tuple[dict] | None = None,
 ):
     ModelClass = model_instance.__class__
     base_qs = ModelClass.objects.all()
@@ -284,7 +345,7 @@ class TranslationSlugField(TranslationField):
         *args,
         populate_from: str = None,
         unique=True,
-        additional_uniqueness: Optional[tuple[dict]] = None,
+        additional_uniqueness: tuple[dict] | None = None,
         **kwargs,
     ):
         self.populate_from = populate_from
@@ -431,7 +492,7 @@ def create_or_update_translation_callback(*, instance, field_name, old_value, ne
     result.update_info.append(FieldUpdate(field_name=field_name, old_value=old_value, new_value=merged_value))
 
 
-def remove_empty_translations(translations: Union[dict, FieldTranslation]) -> FieldTranslation:
+def remove_empty_translations(translations: dict | FieldTranslation) -> FieldTranslation:
     """
     Remove all empty/None from a FieldTranslation, e.g.:
 
@@ -443,7 +504,7 @@ def remove_empty_translations(translations: Union[dict, FieldTranslation]) -> Fi
 
 
 def merge_translations(
-    translations1: Union[dict, FieldTranslation], translations2: Union[dict, FieldTranslation]
+    translations1: dict | FieldTranslation, translations2: dict | FieldTranslation
 ) -> FieldTranslation:
     """
     Merge two FieldTranslation and ignore all empty/None values, e.g.:

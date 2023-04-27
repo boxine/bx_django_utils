@@ -5,7 +5,7 @@
         <tr>
             <td>{{ lang_name }}</td>
             <td>
-                <input type="text" id="id_{{ widget.name }}__{{ code }}" name="{{ widget.name }}__{{ code }}" value="{{ widget.value|dict_get:code }}">
+                <input type="text" id="id_{{ widget.name }}__{{ code }}" name="{{ widget.name }}__{{ code }}" value="{{ widget.value|dict_get:code }}"{% if widget.attrs.maxlength %} maxlength="{{ widget.attrs.maxlength }}"{% endif %}{% if widget.attrs.minlength %} minlength="{{ widget.attrs.minlength }}"{% endif %}>
             </td>
         </tr>
     {% endfor %}
