@@ -33,6 +33,7 @@ from bx_django_utils_tests.test_app.models import (
     RawTranslatedModel,
     TranslatedModel,
     TranslatedSlugTestModel,
+    ValidateLengthTranslations,
 )
 
 
@@ -94,6 +95,28 @@ class TranslationFieldTestCase(TestCase):
 
         obj.translated = {'de-de': 'a value'}
         obj.full_clean()
+
+    def test_value_length(self):
+        instance = ValidateLengthTranslations(translated={'de': '1', 'en': '123456789012345678901'})
+        with self.assertRaises(ValidationError) as err:
+            instance.full_clean()
+        self.assertEqual(
+            err.exception.message_dict,
+            {
+                'translated': [
+                    'Ensure "de" translation has at least 3 character (it has 1).',
+                    'Ensure "en" translation has at most 20 character (it has 21).',
+                ]
+            },
+        )
+
+        instance = ValidateLengthTranslations.objects.create(translated={'de': '<*)))><'})
+        with self.assertRaises(ValidationError) as err:
+            instance.full_clean()
+        self.assertEqual(
+            err.exception.message_dict,
+            {'translated_slug': ['Ensure "de" translation has at least 3 character (it has 1).']},
+        )
 
     def test_empty_translations_from_db(self):
         # Store empty values using the RawTranslatedModel:
@@ -252,6 +275,17 @@ class TranslationFieldTestCase(TestCase):
                 {'translated': FieldTranslation({'de-de': 'Hallo 3', 'en-us': 'Hello 3'})},
             ],
         )
+
+    def test_widget(self):
+        form_field = TranslationFormField(
+            min_value_length=3, max_value_length=20, languages=(('de', 'German'), ('en', 'English'))
+        )
+        html = form_field.widget.render(name='foo', value='{}')
+        self.assertInHTML(
+            '<input type="text" id="id_foo__de" name="foo__de" value="" maxlength="20" minlength="3">',
+            html,
+        )
+        assert_html_snapshot(got=html, validate=False)
 
 
 class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
@@ -422,6 +456,15 @@ class SlugUtilsTestCase(SimpleTestCase):
             list(itertools.islice(slug_generator(source_text='<*)))><'), 4)),
             ['1', '2', '3', '4'],
         )
+
+        # What happen if the source test doesn't contain any useable character?
+        slugs = []
+        for number, slug in enumerate(slug_generator(source_text='<*)))><')):
+            slugs.append(slug)
+            if number > 2:
+                break
+
+        self.assertEqual(slugs, ['1', '2', '3', '4'])
 
 
 class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):

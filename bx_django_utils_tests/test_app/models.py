@@ -161,3 +161,15 @@ class ConnectedUniqueSlugModel2(models.Model):
             ),
         ),
     )
+
+
+class ValidateLengthTranslations(models.Model):
+    LANGUAGES = (
+        ('de', 'German'),
+        ('en', 'English'),
+    )
+
+    translated = TranslationField(min_value_length=3, max_value_length=20, languages=LANGUAGES)
+    translated_slug = TranslationSlugField(
+        min_value_length=3, max_value_length=20, languages=LANGUAGES, populate_from='translated'
+    )

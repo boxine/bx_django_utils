@@ -9,6 +9,7 @@ from bx_django_utils_tests.test_app.models import (
     CreateOrUpdateTestModel,
     TranslatedModel,
     TranslatedSlugTestModel,
+    ValidateLengthTranslations,
 )
 
 
@@ -69,4 +70,9 @@ class TranslatedSlugTestModelForm(forms.ModelForm):
 @admin.register(TranslatedSlugTestModel)
 class TranslatedSlugTestModelAdmin(TranslationFieldAdmin):
     form = TranslatedSlugTestModelForm
+    list_display = ['translated', 'translated_slug']
+
+
+@admin.register(ValidateLengthTranslations)
+class ValidateLengthTranslationsModelAdmin(TranslationFieldAdmin):
     list_display = ['translated', 'translated_slug']
