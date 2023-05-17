@@ -2,8 +2,16 @@ from pathlib import Path
 
 from bx_py_utils.test_utils.assertion import assert_equal
 from bx_py_utils.test_utils.snapshot import assert_html_snapshot, assert_snapshot
+from django import VERSION as DJANGO_VERSION
 from django.contrib.messages import get_messages
 from django.http import HttpResponse
+
+
+def get_django_name_suffix():
+    """
+    Returns a short Django version string, useable for snapshot "name_suffix" e.g.: "django42"
+    """
+    return f'django{DJANGO_VERSION[0]}{DJANGO_VERSION[1]}'
 
 
 def assert_html_response_snapshot(

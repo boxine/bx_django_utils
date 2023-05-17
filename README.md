@@ -53,8 +53,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.registry
 
-* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L11-L97) - Hold all information about all admin extra views to expand urls and admin app list.
-* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L103-L116) - Decorator to add a normal view as pseudo App/Model to the admin.
+* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L12-L101) - Hold all information about all admin extra views to expand urls and admin app list.
+* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L107-L120) - Decorator to add a normal view as pseudo App/Model to the admin.
 
 #### bx_django_utils.admin_extra_views.site
 
@@ -254,8 +254,9 @@ Utilities to manage text fixtures in JSON files.
 
 #### bx_django_utils.test_utils.html_assertion
 
-* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L38-L140) - Unittest mixin class with useful assertments around Django test client tests
-* [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L9-L35) - Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
+* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L46-L148) - Unittest mixin class with useful assertments around Django test client tests
+* [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L17-L43) - Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
+* [`get_django_name_suffix()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L10-L14) - Returns a short Django version string, useable for snapshot "name_suffix" e.g.: "django42"
 
 #### bx_django_utils.test_utils.model_clean_assert
 

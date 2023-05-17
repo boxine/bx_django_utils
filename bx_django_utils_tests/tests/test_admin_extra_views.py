@@ -1,7 +1,7 @@
 import io
 import logging
 
-import django
+from bx_py_utils.test_utils.log_utils import NoLogs
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.core.management import call_command
@@ -18,7 +18,11 @@ from bx_django_utils.admin_extra_views.registry import extra_view_registry, regi
 from bx_django_utils.admin_extra_views.site import ExtraViewAdminSite
 from bx_django_utils.admin_extra_views.utils import reverse_admin_extra_view
 from bx_django_utils.admin_extra_views.views import Redirect2AdminExtraView
-from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
+from bx_django_utils.test_utils.html_assertion import (
+    HtmlAssertionMixin,
+    assert_html_response_snapshot,
+    get_django_name_suffix,
+)
 from bx_django_utils.test_utils.users import make_max_test_user, make_minimal_test_user
 from bx_django_utils_tests.test_app.admin_views import (
     DemoView1,
@@ -153,7 +157,17 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response,
             query_selector='#content-main',
             validate=False,
-            name_suffix=f'django{django.__version__}',
+            name_suffix=get_django_name_suffix(),
+        )
+
+        # Pseudo apps should not have a "app index" view link,
+        # because there is no url/view that will handle this!
+        self.assert_parts_not_in_html(
+            response,
+            parts=(
+                '"/admin/pseudo-app-1/"',
+                '"/admin/pseudo-app-2/"',
+            ),
         )
 
         ############################################################################
@@ -198,6 +212,21 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response,
             parts=("Just the demo view at '/admin/pseudo-app-2/demo-view-3/'",),
         )
+
+    def test_admin_app_page(self):
+        # Test for: https://github.com/boxine/bx_django_utils/issues/125
+        # TypeError: ExtraViewAdminSite.get_app_list() takes 2 positional arguments but 3 were given
+        self.client.force_login(self.superuser)
+        response = self.client.get('/admin/auth/')
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertTemplateUsed(response, 'admin/app_index.html')
+        self.assert_html_parts(response, parts=('<h1>Authentication and Authorization administration</h1>',))
+        self.assert_parts_not_in_html(response, parts=('pseudo', 'Pseudo App'))
+
+        # Pseudo apps has no "app index" view:
+        with NoLogs(logger_name='django.request'):
+            response = self.client.get('/admin/pseudo-app-1/')
+        self.assertEqual(response.status_code, 404, response.content)
 
 
 class AdminExtraViewSimpleTestCase(SimpleTestCase):
