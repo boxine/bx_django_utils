@@ -3,14 +3,17 @@ import pathlib
 import tempfile
 from unittest import mock
 
-import django
 from bx_py_utils.environ import OverrideEnviron
 from django.contrib import messages
 from django.contrib.messages.storage.session import SessionStorage
 from django.template.defaulttags import CsrfTokenNode
 from django.test import RequestFactory, SimpleTestCase
 
-from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
+from bx_django_utils.test_utils.html_assertion import (
+    HtmlAssertionMixin,
+    assert_html_response_snapshot,
+    get_django_name_suffix,
+)
 
 
 class FakeResponse:
@@ -89,7 +92,7 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
                 status_code=200,
                 validate=False,
                 query_selector=None,
-                name_suffix=f'django{django.__version__}',
+                name_suffix=get_django_name_suffix(),
             )
 
         response = self.client.get(path='/admin/')

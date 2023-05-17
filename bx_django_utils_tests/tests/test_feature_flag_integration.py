@@ -1,6 +1,5 @@
 from unittest import mock
 
-import django
 from django.core.cache import cache
 from django.template.defaulttags import CsrfTokenNode
 from django.test import TestCase
@@ -11,7 +10,11 @@ from bx_django_utils.feature_flags.test_utils import (
     get_feature_flag_db_info,
     get_feature_flag_states,
 )
-from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin, assert_html_response_snapshot
+from bx_django_utils.test_utils.html_assertion import (
+    HtmlAssertionMixin,
+    assert_html_response_snapshot,
+    get_django_name_suffix,
+)
 from bx_django_utils.test_utils.users import make_test_user
 from bx_django_utils_tests.test_app.feature_flags import bar_feature_flag, foo_feature_flag
 
@@ -52,7 +55,7 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
             response,
             query_selector='#content',
             validate=False,
-            name_suffix=f'django{django.__version__}',
+            name_suffix=get_django_name_suffix(),
         )
 
         response = self.client.get('/admin/feature_flags/feature-flags-values-demo/')

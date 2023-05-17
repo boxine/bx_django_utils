@@ -1,4 +1,5 @@
-from typing import Iterator, Type, Union
+from collections.abc import Iterator
+from typing import Union
 
 from django.http import HttpRequest
 from django.urls import path, reverse
@@ -16,9 +17,7 @@ class AdminExtraViewRegistry:
     def __init__(self):
         self.pseudo_apps = set()
 
-    def add_view(
-        self, pseudo_app: PseudoApp, view_class: Type[Union[AdminExtraViewMixin, View]]
-    ) -> None:
+    def add_view(self, pseudo_app: PseudoApp, view_class: type[Union[AdminExtraViewMixin, View]]) -> None:
         """
         Collect all admin extra views. Called by our @register_admin_view() decorator.
         """
@@ -53,7 +52,7 @@ class AdminExtraViewRegistry:
 
         return urls
 
-    def get_app_list(self, request: HttpRequest) -> list:
+    def get_app_list(self, request: HttpRequest, app_label=None) -> list:
         """
         :return: The extra views app list, filtered by all conditions
 
@@ -61,6 +60,11 @@ class AdminExtraViewRegistry:
         """
         app_list = []
         for pseudo_app in sorted(self.pseudo_apps, key=lambda x: x.meta.name):
+            if app_label and pseudo_app.meta.app_label != app_label:
+                # User clicked on a Admin app header link. -> List only this one app index.
+                # e.g.: Click on "Authentication and Authorization" -> /admin/auth/
+                continue
+
             if not all(cond(request) for cond in pseudo_app.meta.conditions):
                 # Don't add the view if the user can't use them
                 # Important: This will not deny the access!
@@ -89,7 +93,7 @@ class AdminExtraViewRegistry:
 
         return app_list
 
-    def __iter__(self) -> Iterator[Type[Union[AdminExtraViewMixin, View]]]:
+    def __iter__(self) -> Iterator[type[Union[AdminExtraViewMixin, View]]]:
         """
         Iterate sorted over all registered admin extra view classes.
         """
