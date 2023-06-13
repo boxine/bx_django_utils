@@ -1,7 +1,7 @@
 #!/bin/sh
 
 (
-    set -x
+    set -ex
     poetry run python --version
     poetry run django-admin --version
 )
