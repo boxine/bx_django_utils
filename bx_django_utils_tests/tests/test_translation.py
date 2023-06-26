@@ -62,11 +62,17 @@ class TranslationFieldTestCase(TestCase):
         self.assertEqual(repr(translated), "FieldTranslation({'de-de': 'Hallo'})")
         self.assertEqual(translated.get_first(['foo', 'bar', 'en-gb', 'de-de']), 'Hallo')
 
-        obj1 = TranslatedModel.objects.create(translated={'de-de': 'Hallo 1', 'en-us': 'Hello 1'})
+        obj1 = TranslatedModel.objects.create(
+            translated={'de-de': 'Hallo 1', 'en-us': 'Hello 1', '_meta': {'a': [123]}}
+        )
         obj1.full_clean()
-        self.assertEqual(repr(obj1.translated), "FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1'})")
+        self.assertEqual(
+            repr(obj1.translated), "FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1', '_meta': {'a': [123]}})"
+        )
 
-        obj2 = TranslatedModel.objects.create(translated={'de-de': 'Hallo 2', 'en-us': 'Hello 2'})
+        obj2 = TranslatedModel.objects.create(
+            translated={'de-de': 'Hallo 2', 'en-us': 'Hello 2', '_meta': {'b': [456]}}
+        )
         obj2.full_clean()
 
         self.assertNotEqual(obj1.translated, obj2.translated)
@@ -75,8 +81,8 @@ class TranslationFieldTestCase(TestCase):
         self.assertQuerysetEqual(
             qs,
             [
-                {'translated': FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1'})},
-                {'translated': FieldTranslation({'de-de': 'Hallo 2', 'en-us': 'Hello 2'})},
+                {'translated': FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1', '_meta': {'a': [123]}})},
+                {'translated': FieldTranslation({'de-de': 'Hallo 2', 'en-us': 'Hello 2', '_meta': {'b': [456]}})},
             ],
         )
 
@@ -293,11 +299,12 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
 
     def create_test_obj(self):
         obj = TranslatedModel(
-            translated={'de-de': 'Zug', 'en-us': 'Train', 'es': 'Tren'},
+            translated={'de-de': 'Zug', 'en-us': 'Train', 'es': 'Tren', '_meta': {'a': [123]}},
             translated_multiline={
                 'de-de': 'Ein Zug ist sehr schnell.\nZüge können schneller sein als Autos.',
                 'en-us': 'A train is very fast.\nTrains can be faster than cars.',
                 'es': 'Un tren es muy rápido.\nLos trenes pueden ser más rápidos que los automóviles.',
+                '_meta': 'multiline-meta!',
             },
         )
         obj.full_clean()
@@ -343,6 +350,10 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
                     f' value="{getattr(obj, fieldname)[code]}">',
                 ),
             )
+        self.assert_html_parts(
+            response, parts=(f'<input type="hidden" name="{fieldname}___meta"' ' value="{&quot;a&quot;: [123]}">',)
+        )
+
         fieldname = 'translated_multiline'
         for code in ['de-de', 'en-us', 'es']:
             self.assert_html_parts(
@@ -365,6 +376,10 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
                     f'</textarea>',
                 ),
             )
+        self.assert_html_parts(
+            response,
+            parts=(f'<input type="hidden" name="{fieldname}___meta" value="&quot;multiline-meta!&quot;">',),
+        )
 
         # change all translations via form
         data = {
@@ -375,6 +390,9 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
         for code in ['de-de', 'en-us', 'es']:
             data[f'translated__{code}'] = obj.translated[code].upper()
             data[f'translated_multiline__{code}'] = obj.translated_multiline[code].upper()
+        data['translated___meta'] = json.dumps(obj.translated['_meta'])
+        data['translated_multiline___meta'] = json.dumps(obj.translated_multiline['_meta'])
+
         response = self.client.post(f'/admin/test_app/translatedmodel/{obj.pk}/change/', data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
@@ -383,13 +401,14 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
         self.assertIn('was changed successfully', [str(m) for m in messages][0])
 
         obj.refresh_from_db()
-        self.assertEqual(obj.translated, {'de-de': 'ZUG', 'en-us': 'TRAIN', 'es': 'TREN'})
+        self.assertEqual(obj.translated, {'de-de': 'ZUG', 'en-us': 'TRAIN', 'es': 'TREN', '_meta': {'a': [123]}})
         self.assertEqual(
             obj.translated_multiline,
             {
                 'de-de': 'EIN ZUG IST SEHR SCHNELL.\nZÜGE KÖNNEN SCHNELLER SEIN ALS AUTOS.',
                 'en-us': 'A TRAIN IS VERY FAST.\nTRAINS CAN BE FASTER THAN CARS.',
                 'es': 'UN TREN ES MUY RÁPIDO.\nLOS TRENES PUEDEN SER MÁS RÁPIDOS QUE LOS AUTOMÓVILES.',
+                '_meta': 'multiline-meta!',
             },
         )
 

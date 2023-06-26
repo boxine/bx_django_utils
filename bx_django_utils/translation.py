@@ -22,6 +22,9 @@ from bx_django_utils.admin_utils.admin_urls import admin_change_url
 from bx_django_utils.models.manipulate import CreateOrUpdateResult, FieldUpdate, update_model_field
 
 
+META_KEY = '_meta'
+
+
 class TranslationWidget(forms.Widget):
     template_name = 'bx_django_utils/translation_input.html'
 
@@ -37,9 +40,14 @@ class TranslationWidget(forms.Widget):
         fieldnames = {  # e.g. "fieldname__de-de" -> "de-de"
             f'{name}__{entry[0]}': entry[0] for entry in self.languages
         }
-        return {  # e.g. "de-de" -> "the translation string"
+        res = {  # e.g. "de-de" -> "the translation string"
             fieldnames[fieldname]: data[fieldname] for fieldname in data if fieldname in fieldnames
         }
+        if f'{name}__{META_KEY}' in data:
+            meta_json = data[f'{name}__{META_KEY}']
+            meta = json.loads(meta_json) if meta_json else {}
+            res[META_KEY] = meta
+        return res
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
@@ -192,7 +200,7 @@ class TranslationField(models.JSONField):
         value = remove_empty_translations(value)
         existing_codes = value.keys()
         known_codes = {entry[0] for entry in self.languages}
-        unknown_codes = existing_codes - known_codes
+        unknown_codes = existing_codes - known_codes - {META_KEY}
         if unknown_codes:
             raise ValidationError(f'Unknown translation language(s): {", ".join(sorted(unknown_codes))}')
 

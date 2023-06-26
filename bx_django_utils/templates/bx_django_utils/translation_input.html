@@ -1,4 +1,4 @@
-{% load accessors %}
+{% load accessors json_templates %}
 <table>
     <tbody>
     {% for code, lang_name in widget.languages %}
@@ -10,4 +10,9 @@
         </tr>
     {% endfor %}
     </tbody>
+    {% with widget.value|dict_get:"_meta" as meta %}
+    {% if meta %}
+    <input type="hidden" name="{{widget.name}}___meta" value="{{ meta|json_encode }}" />
+    {% endif %}
+    {% endwith %}
 </table>
