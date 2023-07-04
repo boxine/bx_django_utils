@@ -12,6 +12,7 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.db.models.fields.json import KeyTransform
 from django.forms.fields import InvalidJSONInput
 from django.utils import translation
 from django.utils.safestring import mark_safe
@@ -186,6 +187,10 @@ class TranslationField(models.JSONField):
 
     def from_db_value(self, value, expression, connection):
         value = super().from_db_value(value, expression, connection)
+
+        if isinstance(expression, KeyTransform) and (isinstance(value, str) or (value is None)):
+            return value  # Getting just one translation, already done
+
         if value is None:
             return FieldTranslation()
         value = remove_empty_translations(value)  # Ignore empty translation from DB

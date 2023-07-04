@@ -145,6 +145,14 @@ class TranslationFieldTestCase(TestCase):
         raw_obj = RawTranslatedModel.objects.first()
         self.assertEqual(raw_obj.translated, {'de-de': 'A value'})
 
+    def test_values_list(self):
+        TranslatedModel.objects.create(translated={'de-de': 'Brot', 'en-us': 'bread', 'en-gb': 'buns'})
+        TranslatedModel.objects.create(translated={'de-de': 'Apfel', 'en-us': 'apple'})
+
+        self.assertEqual(set(TranslatedModel.objects.values_list('translated__de-de', flat=True)), {'Brot', 'Apfel'})
+        self.assertEqual(set(TranslatedModel.objects.values_list('translated__en-us', flat=True)), {'apple', 'bread'})
+        self.assertEqual(set(TranslatedModel.objects.values_list('translated__en-gb', flat=True)), {'buns', None})
+
     def test_create_or_update(self):
         # Create via create_or_update2():
         result = create_or_update2(ModelClass=TranslatedModel, translated={'de-de': 'Hallo'})
