@@ -1,5 +1,6 @@
 from http.cookies import SimpleCookie
 
+from bx_py_utils.test_utils.log_utils import NoLogs
 from django.conf import settings
 from django.test import TestCase
 from playwright.sync_api import BrowserContext, expect
@@ -47,7 +48,7 @@ class UserTimezonePlaywrightMixin:
             locale='en_US',
             timezone_id='Europe/Berlin',
         )
-        with context.new_page() as page:
+        with context.new_page() as page, NoLogs('django.request'):
             # Use our "Dynamic View Menu" index page from our "test_app":
             page.goto(f'{self.live_server_url}')
             expect(page).to_have_title('Dynamic View Menu - Index | Django site admin')
