@@ -28,13 +28,13 @@ packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests"
 "Bug Tracker" = "https://github.com/boxine/bx_django_utils/issues"
 
 [tool.poetry.dependencies]
-python = '>=3.9'
+python = '>=3.9,<4.0.0'
 django = '>=3.2'
-bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
+bx_py_utils = '>=85'  # https://github.com/boxine/bx_py_utils
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
-boto3 = '*'  # needed for e.g.: bx_django_utils/aws/ stuff!
+boto3 = '>=1.25.0'  # needed for e.g.: bx_django_utils/aws/ stuff!
 requests-mock = '*'
 tox = '>=4.4.4'  # https://github.com/tox-dev/tox
 coverage = '*'  # https://github.com/nedbat/coveragepy
