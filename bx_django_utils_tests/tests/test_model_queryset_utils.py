@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.test import TestCase
 
 from bx_django_utils.models.queryset_utils import remove_filter, remove_model_filter
+from bx_django_utils_tests.test_app.models import TranslatedModel
 
 
 class QuerySetUtilsTestCase(TestCase):
@@ -97,3 +98,17 @@ class QuerySetUtilsTestCase(TestCase):
         empty_queryset2 = remove_model_filter(empty_queryset1, Group)
         assert empty_queryset2.count() == 0
         assert empty_queryset1 is empty_queryset2  # In this case we get the same object back
+
+        # Test with a KeyExtract
+        TranslatedModel.objects.create(translated={'de-de': 'Apfel', 'fr-fr': 'pomme'})
+        TranslatedModel.objects.create(translated={'de-de': 'Banane', 'fr-fr': 'banane'})
+        qs = TranslatedModel.objects.filter(**{'translated__de-de': 'Apfel'})
+        qs = remove_model_filter(qs, Group)
+        self.assertEqual(list(qs.values_list('translated__fr-fr', flat=True)), ['pomme'])
+
+        # Removing this filter should return everyhting
+        removed_qs = remove_model_filter(qs, TranslatedModel)
+        self.assertEqual(
+            list(removed_qs.order_by('translated__fr-fr').values_list('translated__fr-fr', flat=True)),
+            ['banane', 'pomme'],
+        )
