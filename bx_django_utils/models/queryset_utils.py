@@ -46,7 +46,12 @@ def remove_model_filter(queryset: QuerySet, model: Type[Model]) -> QuerySet:
 
     def filter_lookups(node):
         if hasattr(node, 'lhs'):
-            return node.lhs.target.model != model
+            if hasattr(node.lhs, 'target'):
+                return node.lhs.target.model != model
+            elif hasattr(node.lhs, 'lhs'):
+                return filter_lookups(node.lhs)
+            else:
+                return True  # This branch is fine
 
         if isinstance(node, NothingNode):
             return False
