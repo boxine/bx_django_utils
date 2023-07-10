@@ -61,6 +61,19 @@ class QuerySetUtilsTestCase(TestCase):
         assert empty_queryset2.count() == 0
         assert empty_queryset1 is empty_queryset2  # In this case we get the same object back
 
+        # Test with a KeyExtract
+        TranslatedModel.objects.create(translated={'de-de': 'Apfel', 'fr-fr': 'pomme'})
+        TranslatedModel.objects.create(translated={'de-de': 'Banane', 'fr-fr': 'banane'})
+        qs = TranslatedModel.objects.filter(**{'translated__de-de': 'Apfel'})
+        self.assertEqual(list(qs.values_list('translated__fr-fr', flat=True)), ['pomme'])
+
+        # Removing this filter should return everyhting
+        removed_qs = remove_filter(qs, 'translated')
+        self.assertEqual(
+            list(removed_qs.order_by('translated__fr-fr').values_list('translated__fr-fr', flat=True)),
+            ['banane', 'pomme'],
+        )
+
     def test_remove_model_filter(self):
         admins = Group.objects.create(name='admins')
         customers = Group.objects.create(name='customers')
