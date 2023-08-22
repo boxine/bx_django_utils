@@ -37,6 +37,20 @@ class AssertQueriesTestCase(TestCase):
             similar=True,
         )
 
+    def test_get_table_name(self):
+        self.assertEqual(
+            AssertQueries.get_table_name(
+                query={'sql': 'INSERT INTO "table_name1" ("foo_id", "bar_id") VALUES (1, 2)'}
+            ),
+            'table_name1',
+        )
+        self.assertEqual(
+            AssertQueries.get_table_name(
+                query={'sql': 'INSERT OR IGNORE INTO "table_name2" ("foo_id", "bar_id") VALUES (1, 2)'}
+            ),
+            'table_name2',
+        )
+
     def test_assert_table_names(self):
         queries = self.get_instance()
         queries.assert_table_names('auth_permission')

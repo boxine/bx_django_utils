@@ -77,7 +77,7 @@ class AssertQueries(SQLQueryRecorder):
             # transaction statements
             return
 
-        table_names = re.findall(r'(FROM|INSERT INTO|UPDATE) \"(.+?)\"', sql)
+        table_names = re.findall(r'(FROM|INSERT[A-Z ]+?INTO|UPDATE) \"(.+?)\"', sql)
         assert len(table_names) >= 1, f'Error parsing: {sql!r}'
         # Use only the first table name (e.g.: ignore names in inner join)
         table_name = table_names[0][1]
