@@ -98,7 +98,7 @@ branch = true
 parallel = true
 concurrency = ["multiprocessing"]
 source_pkgs=['bx_django_utils']
-command_line = 'manage.py test --parallel'  # Add --shuffle if we remove Django v3.2 support
+command_line = 'manage.py test --parallel --shuffle'
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*','*/migrations/*']
@@ -117,15 +117,14 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{311,310,39}-django{4.2,4.1,3.2}
+envlist = py{311,310,39}-django{42,41}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
 deps =
-    django4.2: django>=4.2,<4.3
-    django4.1: django>=4.1,<4.2
-    django3.2: django>=3.2,<3.3
+    django42: django>=4.2,<4.3
+    django41: django>=4.1,<4.2
     model-bakery
     playwright
     pdoc
@@ -141,6 +140,9 @@ commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =
     {envpython} -m coverage run --context='{envname}'
+    {envpython} -m coverage combine --append
+    {envpython} -m coverage xml
+    {envpython} -m coverage report
 """
 
 
@@ -174,4 +176,5 @@ applied_migrations = [
     "d970456", # 2023-02-20T16:19:35+01:00
     "89aadc0", # 2023-03-17T09:44:50+01:00
     "53a7e85", # 2023-04-10T19:08:56+02:00
+    "877e2ec", # 2023-08-17T20:54:24+02:00
 ]

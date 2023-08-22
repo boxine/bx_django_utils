@@ -3,10 +3,7 @@
 !.editorconfig
 !.flake8
 !.gitignore
-!.isort.cfg
-!/.travis.yml
-!/.style.yapf
-!.coveralls.yml
+!.gitkeep
 
 # from test projects:
 /bx_django_utils_tests/static/
@@ -30,5 +27,5 @@ sdist/
 .installed.cfg
 *.egg
 /publish.log
-coverage.xml
+/coverage.*
 
