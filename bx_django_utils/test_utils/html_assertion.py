@@ -1,10 +1,12 @@
 from pathlib import Path
+from pprint import pprint
 
 from bx_py_utils.test_utils.assertion import assert_equal
 from bx_py_utils.test_utils.snapshot import assert_html_snapshot, assert_snapshot
 from django import VERSION as DJANGO_VERSION
+from django.contrib.auth import get_user
 from django.contrib.messages import get_messages
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 
 
 def get_django_name_suffix():
@@ -49,12 +51,46 @@ class HtmlAssertionMixin:
     """
 
     def assert_messages(self, response, expected_messages):
+        """
+        Note: Sadly it's complicated to "clear" the existing messages :(
+        Work-a-round: Create a new test client, e.g.:
+
+            self.assert_messages(response, expected_messages=['foo bar'])
+            self.client = self.get_fresh_client()  # "Clear" messages by recreate test client
+        """
         current_messages = [m.message for m in get_messages(response.wsgi_request)]
-        assert_equal(
-            current_messages,
-            expected_messages,
-            msg='Messages are not equal:'
-        )
+        try:
+            assert_equal(current_messages, expected_messages, msg='Messages are not equal:')
+        except AssertionError:
+            # print a copy&paste info for easier update the test code:
+            print('-' * 100)
+            pprint(current_messages)
+            print('-' * 100)
+            raise
+
+    def get_current_user(self):
+        """
+        Get the current user, if a login was done before.
+        """
+        request = HttpRequest()
+        try:
+            request.session = self.client.session
+        except AttributeError:
+            # No login made, yet
+            return None
+        else:
+            return get_user(request)
+
+    def get_fresh_client(self):
+        """
+        Create fresh test client and login the same user.
+        Can be used to "clear" user messages. See assert_messages() above.
+        """
+        current_user = self.get_current_user()
+        client = self.client_class()
+        if current_user and not current_user.is_anonymous:
+            client.force_login(current_user)
+        return client
 
     def snapshot_messages(self, response, **kwargs):
         current_messages = [m.message for m in get_messages(response.wsgi_request)]

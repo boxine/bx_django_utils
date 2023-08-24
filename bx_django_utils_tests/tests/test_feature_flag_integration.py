@@ -1,5 +1,6 @@
 from unittest import mock
 
+from django.contrib.admin.models import LogEntry
 from django.core.cache import cache
 from django.template.defaulttags import CsrfTokenNode
 from django.test import TestCase
@@ -58,6 +59,10 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
             name_suffix=get_django_name_suffix(),
         )
 
+        self.assertEqual(foo_feature_flag.state.name, 'ENABLED')
+        self.assertEqual(bar_feature_flag.state.name, 'DISABLED')
+        self.assert_messages(response, expected_messages=[])
+
         response = self.client.get('/admin/feature_flags/feature-flags-values-demo/')
         self.assertRedirects(response, expected_url='/admin/', fetch_redirect_response=False)
         self.assert_messages(
@@ -67,6 +72,44 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
                 'Demo Feature "Bar" state: DISABLED',
             ],
         )
+
+        self.client = self.get_fresh_client()  # "Clear" messages by recreate test client
+
+        response = self.client.post(
+            '/admin/feature_flags/manage/',
+            data={
+                'cache_key': 'feature-flags-foo',
+                'new_value': '1',
+            },
+        )
+        self.assert_messages(response, expected_messages=['Current "Foo" state is already: ENABLED'])
+        self.assertRedirects(
+            response,
+            expected_url='/admin/feature_flags/manage/',
+            fetch_redirect_response=False,
+            msg_prefix=response.content.decode('utf-8'),
+        )
+        self.assertEqual(LogEntry.objects.count(), 0)
+
+        self.client = self.get_fresh_client()  # "Clear" messages by recreate test client
+
+        response = self.client.post(
+            '/admin/feature_flags/manage/',
+            data={
+                'cache_key': 'feature-flags-foo',
+                'new_value': '0',
+            },
+        )
+        self.assert_messages(response, expected_messages=['Set "Foo" to DISABLED'])
+        self.assertRedirects(
+            response,
+            expected_url='/admin/feature_flags/manage/',
+            fetch_redirect_response=False,
+            msg_prefix=response.content.decode('utf-8'),
+        )
+        log_entry = LogEntry.objects.get()
+        self.assertEqual(log_entry.change_message, 'Changed feature flag "Foo"')
+        self.assertEqual(log_entry.object_repr, 'Set "Foo" to DISABLED')
 
 
 class PersistantFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):

@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+{{ form.errors }}
 {% for feature_flag in feature_flags %}
     <h2>{{ feature_flag.human_name }} - {{ feature_flag.state.name }}</h2>
     <pre>{{ feature_flag.description }}</pre>

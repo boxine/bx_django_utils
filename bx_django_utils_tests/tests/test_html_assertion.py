@@ -4,16 +4,19 @@ import tempfile
 from unittest import mock
 
 from bx_py_utils.environ import OverrideEnviron
+from bx_py_utils.test_utils.redirect import RedirectOut
 from django.contrib import messages
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.storage.session import SessionStorage
 from django.template.defaulttags import CsrfTokenNode
-from django.test import RequestFactory, SimpleTestCase
+from django.test import RequestFactory, TestCase
 
 from bx_django_utils.test_utils.html_assertion import (
     HtmlAssertionMixin,
     assert_html_response_snapshot,
     get_django_name_suffix,
 )
+from bx_django_utils.test_utils.users import make_test_user
 
 
 class FakeResponse:
@@ -28,7 +31,7 @@ def get_request():
     return request
 
 
-class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
+class HtmlAssertionTestCase(HtmlAssertionMixin, TestCase):
     def test_assert_messages(self):
         request = get_request()
         messages.info(request, 'First message.')
@@ -56,12 +59,38 @@ class HtmlAssertionTestCase(HtmlAssertionMixin, SimpleTestCase):
             '     "The last message."\n'
             ' ]'
         )
-        with self.assertRaisesMessage(AssertionError, msg):
+        with self.assertRaisesMessage(AssertionError, msg), RedirectOut() as buffer:
             self.assert_messages(response, expected_messages=[
                 'First message.',
                 'Second X message.',
                 'The last message.'
             ])
+
+        self.assertEqual(
+            buffer.stdout.strip('- \n'),
+            "['First message.', 'Second message.', 'The last message.']",
+        )
+
+    def test_get_current_user(self):
+        self.assertEqual(self.get_current_user(), AnonymousUser())
+
+        user = make_test_user(is_superuser=True)
+        self.client.force_login(user)
+
+        self.assertEqual(self.get_current_user(), user)
+
+    def test_get_fresh_client(self):
+        origin_client_id = id(self.client)
+        self.client = self.get_fresh_client()
+        self.assertIsInstance(self.client, self.client_class)
+        self.assertNotEqual(id(self.client), origin_client_id)
+        self.assertEqual(self.get_current_user(), AnonymousUser())
+
+        # "Transfer" the current user:
+        user = make_test_user(is_superuser=True)
+        self.client.force_login(user)
+        self.client = self.get_fresh_client()
+        self.assertEqual(self.get_current_user(), user)
 
     def test_snapshot_messages(self):
         request = get_request()

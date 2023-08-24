@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib import messages
+from django.contrib.admin.models import CHANGE, LogEntry
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
@@ -7,14 +9,20 @@ from django.views.generic import FormView
 from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
 from bx_django_utils.admin_extra_views.datatypes import AdminExtraMeta
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
+from bx_django_utils.feature_flags.models import FeatureFlagModel
 from bx_django_utils.feature_flags.state import State
+
+
+def get_feature_flag_choices():
+    choices = ((instance.cache_key, instance.human_name) for instance in FeatureFlag.values())
+    return choices
 
 
 class ManageFeatureFlagsForm(forms.Form):
     """"""  # noqa - don't add in README
 
     cache_key = forms.ChoiceField(
-        choices=((instance.cache_key, instance.human_name) for instance in FeatureFlag.values())
+        choices=get_feature_flag_choices,  # Assign lazy
     )
     new_value = forms.ChoiceField(choices=State.choices)
 
@@ -64,7 +72,20 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
             )
         else:
             feature_flag.set_state(new_state)
-            messages.success(
-                self.request, f'Set "{feature_flag.human_name}" state to {feature_flag.state.name}'
+            change_message = f'Set "{feature_flag.human_name}" to {feature_flag.state.name}'
+
+            # Create a LogEntry for this action:
+            content_type_id = ContentType.objects.get_for_model(FeatureFlagModel).id
+            log_entry = LogEntry.objects.log_action(
+                user_id=self.request.user.id,
+                content_type_id=content_type_id,
+                action_flag=CHANGE,
+                change_message=f'Changed feature flag "{feature_flag.human_name}"',
+                object_id=None,
+                object_repr=change_message,  # Rendered in Django log list on index page!
             )
+            log_entry.full_clean()
+
+            messages.success(self.request, change_message)
+
         return HttpResponseRedirect('.')
