@@ -143,7 +143,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.admin_views
 
-* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L22-L70) - Base admin extra view to manage all existing feature flags in admin.
+* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L30-L91) - Base admin extra view to manage all existing feature flags in admin.
 
 #### bx_django_utils.feature_flags.data_classes
 
@@ -254,9 +254,9 @@ Utilities to manage text fixtures in JSON files.
 
 #### bx_django_utils.test_utils.html_assertion
 
-* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L46-L148) - Unittest mixin class with useful assertments around Django test client tests
-* [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L17-L43) - Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
-* [`get_django_name_suffix()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L10-L14) - Returns a short Django version string, useable for snapshot "name_suffix" e.g.: "django42"
+* [`HtmlAssertionMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L48-L184) - Unittest mixin class with useful assertments around Django test client tests
+* [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L19-L45) - Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
+* [`get_django_name_suffix()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L12-L16) - Returns a short Django version string, useable for snapshot "name_suffix" e.g.: "django42"
 
 #### bx_django_utils.test_utils.model_clean_assert
 

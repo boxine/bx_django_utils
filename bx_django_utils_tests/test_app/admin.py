@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 
 from bx_django_utils.admin_utils.filters import ExistingCountedListFilter
 from bx_django_utils.translation import TranslationFieldAdmin, validate_unique_translations
@@ -11,6 +12,11 @@ from bx_django_utils_tests.test_app.models import (
     TranslatedSlugTestModel,
     ValidateLengthTranslations,
 )
+
+
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    pass
 
 
 class NameListFilter(ExistingCountedListFilter):
