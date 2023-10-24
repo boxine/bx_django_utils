@@ -46,7 +46,7 @@ tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
 
 tox: check-poetry ## Run unittests via tox with all environments
-	poetry run tox p
+	poetry run tox
 	poetry run coverage combine --append
 	poetry run coverage html
 	poetry run coverage report
