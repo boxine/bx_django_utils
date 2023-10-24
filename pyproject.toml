@@ -98,7 +98,7 @@ branch = true
 parallel = true
 concurrency = ["multiprocessing"]
 source_pkgs=['bx_django_utils']
-command_line = 'manage.py test --parallel --shuffle'
+command_line = 'manage.py test --parallel'  # Add --shuffle if we remove Django v3.2 support
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*','*/migrations/*']
@@ -117,7 +117,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{311,310,39}-django{42,41}
+envlist = py{311,310,39}-django{42,41,32}
 skip_missing_interpreters = True
 
 [testenv]
@@ -125,6 +125,7 @@ passenv = *
 deps =
     django42: django>=4.2,<4.3
     django41: django>=4.1,<4.2
+    django32: django>=3.2,<3.3
     model-bakery
     playwright
     pdoc
