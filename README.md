@@ -15,6 +15,11 @@ Various Django utility functions
 pip install bx_django_utils
 ```
 
+## Supported Django versions
+`bx_django_utils` generally follows the support schedule of Django. The project is tested against [officially supported Django versions](https://endoflife.date/django) and [their respective supported CPython versions](https://docs.djangoproject.com/en/stable/faq/install/#what-python-version-can-i-use-with-django).
+
+However, under special circumstances we may decide to pull support for a specific version early, e.g. if development of the library would be severely limited.
+Check our tox test matrix for a definitive answer.
 
 ## Existing stuff
 
