@@ -323,7 +323,7 @@ Automatic local user timezone: https://github.com/boxine/bx_django_utils/blob/ma
 
 ### bx_django_utils.version
 
-* [`DetermineVersionCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/version.py#L50-L71) - The base class from which all management commands ultimately
+* [`DetermineVersionCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/version.py#L50-L78) - Write application version determined from git as a command
 
 #### bx_django_utils.view_utils.dynamic_menu_urls
 
