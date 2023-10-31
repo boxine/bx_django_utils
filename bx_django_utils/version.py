@@ -48,6 +48,7 @@ def _git_version(cwd, raise_error=False):
 
 
 class DetermineVersionCommand(BaseCommand):
+    """ Write application version determined from git as a command """
     help = 'Determine version of this application from git'
 
     def add_arguments(self, parser):
