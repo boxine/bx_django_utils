@@ -1,10 +1,11 @@
 import datetime
 from unittest import mock
 
+from bx_py_utils.test_utils.datetime import parse_dt
 from django.test import SimpleTestCase
 from django.utils import timezone
 
-from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
+from bx_django_utils.test_utils.datetime import FreezeTimezoneNow, MockDatetimeGenerator
 
 
 class MockDatetimeGeneratorTestCase(SimpleTestCase):
@@ -31,3 +32,18 @@ class MockDatetimeGeneratorTestCase(SimpleTestCase):
             assert timezone.now() == datetime.datetime(
                 2000, 1, 1, 0, 3, tzinfo=datetime.timezone.utc
             )
+
+    def test_freeze_timezone_now(self):
+        """
+        Test FreezeTimezoneNow
+        """
+        # Test as context manager:
+        with FreezeTimezoneNow(now='2020-01-02T12:34:56+0000'):
+            self.assertEqual(timezone.now(), parse_dt('2020-01-02T12:34:56+0000'))
+
+        # Test as decorator:
+        @FreezeTimezoneNow()
+        def get_now():
+            return timezone.now()
+
+        self.assertEqual(get_now(), parse_dt('2000-01-02T00:00:00+0000'))

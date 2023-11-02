@@ -241,7 +241,8 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.datetime
 
-* [`MockDatetimeGenerator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L4-L50) - Mock django `timezone.now()` with generic time stamps in tests.
+* [`FreezeTimezoneNow()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L59-L66) - Context manager / Decorator to mock django.utils.timezone.now() with a fixed datetime.
+* [`MockDatetimeGenerator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/datetime.py#L10-L56) - Mock django `timezone.now()` with generic time stamps in tests.
 
 #### bx_django_utils.test_utils.fixtures
 

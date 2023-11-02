@@ -1,4 +1,10 @@
 import datetime
+from contextlib import ContextDecorator
+from unittest.mock import patch
+
+from bx_py_utils.test_utils.context_managers import MassContextManager
+from bx_py_utils.test_utils.datetime import parse_dt
+from django.utils import timezone
 
 
 class MockDatetimeGenerator:
@@ -48,3 +54,13 @@ class MockDatetimeGenerator:
         else:
             self.now += self.offset
             return self.now
+
+
+class FreezeTimezoneNow(ContextDecorator, MassContextManager):
+    """
+    Context manager / Decorator to mock django.utils.timezone.now() with a fixed datetime.
+    """
+
+    def __init__(self, now: str = '2000-01-02T00:00:00+0000'):
+        now_dt = parse_dt(now)
+        self.mocks = (patch.object(timezone, 'now', return_value=now_dt),)
