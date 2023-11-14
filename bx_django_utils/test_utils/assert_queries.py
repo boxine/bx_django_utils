@@ -3,7 +3,8 @@ import re
 from collections import Counter
 from difflib import unified_diff
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from pprint import pformat
+from typing import Optional, Union
 
 from bx_py_utils.test_utils.snapshot import assert_snapshot
 
@@ -174,8 +175,7 @@ class AssertQueries(SQLQueryRecorder):
             ))
             raise AssertionError(self.build_error_message(f'Table names does not match:\n{diff}'))
 
-    def assert_table_counts(self, table_counts: Union[Counter, dict],
-                            exclude: Optional[Tuple[str, ...]] = None):
+    def assert_table_counts(self, table_counts: Union[Counter, dict], exclude: Optional[tuple[str, ...]] = None):
         if not isinstance(table_counts, Counter):
             table_counts = Counter(table_counts)
         table_name_count = self.count_table_names()
@@ -191,9 +191,15 @@ class AssertQueries(SQLQueryRecorder):
                 fromfile='expected table counts',
                 tofile='current table counts'
             )
-            raise AssertionError(self.build_error_message(f'Table count error:\n{diff}'))
+            msg = f'Table count error:\n{diff}\n'
 
-    def snapshot_table_counts(self, *, exclude: Optional[Tuple[str]] = None, **kwargs):
+            # Add copy&paste text to make updating the test easy:
+            sorted_dict = dict(sorted((k, v) for k, v in table_name_count.items()))
+            msg += f'Got these counts:\n{pformat(sorted_dict)}\n\n'
+
+            raise AssertionError(self.build_error_message(msg))
+
+    def snapshot_table_counts(self, *, exclude: Optional[tuple[str]] = None, **kwargs):
         table_name_count = self.count_table_names()
         if exclude:
             for k in exclude:
@@ -257,7 +263,7 @@ class AssertQueries(SQLQueryRecorder):
         self,
         table_counts: Optional[Union[Counter, dict]] = None,
         double_tables: Optional[bool] = True,
-        table_names: Optional[List[str]] = None,
+        table_names: Optional[list[str]] = None,
         query_count: Optional[int] = None,
         duplicated: Optional[bool] = True,
         similar: Optional[bool] = True,
