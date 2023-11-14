@@ -4,6 +4,7 @@ import tempfile
 from collections import Counter
 
 from bx_py_utils.environ import OverrideEnviron
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import Group, Permission
 from django.db import connection, transaction
 from django.test import TestCase
@@ -86,24 +87,35 @@ class AssertQueriesTestCase(TestCase):
             Permission.objects.all().first()
             Permission.objects.all().first()
             Group.objects.all().first()
+            LogEntry.objects.all().first()
 
         queries.assert_table_counts(
-            {'auth_permission': 2}, exclude=('auth_group', 'not_mentioned')
+            {'auth_permission': 2, 'django_admin_log': 1},
+            exclude=('auth_group', 'not_mentioned'),
         )
 
         # Incorrect counts / added tables
         with self.assertRaises(AssertionError) as err:
-            queries.assert_table_counts({'auth_permission': 3, 'foo': 1}, exclude=('auth_group',))
+            queries.assert_table_counts({'auth_permission': 3, 'foo': 1})
         msg = str(err.exception)
         assert 'Table count error:\n' in msg
         assert '-auth_permission: 3\n' in msg
         assert '-foo: 1\n' in msg
         assert '+auth_permission: 2\n' in msg
         assert 'Captured queries were:\n' in msg
+        assert 'Got these counts:\n' in msg
+
+        first_part = msg.partition('Captured queries were')[0]
+        copy_past_part = first_part.partition('Got these counts:')[2]
+        self.assertEqual(
+            copy_past_part,
+            "\n{'auth_group': 1, 'auth_permission': 2, 'django_admin_log': 1}\n\n\n",
+        )
 
         # Missing counts
         with self.assertRaises(AssertionError) as err:
             queries.assert_table_counts({'auth_group': 1}, exclude=('foobar',))
+        msg = str(err.exception)
         assert 'Table count error:\n' in msg
         assert '+auth_permission: 2\n' in msg
 
