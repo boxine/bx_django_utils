@@ -460,8 +460,8 @@ class TranslationFieldAdmin(admin.ModelAdmin):
             resolve_func.__name__ = field
             setattr(self, f'get_{field}', resolve_func)
 
-        def patch_fieldnames(fieldnames):
-            return [f'get_{field}' if field in translation_fields else field for field in fieldnames]
+        def patch_fieldnames(fieldnames) -> tuple[str, ...]:
+            return tuple(f'get_{field}' if field in translation_fields else field for field in fieldnames)
 
         # patch each list of fieldnames considered by the changelist to use the new 'get_<fieldname>' methods.
         self.list_display = patch_fieldnames(self.list_display)
