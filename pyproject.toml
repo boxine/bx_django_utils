@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "67"
+version = "69"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
