@@ -1,13 +1,94 @@
+import zoneinfo
 from http.cookies import SimpleCookie
 
 from bx_py_utils.test_utils.log_utils import NoLogs
 from django.conf import settings
-from django.test import TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.utils import timezone
 from playwright.sync_api import BrowserContext, expect
 
 from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 from bx_django_utils.test_utils.playwright import PlaywrightTestCase
 from bx_django_utils.test_utils.users import make_minimal_test_user
+from bx_django_utils.user_timezone.middleware import InvalidUserTimeZone, UserTimezoneMiddleware, validate
+
+
+class ValidateUserTimeZone(SimpleTestCase):
+    def validate(self, raw_time_zone: str):
+        validate(
+            raw_time_zone=raw_time_zone,
+            min_length=UserTimezoneMiddleware.MIN_LENGTH,
+            max_length=UserTimezoneMiddleware.MAX_LENGTH,
+            usertimezone_re=UserTimezoneMiddleware.USERTIMEZONE_RE,
+        )
+
+    def test_validate(self):
+        count = 0
+        for timezone_name in zoneinfo.available_timezones():
+            self.validate(raw_time_zone=timezone_name)
+            count += 1
+        self.assertGreaterEqual(count, 10)
+
+    def test_invalid(self):
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Expected max length'):
+            self.validate(raw_time_zone='A' * (UserTimezoneMiddleware.MAX_LENGTH + 1))
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Expected min length'):
+            self.validate(raw_time_zone='A' * (UserTimezoneMiddleware.MIN_LENGTH - 1))
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Expected min length'):
+            self.validate(raw_time_zone='A' * (UserTimezoneMiddleware.MIN_LENGTH - 1))
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Only ASCII'):
+            self.validate(raw_time_zone='Foo\N{SNOWMAN}Far')
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Not match'):
+            self.validate(raw_time_zone='Bam!')
+
+
+class StoreTimezone:
+    def __enter__(self):
+        self.old_timezone = timezone.get_current_timezone_name()
+        return self
+
+    def __call__(self, request):
+        self.request_timezone = timezone.get_current_timezone_name()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type:
+            return False
+
+
+class UserTimezoneMiddlewareTestCase(TestCase):
+    def check(self, raw_time_zone: str) -> str:
+        self.assertEqual(timezone.get_current_timezone_name(), 'UTC')
+
+        request = RequestFactory().get('/test_app/')
+        request.COOKIES['UserTimeZone'] = raw_time_zone
+        with StoreTimezone() as store_timezone:
+            middleware = UserTimezoneMiddleware(get_response=store_timezone)
+            middleware(request)
+
+        return store_timezone.request_timezone
+
+    def test_set_timezone(self):
+        matrix = (
+            ('Europe/London', 'Europe/London'),
+            ('America/Argentina/ComodRivadavia', 'America/Argentina/ComodRivadavia'),
+            ('NZ', 'NZ'),
+            ('GB', 'GB'),
+            ('Etc/GMT+12', '-12'),
+            ('Etc/GMT-14', '+14'),
+        )
+        for raw_time_zone, expected_timezone in matrix:
+            with self.subTest(raw_time_zone=raw_time_zone):
+                request_timezone = self.check(raw_time_zone=raw_time_zone)
+                self.assertEqual(
+                    request_timezone,
+                    expected_timezone,
+                    f'Got {request_timezone!r} from UserTimeZone={raw_time_zone!r}',
+                )
+
+    def test_invalid(self):
+        with self.assertRaisesMessage(InvalidUserTimeZone, 'Only ASCII'):
+            self.check(raw_time_zone='Foo\N{SNOWMAN}Far')
+        # All other variants are tested in ValidateUserTimeZone ;)
 
 
 class UserTimezoneTestCase(HtmlAssertionMixin, TestCase):
