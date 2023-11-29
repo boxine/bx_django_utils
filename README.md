@@ -315,7 +315,9 @@ Automatic local user timezone: https://github.com/boxine/bx_django_utils/blob/ma
 
 #### bx_django_utils.user_timezone.middleware
 
-* [`UserTimezoneMiddleware()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/middleware.py#L10-L31) - Activate Timezone by "UserTimeZone" cookie
+* [`InvalidUserTimeZone()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/middleware.py#L11-L12) - Inappropriate argument value (of correct type).
+* [`UserTimezoneMiddleware()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/middleware.py#L34-L68) - Activate Timezone by "UserTimeZone" cookie
+* [`validate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/user_timezone/middleware.py#L15-L31) - Validate the UserTimeZone cookie value.
 
 ##### bx_django_utils.user_timezone.templatetags.user_timezone
 
