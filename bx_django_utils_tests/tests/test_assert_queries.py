@@ -51,6 +51,25 @@ class AssertQueriesTestCase(TestCase):
             ),
             'table_name2',
         )
+        self.assertEqual(
+            AssertQueries.get_table_name(
+                query={
+                    'sql': '''
+                    SELECT
+                     foo.id,
+                     bar.id,
+                     bar."timestamp",
+                     xuu.id
+                FROM foo
+                    INNER JOIN bar
+                        ON foo.item_id = bar.item_ptr_id
+                    INNER JOIN xuu
+                        ON bar.content_id = xuu.id
+                '''
+                }
+            ),
+            'foo',
+        )
 
     def test_assert_table_names(self):
         queries = self.get_instance()

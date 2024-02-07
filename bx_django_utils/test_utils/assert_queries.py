@@ -78,10 +78,11 @@ class AssertQueries(SQLQueryRecorder):
             # transaction statements
             return
 
-        table_names = re.findall(r'(FROM|INSERT[A-Z ]+?INTO|UPDATE) \"(.+?)\"', sql)
-        assert len(table_names) >= 1, f'Error parsing: {sql!r}'
-        # Use only the first table name (e.g.: ignore names in inner join)
-        table_name = table_names[0][1]
+        table_name_match = re.search(
+            r'(?:FROM|INSERT[A-Z ]+?INTO|UPDATE)\s+(?:(?P<unquoted>[a-zA-Z][_\w]+)|\"(?P<quoted>.+?)\")', sql
+        )
+        assert table_name_match, f'Error parsing: {sql!r}'
+        table_name = table_name_match.group('unquoted') or table_name_match.group('quoted')
         return table_name
 
     def count_table_names(self):
