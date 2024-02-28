@@ -96,7 +96,7 @@ class BaseApproveModel(TimetrackingBaseModel):
         if not self.is_draft:
             missing = self.get_missing_field_info()
             errors = {}
-            for attname, verbose_name, value in missing:
+            for attname, _verbose_name, _value in missing:
                 errors[attname] = ValidationError(
                     _('This field cannot be blank.'),
                     code='blank'

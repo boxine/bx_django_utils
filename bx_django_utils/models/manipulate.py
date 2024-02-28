@@ -20,7 +20,6 @@ class InvalidStoreBehavior(FieldDoesNotExist):
     """
     Exception used in create_or_update() if "store_behavior" contains not existing field names.
     """
-    pass
 
 
 def create(*, ModelClass, call_full_clean=True, save_kwargs=None, **values):
@@ -238,10 +237,14 @@ def create_or_update(*, ModelClass: type[models.Model], lookup: dict = None, cal
     """
     warnings.warn(
         'create_or_update() is deprecated, please use create_or_update2()',
-        DeprecationWarning
+        DeprecationWarning,
+        stacklevel=2,
     )
     result = create_or_update2(
-        ModelClass=ModelClass, lookup=lookup, call_full_clean=call_full_clean, **values
+        ModelClass=ModelClass,
+        lookup=lookup,
+        call_full_clean=call_full_clean,
+        **values,
     )
     instance = result.instance
     created = result.created

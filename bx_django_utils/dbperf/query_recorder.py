@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pprint import saferepr
-from typing import Callable, List, Optional
+from typing import Callable, Optional
 
 from django.db import connections
 
@@ -58,12 +58,12 @@ class Logger:
         # now that the aggregation is done we must strip all queries in the
         # aggregation dicts that were executed only once.
         for agg_dict in (queries_similar, queries_duplicated):
-            for db, queries in agg_dict.items():
+            for queries in agg_dict.values():
                 del_keys = []
                 for query, count in queries.items():
                     if count == 1:
                         del_keys.append(query)
-                # map(lambda key: queries.pop(key), del_keys)
+
                 for key in del_keys:
                     del queries[key]
 
@@ -112,7 +112,7 @@ class SQLQueryRecorder:
 
     def __init__(
         self,
-        databases: Optional[List[str]] = None,
+        databases: Optional[list[str]] = None,
         collect_stacktrace: Optional[Callable] = None,
         query_explain: bool = False,  # Capture EXPLAIN SQL information?
     ):
@@ -137,8 +137,8 @@ class SQLQueryRecorder:
 
             def cursor():
                 return RecordingCursorWrapper(
-                    connection._recording_cursor(),
-                    connection,
+                    connection._recording_cursor(),  # noqa:B023
+                    connection,  # noqa:B023
                     self.logger,
                     collect_stacktrace=self.collect_stacktrace,
                     query_explain=self.query_explain,
@@ -146,8 +146,8 @@ class SQLQueryRecorder:
 
             def chunked_cursor():
                 return RecordingCursorWrapper(
-                    connection._recording_chunked_cursor(),
-                    connection,
+                    connection._recording_chunked_cursor(),  # noqa:B023
+                    connection,  # noqa:B023
                     self.logger,
                     collect_stacktrace=self.collect_stacktrace,
                     query_explain=self.query_explain,

@@ -54,7 +54,7 @@ def human_timedelta(t):
     if abs(t) < 60:
         return avoid_wrapping(_('%.1f seconds') % round(t, 1))
 
-    for seconds, time_string in TIMESINCE_CHUNKS:
+    for seconds, time_string in TIMESINCE_CHUNKS:  # noqa:B007
         count = t / seconds
         if abs(count) >= 1:
             count = round(count, 1)

@@ -69,14 +69,12 @@ build-backend = 'poetry.core.masonry.api'
 revision = "origin/master..."
 src = ['.']
 line_length = 119
-verbose = true
 color = true
 skip_string_normalization = true
 diff = false
 check = false
 stdout = false
 isort = true
-flynt = true
 lint = [
     "flake8",
 ]

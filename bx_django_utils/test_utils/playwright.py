@@ -72,8 +72,8 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
 
             if hasattr(cls, 'setUpTestData'):
                 warnings.warn(
-                    f'Remove setUpTestData() from {cls.__name__}'
-                    ' because it will never be called!'
+                    f'Remove setUpTestData() from {cls.__name__} because it will never be called!',
+                    stacklevel=2,
                 )
 
     @classmethod

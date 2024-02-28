@@ -13,7 +13,7 @@ from bx_django_utils.test_utils.assert_queries import AssertQueries
 
 
 def make_database_queries(count=1):
-    for i in range(count):
+    for _i in range(count):
         Permission.objects.all().first()
 
 

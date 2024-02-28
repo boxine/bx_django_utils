@@ -87,7 +87,7 @@ class AssertQueries(SQLQueryRecorder):
 
     def count_table_names(self):
         table_name_count = Counter()
-        for db, query in self.logger._queries:
+        for _db, query in self.logger._queries:
             table_name = self.get_table_name(query)
             if table_name:
                 table_name_count[table_name] += 1
@@ -100,7 +100,7 @@ class AssertQueries(SQLQueryRecorder):
         """
         assert self.query_explain, 'Explain way not captured!'
 
-        for db, query in self.logger._queries:
+        for _db, query in self.logger._queries:
             table_name = self.get_table_name(query)
             explain_str = '\n'.join(query['explain'])
 
@@ -121,7 +121,7 @@ class AssertQueries(SQLQueryRecorder):
         :return: Human readable information about the executed SQL queries
         """
         parts = []
-        for i, (db, query) in enumerate(self.logger._queries, start=1):
+        for i, (_db, query) in enumerate(self.logger._queries, start=1):
             parts.append(f'{i:>3}. {query["sql"]}')
 
             if self.max_stacktrace:
