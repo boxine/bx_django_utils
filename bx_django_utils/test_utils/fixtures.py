@@ -149,7 +149,7 @@ def autodiscover(verbosity) -> int:
     """
 
     def get_fixtures(path):
-        for root, dirs, files in os.walk(path, followlinks=False):
+        for root, dirs, _files in os.walk(path, followlinks=False):
             if 'fixtures' in dirs:
                 yield from Path(root, 'fixtures').glob('**/*.py')
 

@@ -190,13 +190,13 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 Utilities to manipulate objects in database via models:
 
-* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L50-L77) - Result object returned by create_or_update2() with all information about create/save a model.
-* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L39-L47) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
-* [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19-L23) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
-* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L26-L36) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L235-L249) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
-* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L98-L232) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
-* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L80-L95) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
+* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L49-L76) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L38-L46) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
+* [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L19-L22) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
+* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L25-L35) - Create a new model instance with optional validate before create.
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L234-L252) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L97-L231) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
+* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L79-L94) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
 #### bx_django_utils.models.queryset_utils
 
@@ -287,18 +287,18 @@ Use Playwright in Unittest + Fast Django user login
 ### bx_django_utils.translation
 
 * [`FieldTranslation()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L110-L128) - Dict-like container that maps language codes to a translated string.
-* [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L131-L259) - A field designed to hold translations for a given set of language codes.
-* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L408-L469) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
+* [`TranslationField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L131-L261) - A field designed to hold translations for a given set of language codes.
+* [`TranslationFieldAdmin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L410-L471) - Provides drop-in support for ModelAdmin classes that want to display TranslationFields
 * [`TranslationFormField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L63-L107) - Default form field for TranslationField.
-* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L316-L405) - A unique translation slug field, useful in combination with TranslationField()
-* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L472-L505) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
-* [`expand_languages_codes()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L578-L598) - Build a complete list if language code with and without dialects.
-* [`get_user_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L601-L614) - Collect usable language codes the current user
-* [`make_unique()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L566-L575) - Flat args and remove duplicate entries while keeping the order intact.
-* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L519-L530) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
-* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L508-L516) - Remove all empty/None from a FieldTranslation, e.g.:
-* [`user_language_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L617-L625) - Returns the order in which to attempt resolving translations of a FieldTranslation model field.
-* [`validate_unique_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L533-L563) - Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
+* [`TranslationSlugField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L318-L407) - A unique translation slug field, useful in combination with TranslationField()
+* [`create_or_update_translation_callback()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L474-L507) - Callback for create_or_update2() for TranslationField, that will never remove existing translation.
+* [`expand_languages_codes()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L580-L600) - Build a complete list if language code with and without dialects.
+* [`get_user_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L603-L616) - Collect usable language codes the current user
+* [`make_unique()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L568-L577) - Flat args and remove duplicate entries while keeping the order intact.
+* [`merge_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L521-L532) - Merge two FieldTranslation and ignore all empty/None values, e.g.:
+* [`remove_empty_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L510-L518) - Remove all empty/None from a FieldTranslation, e.g.:
+* [`user_language_priorities()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L619-L627) - Returns the order in which to attempt resolving translations of a FieldTranslation model field.
+* [`validate_unique_translations()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/translation.py#L535-L565) - Deny creating non-unique translation: Creates ValidationError with change list search for doubled entries.
 
 ### bx_django_utils.user_timezone
 

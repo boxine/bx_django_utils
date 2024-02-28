@@ -162,7 +162,9 @@ class TranslationField(models.JSONField):
         kwargs['default'] = FieldTranslation
 
         if language_codes:
-            warnings.warn('language_codes argument is deprecated in favour of languages', DeprecationWarning)
+            warnings.warn(
+                'language_codes argument is deprecated in favour of languages', DeprecationWarning, stacklevel=2
+            )
             assert not languages, 'Remove language_codes argument!'
             self.languages = tuple((code, code) for code in language_codes)
         else:
@@ -385,7 +387,7 @@ class TranslationSlugField(TranslationField):
             populate_translations, (FieldTranslation, dict)
         ), f'Unexpected type: {type(populate_translations).__name__}'
 
-        for lang_code, lang_name in self.languages:
+        for lang_code, _lang_name in self.languages:
             source_text = slug_translations.get(lang_code) or populate_translations.get(lang_code)
             if source_text:
                 slug = get_unique_translation_slug(
