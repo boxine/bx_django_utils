@@ -16,7 +16,8 @@ from bx_django_utils_tests.test_app.models import (
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('action_time', 'user', 'content_type', 'object_id', 'change_message')
+    list_filter = ('action_flag', 'user', 'content_type')
 
 
 class NameListFilter(ExistingCountedListFilter):

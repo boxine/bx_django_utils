@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
@@ -40,16 +41,25 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
     form_class = ManageFeatureFlagsForm
 
     def get_context_data(self, **context):
+        content_type_id = ContentType.objects.get_for_model(FeatureFlagModel).id
+        log_entry_qs = LogEntry.objects.order_by('action_time').filter(content_type_id=content_type_id)
         feature_flags = []
         for instance in FeatureFlag.values():
+            cache_key = instance.cache_key
+            human_name = instance.human_name
+
+            # We didn't set `object_id` in the past. So we must add the ugly `change_message` fallback:
+            last_change_qs = log_entry_qs.filter(Q(object_id=cache_key) | Q(change_message__contains=human_name))
+
             feature_flags.append(
                 dict(
-                    cache_key=instance.cache_key,
-                    human_name=instance.human_name,
+                    cache_key=cache_key,
+                    human_name=human_name,
                     description=instance.description,
                     state=instance.state,
                     initial_state=instance.initial_state,
                     opposite_state=instance.opposite_state,
+                    last_change=last_change_qs.last(),
                 )
             )
         if not feature_flags:
@@ -81,7 +91,7 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
                 content_type_id=content_type_id,
                 action_flag=CHANGE,
                 change_message=f'Changed feature flag "{feature_flag.human_name}"',
-                object_id=None,
+                object_id=cache_key,
                 object_repr=change_message,  # Rendered in Django log list on index page!
             )
             log_entry.full_clean()

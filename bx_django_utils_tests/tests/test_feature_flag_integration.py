@@ -1,9 +1,13 @@
+import datetime
 from unittest import mock
+from unittest.mock import patch
 
+from bx_py_utils.test_utils.datetime import parse_dt
 from django.contrib.admin.models import LogEntry
 from django.core.cache import cache
 from django.template.defaulttags import CsrfTokenNode
 from django.test import TestCase
+from django.utils import timezone
 
 from bx_django_utils.feature_flags.test_utils import (
     FeatureFlagTestCaseMixin,
@@ -11,6 +15,8 @@ from bx_django_utils.feature_flags.test_utils import (
     get_feature_flag_db_info,
     get_feature_flag_states,
 )
+from bx_django_utils.templatetags.humanize_time import human_duration
+from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
 from bx_django_utils.test_utils.html_assertion import (
     HtmlAssertionMixin,
     assert_html_response_snapshot,
@@ -25,8 +31,9 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
     def setUpTestData(cls):
         super().setUpTestData()
 
-        cls.superuser = make_test_user(is_superuser=True)
+        cls.superuser = make_test_user(username='test-superuser', is_superuser=True)
 
+    @patch.object(timezone, 'now', MockDatetimeGenerator(datetime.timedelta(minutes=1)))
     def test_basic(self):
         self.client.force_login(self.superuser)
         response = self.client.get('/admin/')
@@ -110,6 +117,25 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
         log_entry = LogEntry.objects.get()
         self.assertEqual(log_entry.change_message, 'Changed feature flag "Foo"')
         self.assertEqual(log_entry.object_repr, 'Set "Foo" to DISABLED')
+        self.assertEqual(log_entry.object_id, 'feature-flags-foo')
+
+        self.assertTrue(log_entry.action_time)  # Time is set?
+
+        # "Mock" the real time:
+        action_time = parse_dt('2000-06-15T00:00:00+0000')
+        LogEntry.objects.update(action_time=action_time)
+
+        with (patch.object(CsrfTokenNode, 'render', return_value='MockedCsrfTokenNode'),):
+            response = self.client.get('/admin/feature_flags/manage/')
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<h2>Foo - DISABLED</h2>',
+                '<h2>Bar - DISABLED</h2>',
+                f'<p>Last changed by test-superuser {human_duration(action_time)} ago.</p>',
+            ),
+        )
+        assert_html_response_snapshot(response, query_selector='#content', validate=False)
 
 
 class PersistantFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
