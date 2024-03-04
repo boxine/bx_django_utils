@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load i18n humanize_time %}
 
 {% block content %}
 {{ form.errors }}
@@ -8,6 +8,13 @@
     <pre>{{ feature_flag.description }}</pre>
     <p>(Initial default state: {{ feature_flag.initial_state.name }})</p>
     <p>Current state: <strong>{{ feature_flag.state.name }}</strong></p>
+    {% if feature_flag.last_change %}
+        <p>
+            {% blocktranslate with time=feature_flag.last_change.action_time|human_duration user=feature_flag.last_change.user %}
+                Last changed by {{ user }} {{ time }} ago.
+            {% endblocktranslate %}
+        </p>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="cache_key" value="{{ feature_flag.cache_key }}">

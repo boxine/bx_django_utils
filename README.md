@@ -148,7 +148,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.admin_views
 
-* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L30-L91) - Base admin extra view to manage all existing feature flags in admin.
+* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L31-L101) - Base admin extra view to manage all existing feature flags in admin.
 
 #### bx_django_utils.feature_flags.data_classes
 
