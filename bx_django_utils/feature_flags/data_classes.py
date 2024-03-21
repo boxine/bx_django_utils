@@ -102,6 +102,10 @@ class FeatureFlag:
             return bool(raw_value)
 
     @property
+    def is_disabled(self) -> bool:
+        return not self.is_enabled
+
+    @property
     def state(self):
         if self.is_enabled:
             return State.ENABLED
@@ -126,3 +130,6 @@ class FeatureFlag:
     @classmethod
     def get_by_cache_key(cls, cache_key) -> "FeatureFlag":
         return cls.registry[cache_key]
+
+    def __bool__(self):
+        return self.is_enabled

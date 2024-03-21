@@ -4,7 +4,9 @@
 {% block content %}
 {{ form.errors }}
 {% for feature_flag in feature_flags %}
-    <h2>{{ feature_flag.human_name }} - {{ feature_flag.state.name }}</h2>
+    {% with anchor=feature_flag.human_name|slugify %}
+    <h2 id="{{ anchor }}">{{ feature_flag.human_name }} - {{ feature_flag.state.name }}&nbsp;<a href="#{{ anchor }}">&para;</a></h2>
+    {% endwith %}
     <pre>{{ feature_flag.description }}</pre>
     <p>(Initial default state: {{ feature_flag.initial_state.name }})</p>
     <p>Current state: <strong>{{ feature_flag.state.name }}</strong></p>

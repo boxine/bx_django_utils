@@ -53,9 +53,9 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
         self.assert_html_parts(
             response,
             parts=(
-                '<h2>Foo - ENABLED</h2>',
+                '<h2 id="foo">Foo - ENABLED&nbsp;<a href="#foo">&para;</a></h2>',
                 '<input type="submit" value="Set \'Foo\' to DISABLED">',
-                '<h2>Bar - DISABLED</h2>',
+                '<h2 id="bar">Bar - DISABLED&nbsp;<a href="#bar">&para;</a></h2>',
                 '<input type="submit" value="Set \'Bar\' to ENABLED">',
             ),
         )
@@ -130,8 +130,8 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
         self.assert_html_parts(
             response,
             parts=(
-                '<h2>Foo - DISABLED</h2>',
-                '<h2>Bar - DISABLED</h2>',
+                '<h2 id="foo">Foo - DISABLED&nbsp;<a href="#foo">&para;</a></h2>',
+                '<h2 id="bar">Bar - DISABLED&nbsp;<a href="#bar">&para;</a></h2>',
                 f'<p>Last changed by test-superuser {human_duration(action_time)} ago.</p>',
             ),
         )
