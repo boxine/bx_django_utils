@@ -48,7 +48,7 @@ def _exclude(file, excluded_modules):
     return any(file.startswith(excluded_path) for excluded_path in excluded_paths)
 
 
-def iter_frameinfo(start_no=2):
+def iter_frameinfo(start_no=2 if sys.version_info < (3, 12) else 1):
     previous_frame = sys._getframe(start_no)
     while previous_frame:
         file, line, func, code, _ = inspect.getframeinfo(previous_frame, context=1)
@@ -76,6 +76,9 @@ def get_stacktrace(tidy=True, exclude_modules=DEFAULT_EXCLUDED_MODULES):
             stacktrace.append(FrameInfo(file, line, func, code))
         if tidy and not _exclude(file, exclude_modules):
             stacktrace.append(FrameInfo(file, line, func, code))
+
+    if sys.version_info >= (3, 12):
+        stacktrace.pop(0)
 
     stacktrace.reverse()
     return stacktrace
