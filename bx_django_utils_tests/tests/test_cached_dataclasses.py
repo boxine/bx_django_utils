@@ -60,9 +60,7 @@ class TestCachedDataclass(ClearCacheMixin, SimpleTestCase):
 
         # Delete cache entry:
         deleted = data.delete_cache_entry()
-        if django.VERSION >= (3, 1):
-            # https://docs.djangoproject.com/en/3.2/topics/cache/#django.core.caches.cache.delete
-            self.assertTrue(deleted)
+        self.assertTrue(deleted)
         self.assertIsNone(ExampleCachedDataclass.get_from_cache(uuid=uuid_value))
 
     def test_no_uuid_argument(self):

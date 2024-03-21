@@ -29,8 +29,8 @@ packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests"
 
 [tool.poetry.dependencies]
 python = '>=3.9,<4.0.0'
-django = '>=3.2'
-bx_py_utils = '>=85'  # https://github.com/boxine/bx_py_utils
+django = '>=4.2'
+bx_py_utils = '>=92'  # https://github.com/boxine/bx_py_utils
 python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
 
 [tool.poetry.dev-dependencies]
@@ -116,16 +116,15 @@ legacy_tox_ini = """
 [tox]
 isolated_build = True
 envlist =
-    py{39,310,311}-django{41,42}
-    py{39,310}-django32
+    py39-django42
+    py{310,311,312}-django{42,50}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
 deps =
     django42: django>=4.2,<4.3
-    django41: django>=4.1,<4.2
-    django32: django>=3.2,<3.3
+    django50: django>=5.0,<5.1
     model-bakery
     playwright
     pdoc
