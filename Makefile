@@ -33,6 +33,9 @@ update: check-poetry ## Update the dependencies as according to the pyproject.to
 	poetry update -v
 	poetry install
 
+clear-partial-coverage:
+	rm -f .coverage.*
+
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
 	poetry run isort --check-only .
@@ -45,18 +48,18 @@ fix-code-style: ## Fix code formatting
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
 
-tox: check-poetry ## Run unittests via tox with all environments
-	poetry run tox
-	poetry run coverage combine --append
+tox: check-poetry clear-partial-coverage ## Run unittests via tox with all environments
+	poetry run tox p
+	poetry run coverage combine
 	poetry run coverage html
 	poetry run coverage report
 
 test: check-poetry  ## Run unittests
 	RAISE_LOG_OUTPUT=1 ./manage.sh test --parallel --shuffle --buffer
 
-coverage_test: ## Run tests and generate coverage html report
-	poetry run coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
-	poetry run coverage combine --append
+coverage_test: clear-partial-coverage ## Run tests and generate coverage html report
+	poetry run coverage run --parallel-mode manage.py test --parallel --shuffle
+	poetry run coverage combine
 	poetry run coverage html
 	poetry run coverage report
 
