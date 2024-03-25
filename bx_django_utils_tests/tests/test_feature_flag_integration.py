@@ -138,9 +138,9 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
         assert_html_response_snapshot(response, query_selector='#content', validate=False)
 
 
-class PersistantFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
+class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
 
-    def test_peristant(self):
+    def test_persistent(self):
         # Nothing stored, yet:
         self.assertEqual(get_feature_flag_cache_info(), {})
         self.assertEqual(get_feature_flag_db_info(), {})
@@ -185,3 +185,31 @@ class PersistantFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
         # Now it's in the cache:
         self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-bar': 1, 'feature-flags-foo': 0})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 1, 'feature-flags-foo': 0})
+
+    def test_temp_enable(self):
+        self.assertTrue(foo_feature_flag)
+        self.assertFalse(bar_feature_flag)
+
+        with (
+            foo_feature_flag.temp_enable(),
+            bar_feature_flag.temp_enable(),
+        ):
+            self.assertTrue(foo_feature_flag)
+            self.assertTrue(bar_feature_flag)
+
+        self.assertTrue(foo_feature_flag)
+        self.assertFalse(bar_feature_flag)
+
+    def test_temp_disable(self):
+        self.assertTrue(foo_feature_flag)
+        self.assertFalse(bar_feature_flag)
+
+        with (
+            foo_feature_flag.temp_disable(),
+            bar_feature_flag.temp_disable(),
+        ):
+            self.assertFalse(foo_feature_flag)
+            self.assertFalse(bar_feature_flag)
+
+        self.assertTrue(foo_feature_flag)
+        self.assertFalse(bar_feature_flag)
