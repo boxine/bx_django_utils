@@ -152,7 +152,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.data_classes
 
-* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L17-L135) - A feature flag that persistent the state into django cache/database.
+* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L18-L164) - A feature flag that persistent the state into django cache/database.
 
 #### bx_django_utils.feature_flags.test_utils
 

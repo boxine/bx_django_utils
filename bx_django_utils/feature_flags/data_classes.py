@@ -1,5 +1,6 @@
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
+from contextlib import contextmanager
 from typing import Optional
 
 from django.core.cache import cache
@@ -104,6 +105,34 @@ class FeatureFlag:
     @property
     def is_disabled(self) -> bool:
         return not self.is_enabled
+
+    @contextmanager
+    def temp_enable(self) -> Iterator[None]:
+        """
+        Temporarily enable the feature flag.
+        """
+        was_enabled = self.is_enabled
+        if not was_enabled:
+            self.enable()
+
+        yield
+
+        if not was_enabled:
+            self.disable()
+
+    @contextmanager
+    def temp_disable(self) -> Iterator[None]:
+        """
+        Temporarily disable the feature flag.
+        """
+        was_disabled = self.is_disabled
+        if not was_disabled:
+            self.disable()
+
+        yield
+
+        if not was_disabled:
+            self.enable()
 
     @property
     def state(self):
