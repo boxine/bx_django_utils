@@ -7,10 +7,10 @@ from django.test import TestCase
 
 from bx_django_utils.feature_flags import data_classes
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
-from bx_django_utils.feature_flags.exceptions import NotUniqueFlag
+from bx_django_utils.feature_flags.exceptions import FeatureFlagDisabled, NotUniqueFlag
 from bx_django_utils.feature_flags.state import State
 from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin, get_feature_flag_db_info
-from bx_django_utils.feature_flags.utils import validate_cache_key
+from bx_django_utils.feature_flags.utils import if_feature, validate_cache_key
 from bx_django_utils.test_utils.assert_queries import AssertQueries
 
 
@@ -68,14 +68,18 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
             seen_keys.add(instance.cache_key)
         self.assertEqual(seen_keys, test_keys)
 
-        # Inistal state is enabled?
+        # Initial state is enabled?
         self.assertEqual(self.initial_enabled_test_flag.state, State.ENABLED)
         self.assertEqual(self.initial_enabled_test_flag.opposite_state, State.DISABLED)
         self.assertTrue(self.initial_enabled_test_flag.is_enabled)
+        self.assertFalse(self.initial_enabled_test_flag.is_disabled)
+        self.assertTrue(self.initial_enabled_test_flag)  # checks __bool__
         # Disable
         self.initial_enabled_test_flag.set_state(State.DISABLED)
         # is disabled?
         self.assertFalse(self.initial_enabled_test_flag.is_enabled)
+        self.assertTrue(self.initial_enabled_test_flag.is_disabled)
+        self.assertFalse(self.initial_enabled_test_flag)  # checks __bool__
         self.assertEqual(self.initial_enabled_test_flag.state, State.DISABLED)
         self.assertEqual(self.initial_enabled_test_flag.opposite_state, State.ENABLED)
         # enable via set_state:
@@ -183,3 +187,61 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         with AssertQueries() as queries:
             self.assertTrue(flag.is_enabled)  # Now it's enabled
         queries.assert_queries(table_counts={})  # No Queries made?
+
+    def test_decorator(self):
+        some_var = 0
+
+        @if_feature(self.initial_enabled_test_flag)
+        def increment():
+            nonlocal some_var
+            some_var += 1
+
+        self.assertTrue(self.initial_enabled_test_flag)
+        self.assertEqual(some_var, 0)
+        increment()
+        self.assertEqual(some_var, 1)
+
+        self.initial_enabled_test_flag.disable()
+        increment()
+        self.assertEqual(some_var, 1)
+
+    def test_decorator_with_args(self):
+        some_var = 0
+        call_kwargs = None
+
+        @if_feature(self.initial_enabled_test_flag)
+        def increment(by, **kwargs):
+            nonlocal some_var
+            nonlocal call_kwargs
+            some_var += by
+            call_kwargs = kwargs
+
+        self.assertTrue(self.initial_enabled_test_flag)
+        self.assertEqual(some_var, 0)
+        self.assertIsNone(call_kwargs)
+        increment(2, foo=True)
+        self.assertEqual(some_var, 2)
+        self.assertEqual(call_kwargs, {'foo': True})
+
+        self.initial_enabled_test_flag.disable()
+        increment(3, foo=False)
+        self.assertEqual(some_var, 2)
+        self.assertEqual(call_kwargs, {'foo': True})
+
+    def test_decorator_raising(self):
+        some_var = 0
+
+        @if_feature(self.initial_enabled_test_flag, raise_exception=True)
+        def increment():
+            nonlocal some_var
+            some_var += 1
+
+        self.assertTrue(self.initial_enabled_test_flag)
+        self.assertEqual(some_var, 0)
+        increment()
+        self.assertEqual(some_var, 1)
+
+        self.initial_enabled_test_flag.disable()
+        with self.assertRaisesMessage(FeatureFlagDisabled, ''):
+            increment()
+        self.assertEqual(some_var, 1)
