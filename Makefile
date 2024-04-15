@@ -64,6 +64,15 @@ update-test-snapshot-files:   ## Update all snapshot files (by remove and recrea
 	find . -type f -name '*.snapshot.*' -delete
 	RAISE_SNAPSHOT_ERRORS=0 $(MAKE) tox
 
+update-test-migrations:  ## Update migration files from the test project
+	cd bx_django_utils_tests/test_app/migrations/ && find . -type f -name '00*.py' -delete
+	cd bx_django_utils_tests/approve_workflow_test_app/migrations/ && find . -type f -name '00*.py' -delete
+	./manage.sh makemigrations --noinput
+	poetry run black bx_django_utils_tests/test_app/migrations/0001_initial.py
+	poetry run isort bx_django_utils_tests/test_app/migrations/0001_initial.py
+	poetry run black bx_django_utils_tests/approve_workflow_test_app/migrations/0001_initial.py
+	poetry run isort bx_django_utils_tests/approve_workflow_test_app/migrations/0001_initial.py
+
 publish: install  ## Release new version to PyPi
 	poetry run publish
 

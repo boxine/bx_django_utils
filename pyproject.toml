@@ -80,6 +80,9 @@ lint = [
 ]
 log_level = "INFO"
 
+[tool.black]
+line_length = 119
+skip_string_normalization = true
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/config_files.html
