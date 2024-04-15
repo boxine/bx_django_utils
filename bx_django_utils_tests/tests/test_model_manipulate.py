@@ -1,4 +1,5 @@
 from unittest import mock
+from uuid import UUID
 
 from bx_py_utils.test_utils.datetime import parse_dt
 from django.core.exceptions import ValidationError
@@ -6,6 +7,7 @@ from django.core.validators import validate_slug
 from django.db.utils import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
+from model_bakery import baker
 
 from bx_django_utils.models.manipulate import (
     STORE_BEHAVIOR_IGNORE,
@@ -391,7 +393,7 @@ class ModelManipulateTestCase(TestCase):
         err_msg = (
             "store_behavior field name 'wrong' is not one of:"
             " ['blank_field', 'create_dt', 'id', 'many2one_rel',"
-            " 'name', 'null_field', 'slug', 'update_dt']"
+            " 'name', 'null_field', 'slug', 'update_dt', 'uuid_field']"
         )
         with self.assertRaisesMessage(InvalidStoreBehavior, err_msg):
             create_or_update2(
@@ -438,3 +440,57 @@ class ModelManipulateTestCase(TestCase):
             {'other_arg': 'changed'},
             {},
         ]
+
+    def test_create_or_update2_uuid(self):
+        baker.make(
+            CreateOrUpdateTestModel, id=1, uuid_field='00000000-0000-0000-0000-000000000001', name='foo', slug='foo'
+        )
+
+        # Change UUID field by string:
+
+        result: CreateOrUpdateResult = create_or_update2(
+            ModelClass=CreateOrUpdateTestModel,
+            lookup={'id': 1},
+            uuid_field='00000000-0000-0000-0000-000000000002',
+        )
+        self.assertIs(result.created, False)
+        self.assertEqual(result.updated_fields, ['uuid_field'])
+
+        # Change UUID field by object:
+
+        result: CreateOrUpdateResult = create_or_update2(
+            ModelClass=CreateOrUpdateTestModel,
+            lookup={'id': 1},
+            uuid_field=UUID('00000000-0000-0000-0000-000000000003'),
+        )
+        self.assertIs(result.created, False)
+        self.assertEqual(result.updated_fields, ['uuid_field'])
+
+        # Don't change anything, use UUID as string:
+
+        result: CreateOrUpdateResult = create_or_update2(
+            ModelClass=CreateOrUpdateTestModel,
+            lookup={'id': 1},
+            uuid_field='00000000-0000-0000-0000-000000000003',
+        )
+        self.assertIs(result.created, False)
+        self.assertEqual(result.updated_fields, [])
+
+        # Don't change anything, use UUID object:
+
+        result: CreateOrUpdateResult = create_or_update2(
+            ModelClass=CreateOrUpdateTestModel,
+            lookup={'id': 1},
+            uuid_field=UUID('00000000-0000-0000-0000-000000000003'),
+        )
+        self.assertIs(result.created, False)
+        self.assertEqual(result.updated_fields, [])
+
+        # Feed a non UUID will raise a normal error:
+
+        with self.assertRaisesMessage(ValidationError, 'is not a valid UUID'):
+            create_or_update2(
+                ModelClass=CreateOrUpdateTestModel,
+                lookup={'id': 1},
+                uuid_field='Bam !',
+            )
