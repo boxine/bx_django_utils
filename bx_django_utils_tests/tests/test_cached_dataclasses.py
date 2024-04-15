@@ -2,7 +2,6 @@ import dataclasses
 from typing import Any
 from uuid import UUID, uuid4
 
-import django
 from django.core.cache import cache
 from django.test import SimpleTestCase
 
