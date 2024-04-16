@@ -25,6 +25,7 @@ class CreateOrUpdateTestModel(TimetrackingBaseModel):
 
     blank_field = models.CharField(max_length=64, blank=True)
     null_field = models.CharField(max_length=64, blank=True, null=True)
+    uuid_field = models.UUIDField(blank=True, null=True)
 
 
 class GtinFieldTestModel(models.Model):

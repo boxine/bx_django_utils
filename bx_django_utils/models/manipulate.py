@@ -6,6 +6,7 @@
 import dataclasses
 import warnings
 from typing import Any, Callable, Optional
+from uuid import UUID
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
@@ -207,6 +208,12 @@ def create_or_update2(
             continue
 
         old_value = getattr(instance, field_name)
+
+        if isinstance(old_value, UUID) and not isinstance(value, UUID):
+            # Special case: Model field is a UUID but given values is a string.
+            # Important: Convert the database value and *not* the given value!
+            # In case of a non-UUID string a normal ValueError will be raised.
+            old_value = str(old_value)
 
         if old_value and field_name in to_be_set_if_empty_fields:
             # We should not overwrite this existing field value!
