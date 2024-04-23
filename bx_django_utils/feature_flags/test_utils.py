@@ -38,10 +38,13 @@ class FeatureFlagTestCaseMixin(ClearCacheMixin):
 
     * Restore `FeatureFlag.registry` between tests.
     * Restore all feature flags to the initial stage between tests.
+    * Warm-up the cache with the initial state of all feature flags.
 
     Used ClearCacheMixin to remove persistent data in Django's cache.
     Should be used with django.test.TestCase so that persistent data in database also be removed!
     """
+
+    warum_up_feature_flag_cache = True
 
     @classmethod
     def setUpClass(cls):
@@ -66,6 +69,10 @@ class FeatureFlagTestCaseMixin(ClearCacheMixin):
     def setUp(self):
         super().setUp()
         FeatureFlag.registry = deepcopy(self._origin_feature_flag_registry)
+
+        if self.warum_up_feature_flag_cache:
+            for feature_flag in FeatureFlag.registry.values():
+                feature_flag.is_enabled  # noqa: Will fill the cache with the initial state
 
     def tearDown(self):
         super().tearDown()

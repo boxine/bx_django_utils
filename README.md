@@ -156,7 +156,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.test_utils
 
-* [`FeatureFlagTestCaseMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/test_utils.py#L35-L72) - Mixin for `TestCase` that will change `FeatureFlag` entries. To make the tests atomic.
+* [`FeatureFlagTestCaseMixin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/test_utils.py#L35-L79) - Mixin for `TestCase` that will change `FeatureFlag` entries. To make the tests atomic.
 * [`get_feature_flag_states()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/test_utils.py#L12-L17) - Collects information about all registered feature flags and their current state.
 
 #### bx_django_utils.feature_flags.utils

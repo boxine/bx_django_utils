@@ -139,6 +139,7 @@ class FeatureFlagIntegrationTestCase(FeatureFlagTestCaseMixin, HtmlAssertionMixi
 
 
 class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
+    warum_up_feature_flag_cache = False
 
     def test_persistent(self):
         # Nothing stored, yet:

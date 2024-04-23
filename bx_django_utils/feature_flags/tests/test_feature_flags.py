@@ -17,6 +17,8 @@ from bx_django_utils.test_utils.assert_queries import AssertQueries
 class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
     """"""  # noqa - Don't add to README
 
+    warum_up_feature_flag_cache = False
+
     def setUp(self):
         super().setUp()
 

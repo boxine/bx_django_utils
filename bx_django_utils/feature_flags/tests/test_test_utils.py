@@ -16,11 +16,13 @@ TEST_CACHE_KEY = 'feature-flags-test_atomic'
 class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
     """"""  # noqa - Don't add to README
 
+    warum_up_feature_flag_cache = False
+
     def _test_atomic(self):
         # We always start fresh: Only with existing entries:
         self.assertEqual(FeatureFlag.registry.keys(), {'feature-flags-foo', 'feature-flags-bar'})
 
-        # Cache and DB empty?
+        # Cache and DB empty? (No warp-up made in mixin)
         self.assertEqual(get_feature_flag_cache_info(), {})
         self.assertEqual(get_feature_flag_db_info(), {})
 
@@ -45,3 +47,13 @@ class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
 
     def test_atomic2(self):
         self._test_atomic()
+
+
+class FeatureFlagTestCaseMixinTestCase1(FeatureFlagTestCaseMixin, TestCase):
+    """"""  # noqa - Don't add to README
+
+    warum_up_feature_flag_cache = True
+
+    def test_warm_up(self):
+        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})
+        self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})
