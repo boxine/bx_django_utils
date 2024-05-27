@@ -23,13 +23,13 @@ class InvalidStoreBehavior(FieldDoesNotExist):
     """
 
 
-def create(*, ModelClass, call_full_clean=True, save_kwargs=None, **values):
+def create(*, ModelClass, call_full_clean=True, save_kwargs=None, validate_unique=False, **values):
     """
     Create a new model instance with optional validate before create.
     """
     instance = ModelClass(**values)
     if call_full_clean:
-        instance.full_clean(validate_unique=False)  # Don't create non-valid instances
+        instance.full_clean(validate_unique=validate_unique)  # Don't create non-valid instances
     if save_kwargs is None:
         save_kwargs = {}
     instance.save(force_insert=True, **save_kwargs)
@@ -100,6 +100,7 @@ def create_or_update2(
     ModelClass: type[models.Model],
     lookup: dict = None,
     call_full_clean: bool = True,
+    validate_unique: bool = False,
     store_behavior: Optional[dict] = None,
     save_kwargs: Optional[dict] = None,
     update_model_field_callback: Callable = update_model_field,
@@ -179,6 +180,7 @@ def create_or_update2(
         # Create a new object
         instance = create(
             ModelClass=ModelClass, call_full_clean=call_full_clean, save_kwargs=save_kwargs,
+            validate_unique=validate_unique,
             **filtered_values)
         result.instance = instance
         result.created = True
@@ -191,6 +193,7 @@ def create_or_update2(
         instance = create(
             ModelClass=ModelClass,
             call_full_clean=call_full_clean,
+            validate_unique=validate_unique,
             save_kwargs=save_kwargs,
             **lookup,
             **filtered_values

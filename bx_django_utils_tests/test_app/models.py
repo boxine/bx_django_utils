@@ -2,6 +2,7 @@ import threading
 
 from bx_py_utils.dict_utils import pluck
 from django.db import models
+from polymorphic.models import PolymorphicModel
 
 from bx_django_utils.data_types.gtin.model_fields import GtinModelField
 from bx_django_utils.models.color_field import ColorModelField
@@ -174,3 +175,16 @@ class ValidateLengthTranslations(models.Model):
     translated_slug = TranslationSlugField(
         min_value_length=3, max_value_length=20, languages=LANGUAGES, populate_from='translated'
     )
+
+
+class PolymorphicVehicle(PolymorphicModel):
+    license_plate = models.CharField(max_length=64, primary_key=True)
+    color = models.TextField()
+
+
+class PolymorphicCar(PolymorphicVehicle):
+    pass
+
+
+class PolymorphicBike(PolymorphicVehicle):
+    pass

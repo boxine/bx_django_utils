@@ -167,6 +167,27 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='PolymorphicVehicle',
+            fields=[
+                ('license_plate', models.CharField(max_length=64, primary_key=True, serialize=False)),
+                ('color', models.TextField()),
+                (
+                    'polymorphic_ctype',
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='polymorphic_%(app_label)s.%(class)s_set+',
+                        to='contenttypes.contenttype',
+                    ),
+                ),
+            ],
+            options={
+                'abstract': False,
+                'base_manager_name': 'objects',
+            },
+        ),
+        migrations.CreateModel(
             name='StoreSaveModel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -273,6 +294,48 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
+        ),
+        migrations.CreateModel(
+            name='PolymorphicBike',
+            fields=[
+                (
+                    'polymorphicvehicle_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='test_app.polymorphicvehicle',
+                    ),
+                ),
+            ],
+            options={
+                'abstract': False,
+                'base_manager_name': 'objects',
+            },
+            bases=('test_app.polymorphicvehicle',),
+        ),
+        migrations.CreateModel(
+            name='PolymorphicCar',
+            fields=[
+                (
+                    'polymorphicvehicle_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='test_app.polymorphicvehicle',
+                    ),
+                ),
+            ],
+            options={
+                'abstract': False,
+                'base_manager_name': 'objects',
+            },
+            bases=('test_app.polymorphicvehicle',),
         ),
         migrations.CreateModel(
             name='CreateOrUpdateTestModel',

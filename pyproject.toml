@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_django_utils'
-version = "76"
+version = "77"
 description = 'Various Django utility functions'
 homepage = "https://github.com/boxine/bx_django_utils/"
 authors = [
@@ -50,6 +50,7 @@ model-bakery = '*'  # https://github.com/model-bakers/model_bakery
 tblib = '*'  # https://github.com/ionelmc/python-tblib
 packaging = '*'  # https://pypi.org/project/packaging/
 EditorConfig = '*'  # https://pypi.org/project/EditorConfig/
+django-polymorphic = '*'
 
 # https://github.com/akaihola/darker
 # https://github.com/ikamensh/flynt
@@ -141,6 +142,8 @@ deps =
     manageprojects
     packaging
     editorconfig
+    django-polymorphic
+    setuptools
 commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =
