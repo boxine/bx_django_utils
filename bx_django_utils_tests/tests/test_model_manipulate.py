@@ -22,7 +22,13 @@ from bx_django_utils.models.manipulate import (
 )
 from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
 from bx_django_utils.test_utils.model_clean_assert import AssertModelCleanCalled
-from bx_django_utils_tests.test_app.models import CreateOrUpdateTestModel, StoreSaveModel, TimetrackingTestModel
+from bx_django_utils_tests.test_app.models import (
+    CreateOrUpdateTestModel,
+    StoreSaveModel,
+    TimetrackingTestModel,
+    PolymorphicCar,
+    PolymorphicBike,
+)
 
 
 class ModelManipulateTestCase(TestCase):
@@ -494,3 +500,18 @@ class ModelManipulateTestCase(TestCase):
                 lookup={'id': 1},
                 uuid_field='Bam !',
             )
+
+    def test_polymorphic_change(self):
+        pk = 'D-TO123'
+        car = PolymorphicCar.objects.create(license_plate=pk, color='red')
+
+        with self.assertRaisesMessage(ValidationError, 'Polymorphic vehicle with this License plate already exists.'):
+            create_or_update2(
+                ModelClass=PolymorphicBike,
+                lookup={'license_plate': pk},
+                validate_unique=True,
+                color='blue',
+            )
+
+        # This should not crash
+        car.refresh_from_db()

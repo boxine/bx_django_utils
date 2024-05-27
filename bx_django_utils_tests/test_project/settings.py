@@ -62,6 +62,11 @@ MIDDLEWARE = [
     'bx_django_utils.user_timezone.middleware.UserTimezoneMiddleware',
 ]
 
+# We're a test application, the Debug toolbar is fine to run
+DEBUG_TOOLBAR_CONFIG = {
+    'IS_RUNNING_TESTS': False,
+}
+
 ROOT_URLCONF = 'bx_django_utils_tests.test_project.urls'
 
 TEMPLATES = [
