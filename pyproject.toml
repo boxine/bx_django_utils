@@ -147,10 +147,7 @@ deps =
 commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =
-    {envpython} -m coverage run --context='{envname}'
-    {envpython} -m coverage combine --append
-    {envpython} -m coverage xml
-    {envpython} -m coverage report
+    {envpython} -m coverage run --parallel-mode --context='{envname}'
 """
 
 
