@@ -211,15 +211,15 @@ class RenewAllFixturesBaseCommand(BaseCommand):
             filter_rex = re.compile(filter_re)
             all_fixtures = [
                 fixtures
-                for fixtures in fixtures_registry
+                for fixtures in all_fixtures
                 if filter_rex.search(fixtures.name) or filter_rex.search(fixtures.file_name)
             ]
 
-        if not options['all']:
+        if not options['all'] and len(all_fixtures) != 1:
             # Ask the user what fixtures should be updated.
             print('Please select:\n')
             fixture_map = {}
-            for number, fixtures in enumerate(fixtures_registry):
+            for number, fixtures in enumerate(all_fixtures):
                 fixture_map[str(number)] = fixtures
                 print(f'{number:>3} - {fixtures.name} - {fixtures.file_name}')
             print('\n(ENTER nothing for renew all fixtures)')
