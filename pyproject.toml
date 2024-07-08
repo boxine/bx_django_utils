@@ -1,12 +1,11 @@
-[tool.poetry]
-name = 'bx_django_utils'
-version = "77"
-description = 'Various Django utility functions'
-homepage = "https://github.com/boxine/bx_django_utils/"
+[project]
+name = "bx_django_utils"
+dynamic = ["version"]
+description = "Various Django utility functions"
 authors = [
-    'Jens Diemer <jens.diemer@boxine.de>',
-    'Philipp Hagemeister <phihag@phihag.de>',
-    'Florian Braun <mail@chiron-online.de>'
+    {name = 'Jens Diemer', email = 'jens.diemer@boxine.de'},
+    {name = 'Philipp Hagemeister', email = 'phihag@phihag.de'},
+    {name = 'Florian Braun', email = 'mail@chiron-online.de'},
 ]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -18,52 +17,26 @@ classifiers = [
     'Framework :: Django',
     'Intended Audience :: Developers',
 ]
-license = 'MIT'
-keywords=['django', 'utilities']
-include = ['LICENSE', 'README.md']
-readme='README.md'
-packages = [{ include = "bx_django_utils" }, { include = "bx_django_utils_tests" }]
+license = {text = "MIT"}
+readme="README.md"
 
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/boxine/bx_django_utils/issues"
+[project.urls]
+Documentation = "https://github.com/boxine/bx_django_utils/"
+Source = "https://github.com/boxine/bx_django_utils/"
 
-[tool.poetry.dependencies]
-python = '>=3.9,<4.0.0'
-django = '>=4.2'
-bx_py_utils = '>=92'  # https://github.com/boxine/bx_py_utils
-python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
-
-[tool.poetry.dev-dependencies]
-boto3 = '>=1.25.0'  # needed for e.g.: bx_django_utils/aws/ stuff!
-requests-mock = '*'
-tox = '>=4.4.4'  # https://github.com/tox-dev/tox
-coverage = '*'  # https://github.com/nedbat/coveragepy
-flake8 = '*'  # https://github.com/pycqa/flake8
-manageprojects = '*'  # https://github.com/jedie/manageprojects
-twine = '*'  # https://github.com/pypa/twine/
-django-debug-toolbar = '*'
-beautifulsoup4 = '*'
-lxml = '*'
-playwright = '*'  # https://playwright.dev/python/
-pdoc = '*'  # https://pdoc.dev/
-model-bakery = '*'  # https://github.com/model-bakers/model_bakery
-tblib = '*'  # https://github.com/ionelmc/python-tblib
-packaging = '*'  # https://pypi.org/project/packaging/
-EditorConfig = '*'  # https://pypi.org/project/EditorConfig/
-django-polymorphic = '*'
-
-# https://github.com/akaihola/darker
-# https://github.com/ikamensh/flynt
-# https://github.com/pycqa/isort
-# https://github.com/pygments/pygments
-darker = { version = "*", extras = ["flynt", "isort", "color"] }
-[tool.poetry.scripts]
-publish = "bx_django_utils_tests.test_project.publish:publish"
-
+[project.scripts]
+bx_django_utils = "bx_django_utils.__main__:main"
 
 [build-system]
-requires = ['poetry-core>=1.0.0']
-build-backend = 'poetry.core.masonry.api'
+requires = ["setuptools>=61.0", "setuptools_scm>=7.1"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bx_django_utils*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "bx_django_utils.__version__"}
 
 
 [tool.darker]
@@ -81,18 +54,13 @@ lint = [
 ]
 log_level = "INFO"
 
-[tool.black]
-line_length = 119
-skip_string_normalization = true
 
 [tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/config_files.html
-atomic=true
-profile='black'
-skip_glob=[".*", "*/htmlcov/*","*/migrations/*"]
-known_first_party=['bx_django_utils']
-line_length=119
-lines_after_imports=2
+profile = "black"
+
+
+[tool.pytest.ini_options]
+filterwarnings = []
 
 
 [tool.coverage.run]
@@ -100,7 +68,7 @@ branch = true
 parallel = true
 concurrency = ["multiprocessing"]
 source_pkgs=['bx_django_utils']
-command_line = 'manage.py test --parallel'  # Add --shuffle if we remove Django v3.2 support
+command_line = 'manage.py test --parallel --shuffle'
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*','*/migrations/*']
@@ -112,8 +80,6 @@ exclude_lines = [
     'pragma: no cover',
     'raise NotImplementedError',
     'if __name__ == .__main__.:',
-    'if TYPE_CHECKING:',
-    'if typing.TYPE_CHECKING:',
 ]
 
 
@@ -131,6 +97,8 @@ passenv = *
 deps =
     django42: django>=4.2,<4.3
     django50: django>=5.0,<5.1
+    bx_py_utils
+    python-stdnum
     model-bakery
     playwright
     pdoc
@@ -164,10 +132,10 @@ exclude = ['.venv', 'tests', 'migrations']
 
 
 [manageprojects] # https://github.com/jedie/manageprojects
-initial_revision = "70663ef"
-initial_date = 2023-02-07T09:52:21+01:00
+initial_revision = "013cb11"
+initial_date = 2024-07-08T14:39:09+02:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "poetry-django-app"
+cookiecutter_directory = "pipenv-python"
 
 [manageprojects.cookiecutter_context.cookiecutter]
 full_name = "Jens Diemer"
@@ -180,9 +148,4 @@ package_url = "https://github.com/boxine/bx_django_utils"
 issues_url = "https://github.com/boxine/bx_django_utils/issues"
 license = "MIT"
 _template = "https://github.com/jedie/cookiecutter_templates/"
-applied_migrations = [
-    "d970456", # 2023-02-20T16:19:35+01:00
-    "89aadc0", # 2023-03-17T09:44:50+01:00
-    "53a7e85", # 2023-04-10T19:08:56+02:00
-    "877e2ec", # 2023-08-17T20:54:24+02:00
-]
+applied_migrations = ["d970456", "89aadc0", "53a7e85", "877e2ec"]

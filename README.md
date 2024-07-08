@@ -377,9 +377,17 @@ If you like to start from stretch, just delete related test project files with:
 ...and start the test server again ;)
 
 
+
+## Create a release
+
+* Increase verion number in `bx_django_utils/__init__.py`
+* Create pull request
+* After merge, call: `make publish`
+
+
 ## License
 
-[MIT](LICENSE). Patches welcome!
+[MIT](https://github.com/boxine/bx_django_utils/blob/master/LICENSE). Patches welcome!
 
 
 ## About us

@@ -1,20 +1,50 @@
+import subprocess
+from importlib.metadata import version
+
+from bx_py_utils.test_utils.unittest_utils import assert_no_flat_tests_functions
 from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase
 from manageprojects.test_utils.project_setup import check_editor_config, get_py_max_line_length
 from model_bakery import baker
 from packaging.version import Version
 
-from bx_django_utils import __version__
+import bx_django_utils
 from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 from bx_django_utils_tests.tests import PACKAGE_ROOT
 
 
 class ProjectSetupTestCase(SimpleTestCase):
-    def test_version(self):
-        self.assertIsNotNone(__version__)
+    def test_code_style(self):
+        try:
+            output = subprocess.check_output(['make', 'lint'], stderr=subprocess.STDOUT, cwd=PACKAGE_ROOT, text=True)
+        except subprocess.CalledProcessError:
+            # Code style is not correct -> Try to fix it
+            subprocess.check_call(['make', 'fix-code-style'], stderr=subprocess.STDOUT, cwd=PACKAGE_ROOT)
 
-        version = Version(__version__)  # Will raise InvalidVersion() if wrong formatted
-        self.assertEqual(str(version), __version__)
+            # Check again:
+            subprocess.check_call(['make', 'lint'], cwd=PACKAGE_ROOT)
+        else:
+            self.assertIn('darker', output)
+            self.assertIn('flake8', output)
+
+    def test_version(self):
+        # We get a version string:
+        bx_py_utils_version_str = version('bx_django_utils')
+        self.assertIsInstance(bx_py_utils_version_str, str)
+        self.assertTrue(bx_py_utils_version_str)
+
+        # Note: The actual installed version may be different from the one in the __init__.py file.
+        # So check this too:
+        self.assertIsInstance(bx_django_utils.__version__, str)
+        bx_py_utils_version = Version(bx_django_utils.__version__)
+        self.assertIsInstance(bx_py_utils_version, Version)
+        self.assertEqual(str(bx_py_utils_version), bx_django_utils.__version__)  # Don't allow wrong formatting
+
+    def test_no_ignored_test_function(self):
+        # In the past we used pytest ;)
+        # Check if we still have some flat test function that will be not executed by unittests
+        assert_no_flat_tests_functions(PACKAGE_ROOT / 'bx_django_utils')
+        assert_no_flat_tests_functions(PACKAGE_ROOT / 'bx_django_utils_tests')
 
     def test_check_editor_config(self):
         check_editor_config(package_root=PACKAGE_ROOT)

@@ -1,5 +1,5 @@
 # docker build -f Dockerfile.tests .
-FROM python:3.9-slim-bullseye
+FROM python:3.12-slim-bullseye
 
 WORKDIR /bx_django_utils
 RUN set -x \
@@ -9,20 +9,18 @@ RUN set -x \
 
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Install Poetry + requirements + Playwright
-COPY Makefile pyproject.toml poetry.lock ./
+# Install requirements + Playwright
+COPY Makefile pyproject.toml Pipfile Pipfile.lock ./
 RUN set -x \
-    && make install-poetry \
     && make install || true \
     && make playwright-install \
-    && poetry run playwright install-deps
+    && .venv/bin/playwright install-deps
 
 COPY . .
 
 # List installed packages
 RUN set -x \
-    && poetry run pip freeze \
-    && poetry show --tree
+    && .venv/bin/pip freeze
 
 # Run unittests
 RUN make test
