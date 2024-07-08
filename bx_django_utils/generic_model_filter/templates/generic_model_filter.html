@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    <a href="{{ start_url }}"> &rsaquo; {{ title }}</a>
+
+{% if opts %}
+    &rsaquo; <a href="{{ search_model_url }}">{{ opts.app_config.verbose_name }} | {{ opts.verbose_name_plural|capfirst }}</a>
+{% endif %}
+
+    &rsaquo; {{ subtitle }}
+</div>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% if not search_values_input %}
+            {{ form.as_table }}
+        {% else %}
+            <table>
+            <tr>
+                <th>Model field</th>
+                <th>Filter by value</th>
+                <th>Filter by <code>isnull</code></th>
+            </tr>
+            {% for field in form %}
+                {% if field.name in regular_field_names %}
+                <tr title="{{ field.help_text }}">
+                    <td>{{ field.label_tag }}</td>
+                    <td>
+                        {{ field.errors }}
+                        {{ field }}
+                    </td>
+                    <td>
+                        {{ field.null_field }}
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+        {% endif %}
+        <p><input type="submit"></p>
+    </form>
+
+    {% if query_str %}
+        <h2>Found {{ filtered_count }} entries (total: {{ total_count }})</h2>
+    {% endif %}
+    {% if page_obj %}
+
+        <table>
+            {% for item in page_obj %}
+            <tr>
+                <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+                <td><a href="{% url opts|admin_urlname:'change' item.pk|admin_urlquote %}">{{ item }}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?{{ query_str }}&__page=1">&laquo; first</a>
+                    <a href="?{{ query_str }}&__page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?{{ query_str }}&__page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?{{ query_str }}&__page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+
+    {% endif %}
+{% endblock %}

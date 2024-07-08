@@ -168,6 +168,12 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 * [`clean_filename()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L34-L64) - Convert filename to ASCII only via slugify.
 * [`filename2human_name()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/filename.py#L7-L31) - Convert filename to a capitalized name.
 
+#### bx_django_utils.generic_model_filter.admin_views
+
+Generic "AdminExtraView" view to filter accessible model by any field value.
+
+* [`GenericModelFilterBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/generic_model_filter/admin_views.py#L171-L321) - Base "AdminExtraView" to add this view to the admin interface via @register_admin_view().
+
 ### bx_django_utils.http
 
 * [`build_url_parameters()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/http.py#L4-L30) - Return an encoded string of all given parameters.
@@ -189,6 +195,12 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 * [`ColorModelField()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/color_field.py#L14-L29) - Hex color model field, e.g.: "#0055ff" (It's not a html color picker widget)
 * [`HexColorValidator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/color_field.py#L6-L11) - Hex color validator (seven-character hexadecimal notation, e.g.: "#0055ff")
+
+#### bx_django_utils.models.get_models4user
+
+* [`SelectModelForm()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/get_models4user.py#L43-L57) - Form to select a model that the user can "view"
+* [`get_user_model_choices()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/get_models4user.py#L29-L40) - Build a form choices list with all models the given user can "view" | "add" | "change" | "delete" etc.
+* [`iter_user_models()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/get_models4user.py#L11-L26) - Filter models for the given user.
 
 #### bx_django_utils.models.manipulate
 

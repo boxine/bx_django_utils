@@ -12,6 +12,7 @@ from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
 from bx_django_utils.admin_extra_views.datatypes import AdminExtraMeta, PseudoApp
 from bx_django_utils.admin_extra_views.registry import register_admin_view
 from bx_django_utils.feature_flags.admin_views import ManageFeatureFlagsBaseView
+from bx_django_utils.generic_model_filter.admin_views import GenericModelFilterBaseView
 from bx_django_utils_tests.test_app.feature_flags import bar_feature_flag, foo_feature_flag
 
 
@@ -90,3 +91,15 @@ class FeatureFlagsInfoView(AdminExtraViewMixin, View):
         messages.info(self.request, f'Demo Feature "Bar" state: {bar_feature_flag.state.name}')
         url = reverse('admin:index')
         return HttpResponseRedirect(url)
+
+
+#####################################################################################
+# GenericModelFilter DEMO
+
+
+generic_model_filter_app = PseudoApp(meta=AdminExtraMeta(name='Generic Model Filter'))
+
+
+@register_admin_view(pseudo_app=generic_model_filter_app)
+class GenericModelFilterAdminExtraView(GenericModelFilterBaseView):
+    pass
