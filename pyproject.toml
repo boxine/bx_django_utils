@@ -6,6 +6,7 @@ authors = [
     {name = 'Jens Diemer', email = 'jens.diemer@boxine.de'},
     {name = 'Philipp Hagemeister', email = 'phihag@phihag.de'},
     {name = 'Florian Braun', email = 'mail@chiron-online.de'},
+    {name = 'Christian Schneider', email = 'christian@cnschn.com'},
 ]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
