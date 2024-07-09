@@ -18,8 +18,8 @@ def publish():
     Call this via:
         $ .venv/bin/publish
     """
-    PACKAGE_ROOT = Path(__file__).parent.parent
-    assert_is_file(PACKAGE_ROOT / 'pyproject.toml')
+    package_path = Path(bx_django_utils.__file__).parent.parent
+    assert_is_file(package_path / 'pyproject.toml')
 
     subprocess.check_call(['pipenv', 'check'])
 
@@ -28,7 +28,7 @@ def publish():
 
     publish_package(
         module=bx_django_utils,
-        package_path=PACKAGE_ROOT,
+        package_path=package_path,
     )
 
 

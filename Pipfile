@@ -21,6 +21,7 @@ pdoc = '*'  # https://pdoc.dev/
 model-bakery = '*'  # https://github.com/model-bakers/model_bakery
 tblib = '*'  # https://github.com/ionelmc/python-tblib
 packaging = '*'  # https://pypi.org/project/packaging/
+build = "*"  # https://github.com/pypa/build
 EditorConfig = '*'  # https://pypi.org/project/EditorConfig/
 django-polymorphic = '*'
 
