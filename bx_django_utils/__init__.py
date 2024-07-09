@@ -1,1 +1,1 @@
-__version__ = "78"
+__version__ = "78rc0"
