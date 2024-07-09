@@ -2,8 +2,8 @@
 
 (
     set -ex
-    poetry run python --version
-    poetry run django-admin --version
+    .venv/bin/python --version
+    .venv/bin/django-admin --version
 )
 
-exec poetry run python3 manage.py "$@"
+exec .venv/bin/python3 manage.py "$@"
