@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     #
     # Feature Flags:
     'bx_django_utils.feature_flags.apps.FeatureFlagsAppConfig',
+    #
+    # Generic Model Filter:
+    'bx_django_utils.generic_model_filter.apps.GenericModelFilterAppConfig',
 ]
 
 MIDDLEWARE = [
