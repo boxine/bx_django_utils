@@ -1,35 +1,5 @@
 [packages]
-django = '>=4.2'
-bx_py_utils = '>=92'  # https://github.com/boxine/bx_py_utils
-python-stdnum = '*'  # https://arthurdejong.org/python-stdnum/
-
+bx_django_utils = {path = ".", editable = true}
 
 [dev-packages]
-boto3 = '>=1.25.0'  # needed for e.g.: bx_django_utils/aws/ stuff!
-requests-mock = '*'
-tox = '>=4.4.4'  # https://github.com/tox-dev/tox
-coverage = '*'  # https://github.com/nedbat/coveragepy
-flake8 = '*'  # https://github.com/pycqa/flake8
-flake8-bugbear = "*"  # https://github.com/PyCQA/flake8-bugbear
-manageprojects = '*'  # https://github.com/jedie/manageprojects
-twine = '*'  # https://github.com/pypa/twine/
-django-debug-toolbar = '*'
-beautifulsoup4 = '*'
-lxml = '*'
-playwright = '*'  # https://playwright.dev/python/
-pdoc = '*'  # https://pdoc.dev/
-model-bakery = '*'  # https://github.com/model-bakers/model_bakery
-tblib = '*'  # https://github.com/ionelmc/python-tblib
-packaging = '*'  # https://pypi.org/project/packaging/
-build = "*"  # https://github.com/pypa/build
-EditorConfig = '*'  # https://pypi.org/project/EditorConfig/
-django-polymorphic = '*'
-
-# https://github.com/akaihola/darker
-# https://github.com/ikamensh/flynt
-# https://github.com/pycqa/isort
-# https://github.com/pygments/pygments
-darker = { version = "*", extras = ["flynt", "isort", "color"] }
-
-typeguard = "*"  # https://github.com/agronholm/typeguard/
-
+bx_django_utils = {path = ".", editable = true, extras = ["dev"]}

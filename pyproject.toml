@@ -21,6 +21,46 @@ classifiers = [
 license = {text = "MIT"}
 readme="README.md"
 
+
+dependencies = [
+    'django>=4.2',
+    'bx_py_utils>=92',  # https://github.com/boxine/bx_py_utils
+    'python-stdnum',  # https://arthurdejong.org/python-stdnum/
+]
+
+[project.optional-dependencies]
+dev = [
+    'boto3>=1.25.0',  # needed for e.g.: bx_django_utils/aws/ stuff!
+    'requests-mock',
+    'tox>=4.4.4',  # https://github.com/tox-dev/tox
+    'coverage',  # https://github.com/nedbat/coveragepy
+    'flake8',  # https://github.com/pycqa/flake8
+    'flake8-bugbear',  # https://github.com/PyCQA/flake8-bugbear
+    'manageprojects',  # https://github.com/jedie/manageprojects
+    'twine',  # https://github.com/pypa/twine/
+    'django-debug-toolbar',
+    'beautifulsoup4',
+    'lxml',
+    'playwright',  # https://playwright.dev/python/
+    'pdoc',  # https://pdoc.dev/
+    'model-bakery',  # https://github.com/model-bakers/model_bakery
+    'tblib',  # https://github.com/ionelmc/python-tblib
+    'packaging',  # https://pypi.org/project/packaging/
+    'build',  # https://github.com/pypa/build
+    'EditorConfig',  # https://pypi.org/project/EditorConfig/
+    #
+    'setuptools',  # Because of: https://github.com/jazzband/django-polymorphic/issues/599
+    'django-polymorphic',  # https://github.com/jazzband/django-polymorphic/
+
+    # https://github.com/akaihola/darker
+    # https://github.com/ikamensh/flynt
+    # https://github.com/pycqa/isort
+    # https://github.com/pygments/pygments
+    'darker[flynt, isort, color]',
+
+    'typeguard',  # https://github.com/agronholm/typeguard/
+]
+
 [project.urls]
 Documentation = "https://github.com/boxine/bx_django_utils/"
 Source = "https://github.com/boxine/bx_django_utils/"
@@ -96,24 +136,9 @@ skip_missing_interpreters = True
 [testenv]
 passenv = *
 deps =
+    .[dev]
     django42: django>=4.2,<4.3
     django50: django>=5.0,<5.1
-    bx_py_utils
-    python-stdnum
-    model-bakery
-    playwright
-    pdoc
-    beautifulsoup4
-    lxml
-    django-debug-toolbar
-    tblib
-    coverage[toml]
-    manageprojects
-    packaging
-    editorconfig
-    django-polymorphic
-    setuptools
-    typeguard
 commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =
