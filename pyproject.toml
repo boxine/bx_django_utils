@@ -112,6 +112,7 @@ deps =
     editorconfig
     django-polymorphic
     setuptools
+    typeguard
 commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =

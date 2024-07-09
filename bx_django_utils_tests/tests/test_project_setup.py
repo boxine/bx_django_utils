@@ -1,6 +1,8 @@
 import subprocess
 from importlib.metadata import version
+from pathlib import Path
 
+from bx_py_utils.path import assert_is_file
 from bx_py_utils.test_utils.unittest_utils import assert_no_flat_tests_functions
 from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase
@@ -10,7 +12,9 @@ from packaging.version import Version
 
 import bx_django_utils
 from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
-from bx_django_utils_tests.tests import PACKAGE_ROOT
+
+PACKAGE_ROOT = Path(bx_django_utils.__file__).parent.parent
+assert_is_file(PACKAGE_ROOT / 'pyproject.toml')
 
 
 class ProjectSetupTestCase(SimpleTestCase):

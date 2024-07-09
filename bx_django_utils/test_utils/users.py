@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import uuid
 
 from bx_py_utils.test_utils.assertion import assert_equal
@@ -146,7 +148,7 @@ def make_max_test_user(
     return user
 
 
-def assert_user_properties(user, properties: dict, raw_password: str = None) -> None:
+def assert_user_properties(user, properties: dict, raw_password: str | None = None) -> None:
     """
     Check a user instance with all properties and password (optional)
     """
