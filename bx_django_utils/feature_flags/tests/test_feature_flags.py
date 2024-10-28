@@ -8,6 +8,7 @@ from django.test import TestCase
 from bx_django_utils.feature_flags import data_classes
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
 from bx_django_utils.feature_flags.exceptions import FeatureFlagDisabled, NotUniqueFlag
+from bx_django_utils.feature_flags.models import FeatureFlagModel
 from bx_django_utils.feature_flags.state import State
 from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin, get_feature_flag_db_info
 from bx_django_utils.feature_flags.utils import if_feature, validate_cache_key
@@ -247,3 +248,24 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         with self.assertRaisesMessage(FeatureFlagDisabled, ''):
             increment()
         self.assertEqual(some_var, 1)
+
+
+class IsolatedFeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
+    """"""  # noqa - Don't add to README
+
+    def test_reset(self):
+        flag = FeatureFlag(
+            cache_key='reset-me',
+            human_name='Testing reset',
+            initial_enabled=False,
+        )
+        flag.enable()
+        self.assertTrue(FeatureFlagModel.objects.filter(cache_key=flag.cache_key).exists())
+        self.assertNotEqual(cache.get(flag.cache_key), None)
+
+        flag.reset()
+        self.assertFalse(FeatureFlagModel.objects.filter(cache_key=flag.cache_key).exists())
+        self.assertEqual(cache.get(flag.cache_key), None)
+
+        # Reset again – should not error
+        flag.reset()
