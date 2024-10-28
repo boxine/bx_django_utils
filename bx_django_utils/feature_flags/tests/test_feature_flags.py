@@ -269,3 +269,12 @@ class IsolatedFeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
 
         # Reset again – should not error
         flag.reset()
+
+    def test_str(self):
+        flag = FeatureFlag(
+            cache_key='be-wild',
+            human_name='Be wild',
+            initial_enabled=False,
+        )
+        self.assertEqual(str(flag), '<FeatureFlag be-wild>')
+        self.assertEqual(repr(flag), "FeatureFlag(cache_key='be-wild', human_name='Be wild', initial_enabled=False)")
