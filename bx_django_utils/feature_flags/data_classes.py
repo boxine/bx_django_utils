@@ -75,6 +75,10 @@ class FeatureFlag:
         cache.set(self.cache_key, state_value, timeout=None)  # set forever
         return bool(state_value)
 
+    def reset(self) -> None:
+        FeatureFlagModel.objects.filter(cache_key=self.cache_key).delete()
+        cache.delete(self.cache_key)
+
     @property
     def is_enabled(self) -> bool:
         try:
