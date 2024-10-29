@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 from unittest import TestCase
 
@@ -9,7 +8,6 @@ import bx_django_utils
 
 class Readme(TestCase):
     def test_auto_doc_in_readme(self):
-        assert sys.version_info >= (3, 9), 'requires Python v3.9 or newer'
         root_path = Path(bx_django_utils.__file__).parent.parent
         readme_path = root_path / 'README.md'
 
