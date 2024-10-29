@@ -11,9 +11,9 @@ authors = [
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Topic :: Software Development :: Libraries :: Python Modules',
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
     'Intended Audience :: Developers',
@@ -129,7 +129,6 @@ legacy_tox_ini = """
 [tox]
 isolated_build = True
 envlist =
-    py39-django42
     py{310,311,312}-django{42,50}
 skip_missing_interpreters = True
 
