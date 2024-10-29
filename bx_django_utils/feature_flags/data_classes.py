@@ -36,6 +36,7 @@ class FeatureFlag:
 
         validate_cache_key(cache_key)
         validate_cache_key(cache_key_prefix)
+        self.name = cache_key
         self.cache_key = f'{cache_key_prefix}-{cache_key}'
         validate_cache_key(self.cache_key)  # Double check ;)
 
@@ -166,3 +167,10 @@ class FeatureFlag:
 
     def __bool__(self):
         return self.is_enabled
+
+    def __str__(self):
+        return f'<FeatureFlag {self.name}>'
+
+    def __repr__(self):
+        initial = self.initial_state == State.ENABLED
+        return f'FeatureFlag(cache_key={self.name!r}, human_name={self.human_name!r}, initial_enabled={initial!r})'
