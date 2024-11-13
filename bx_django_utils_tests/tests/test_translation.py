@@ -78,7 +78,7 @@ class TranslationFieldTestCase(TestCase):
         self.assertNotEqual(obj1.translated, obj2.translated)
 
         qs = TranslatedModel.objects.order_by('translated').values('translated')
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             qs,
             [
                 {'translated': FieldTranslation({'de-de': 'Hallo 1', 'en-us': 'Hello 1', '_meta': {'a': [123]}})},
