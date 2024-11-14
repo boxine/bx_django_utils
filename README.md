@@ -49,8 +49,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.datatypes
 
-* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L15-L58) - Stores information for pseudo app and pseudo models.
-* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L61-L91) - Represents information about a Django App. Instance must be pass to @register_admin_view()
+* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L14-L57) - Stores information for pseudo app and pseudo models.
+* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L60-L90) - Represents information about a Django App. Instance must be pass to @register_admin_view()
 
 ###### bx_django_utils.admin_extra_views.management.commands.admin_extra_views
 
@@ -58,8 +58,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.registry
 
-* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L12-L101) - Hold all information about all admin extra views to expand urls and admin app list.
-* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L107-L120) - Decorator to add a normal view as pseudo App/Model to the admin.
+* [`AdminExtraViewRegistry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L11-L100) - Hold all information about all admin extra views to expand urls and admin app list.
+* [`register_admin_view()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/registry.py#L106-L119) - Decorator to add a normal view as pseudo App/Model to the admin.
 
 #### bx_django_utils.admin_extra_views.site
 
@@ -82,11 +82,11 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 Helpers to build Admin URLs
 
-* [`admin_change_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L62-L78) - Shortcut to generate Django admin "change" url for a model instance.
-* [`admin_changelist_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L119-L134) - Shortcut to generate Django admin "changelist" url for a model or instance.
-* [`admin_delete_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L100-L116) - Shortcut to generate Django admin "delete" url for a model instance.
-* [`admin_history_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L81-L97) - Shortcut to generate Django admin "history" url for a model instance.
-* [`admin_model_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L15-L59) - Build Admin change, add, changelist, etc. links with optional filter parameters.
+* [`admin_change_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L61-L77) - Shortcut to generate Django admin "change" url for a model instance.
+* [`admin_changelist_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L118-L133) - Shortcut to generate Django admin "changelist" url for a model or instance.
+* [`admin_delete_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L99-L115) - Shortcut to generate Django admin "delete" url for a model instance.
+* [`admin_history_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L80-L96) - Shortcut to generate Django admin "history" url for a model instance.
+* [`admin_model_url()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/admin_urls.py#L14-L58) - Build Admin change, add, changelist, etc. links with optional filter parameters.
 
 #### bx_django_utils.admin_utils.filters
 
@@ -152,7 +152,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.data_classes
 
-* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L21-L205) - A feature flag that persistent the state into django cache/database.
+* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L20-L204) - A feature flag that persistent the state into django cache/database.
 
 #### bx_django_utils.feature_flags.test_utils
 
@@ -216,8 +216,8 @@ Utilities to manipulate objects in database via models:
 
 #### bx_django_utils.models.queryset_utils
 
-* [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L8-L38) - Remove an applied .filter() from a QuerySet
-* [`remove_model_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L41-L68) - Remove an applied .filter() from a QuerySet if it contains references to the specified model
+* [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L7-L37) - Remove an applied .filter() from a QuerySet
+* [`remove_model_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L40-L67) - Remove an applied .filter() from a QuerySet if it contains references to the specified model
 
 #### bx_django_utils.models.timetracking
 
@@ -244,7 +244,7 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.assert_queries
 
-* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L35-L288) - Assert executed database queries: Check table names, duplicate/similar Queries.
+* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L34-L287) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
 #### bx_django_utils.test_utils.cache
 

@@ -4,7 +4,6 @@ from collections import Counter
 from difflib import unified_diff
 from pathlib import Path
 from pprint import pformat
-from typing import Optional, Union
 
 from bx_py_utils.test_utils.snapshot import assert_snapshot
 
@@ -176,7 +175,7 @@ class AssertQueries(SQLQueryRecorder):
             ))
             raise AssertionError(self.build_error_message(f'Table names does not match:\n{diff}'))
 
-    def assert_table_counts(self, table_counts: Union[Counter, dict], exclude: Optional[tuple[str, ...]] = None):
+    def assert_table_counts(self, table_counts: Counter | dict, exclude: tuple[str, ...] | None = None):
         if not isinstance(table_counts, Counter):
             table_counts = Counter(table_counts)
         table_name_count = self.count_table_names()
@@ -200,7 +199,7 @@ class AssertQueries(SQLQueryRecorder):
 
             raise AssertionError(self.build_error_message(msg))
 
-    def snapshot_table_counts(self, *, exclude: Optional[tuple[str]] = None, **kwargs):
+    def snapshot_table_counts(self, *, exclude: tuple[str] | None = None, **kwargs):
         table_name_count = self.count_table_names()
         if exclude:
             for k in exclude:
@@ -262,12 +261,12 @@ class AssertQueries(SQLQueryRecorder):
 
     def assert_queries(
         self,
-        table_counts: Optional[Union[Counter, dict]] = None,
-        double_tables: Optional[bool] = True,
-        table_names: Optional[list[str]] = None,
-        query_count: Optional[int] = None,
-        duplicated: Optional[bool] = True,
-        similar: Optional[bool] = True,
+        table_counts: Counter | dict | None = None,
+        double_tables: bool | None = True,
+        table_names: list[str] | None = None,
+        query_count: int | None = None,
+        duplicated: bool | None = True,
+        similar: bool | None = True,
     ):
         """
         Shortcut to assert everything

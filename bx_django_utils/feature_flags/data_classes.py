@@ -1,9 +1,8 @@
 import datetime
 import logging
 import time
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
-from typing import Callable, Optional
 
 from django.core.cache import cache
 
@@ -31,7 +30,7 @@ class FeatureFlag:
         cache_key: str,
         human_name: str,
         initial_enabled: bool,
-        description: Optional[str] = None,
+        description: str | None = None,
         cache_key_prefix: str = 'feature-flags',
         cache_duration: datetime.timedelta = DEFAULT_DURATION,
     ):

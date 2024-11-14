@@ -1,5 +1,4 @@
 from copy import deepcopy
-from typing import Type
 
 from django.db.models import Model, Q, QuerySet
 from django.db.models.sql.where import NothingNode
@@ -38,7 +37,7 @@ def remove_filter(queryset: QuerySet, lookup: str) -> QuerySet:
     return queryset
 
 
-def remove_model_filter(queryset: QuerySet, model: Type[Model]) -> QuerySet:
+def remove_model_filter(queryset: QuerySet, model: type[Model]) -> QuerySet:
     """
     Remove an applied .filter() from a QuerySet if it contains references to the specified model
     """

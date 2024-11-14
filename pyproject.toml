@@ -14,12 +14,14 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
     'Intended Audience :: Developers',
 ]
 license = {text = "MIT"}
 readme="README.md"
+requires-python = ">=3.10,<4"
 
 
 dependencies = [
@@ -129,7 +131,8 @@ legacy_tox_ini = """
 [tox]
 isolated_build = True
 envlist =
-    py{310,311,312}-django{42,50}
+    py{310,311,312}-django{42,50,51}
+    py313-django51
 skip_missing_interpreters = True
 
 [testenv]
@@ -138,6 +141,7 @@ deps =
     .[dev]
     django42: django>=4.2,<4.3
     django50: django>=5.0,<5.1
+    django51: django>=5.1,<5.2
 commands_pre =
     {envpython} -m playwright install chromium firefox
 commands =

@@ -1,7 +1,6 @@
 """
     Helpers to build Admin URLs
 """
-from typing import Optional, Union
 from urllib.parse import urlencode
 
 from django.contrib.admin.utils import quote
@@ -14,11 +13,11 @@ ADMIN_LINK_TYPES = ('changelist', 'add', 'history', 'delete', 'change')
 
 def admin_model_url(
     *,
-    model_or_instance: Union[models.Model, type[models.Model]],
-    action: Optional[str] = None,  # Default is 'changelist' and 'change'
+    model_or_instance: models.Model | type[models.Model],
+    action: str | None = None,  # Default is 'changelist' and 'change'
     admin_prefix: str = 'admin',
-    current_app: Optional[str] = None,
-    params: Optional[dict] = None,
+    current_app: str | None = None,
+    params: dict | None = None,
 ):
     """
     Build Admin change, add, changelist, etc. links with optional filter parameters.
@@ -62,8 +61,8 @@ def admin_model_url(
 def admin_change_url(
     instance: models.Model,
     admin_prefix: str = 'admin',
-    current_app: Optional[str] = None,
-    params: Optional[dict] = None,
+    current_app: str | None = None,
+    params: dict | None = None,
 ):
     """
     Shortcut to generate Django admin "change" url for a model instance.
@@ -81,8 +80,8 @@ def admin_change_url(
 def admin_history_url(
     instance: models.Model,
     admin_prefix: str = 'admin',
-    current_app: Optional[str] = None,
-    params: Optional[dict] = None,
+    current_app: str | None = None,
+    params: dict | None = None,
 ):
     """
     Shortcut to generate Django admin "history" url for a model instance.
@@ -100,8 +99,8 @@ def admin_history_url(
 def admin_delete_url(
     instance: models.Model,
     admin_prefix: str = 'admin',
-    current_app: Optional[str] = None,
-    params: Optional[dict] = None,
+    current_app: str | None = None,
+    params: dict | None = None,
 ):
     """
     Shortcut to generate Django admin "delete" url for a model instance.
@@ -117,10 +116,10 @@ def admin_delete_url(
 
 
 def admin_changelist_url(
-    model_or_instance: Union[models.Model, type[models.Model]],
+    model_or_instance: models.Model | type[models.Model],
     admin_prefix: str = 'admin',
-    current_app: Optional[str] = None,
-    params: Optional[dict] = None,
+    current_app: str | None = None,
+    params: dict | None = None,
 ):
     """
     Shortcut to generate Django admin "changelist" url for a model or instance.

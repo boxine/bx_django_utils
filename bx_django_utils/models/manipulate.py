@@ -5,12 +5,12 @@
 """
 import dataclasses
 import warnings
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 from uuid import UUID
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
-
 
 STORE_BEHAVIOR_IGNORE = "i"  # Ignore the value completely
 STORE_BEHAVIOR_SET_IF_EMPTY = "e"  # Use the value only if we currently have no one.
@@ -101,8 +101,8 @@ def create_or_update2(
     lookup: dict = None,
     call_full_clean: bool = True,
     validate_unique: bool = False,
-    store_behavior: Optional[dict] = None,
-    save_kwargs: Optional[dict] = None,
+    store_behavior: dict | None = None,
+    save_kwargs: dict | None = None,
     update_model_field_callback: Callable = update_model_field,
     **values,
 ) -> CreateOrUpdateResult:
