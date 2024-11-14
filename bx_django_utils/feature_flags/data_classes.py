@@ -1,7 +1,9 @@
+import datetime
 import logging
+import time
 from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
-from typing import Optional
+from typing import Callable, Optional
 
 from django.core.cache import cache
 
@@ -11,8 +13,9 @@ from bx_django_utils.feature_flags.state import State
 from bx_django_utils.feature_flags.utils import validate_cache_key
 from bx_django_utils.models.manipulate import create_or_update2
 
-
 logger = logging.getLogger(__name__)
+
+DEFAULT_DURATION = datetime.timedelta(seconds=0)
 
 
 class FeatureFlag:
@@ -30,7 +33,11 @@ class FeatureFlag:
         initial_enabled: bool,
         description: Optional[str] = None,
         cache_key_prefix: str = 'feature-flags',
+        cache_duration: datetime.timedelta = DEFAULT_DURATION,
     ):
+        """
+        :param cache_duration: how long the state of the flag should be cached in-process
+        """
         self.human_name = human_name
         self.description = description
 
@@ -49,6 +56,12 @@ class FeatureFlag:
             self.initial_state = State.ENABLED
         else:
             self.initial_state = State.DISABLED
+
+        if cache_duration:
+            self._cache_duration: datetime.timedelta = cache_duration
+            self._cache_time_func: Callable[[], float] = time.monotonic
+            self._cache_from: float = self._cache_time_func()
+            self._cache_value: State = self.initial_state
 
     def enable(self) -> bool:
         return self.set_state(new_state=State.ENABLED)
@@ -82,6 +95,22 @@ class FeatureFlag:
 
     @property
     def is_enabled(self) -> bool:
+        if not hasattr(self, '_cache_duration'):  # caching is disabled
+            return self._compute_is_enabled()
+
+        elapsed = self._cache_time_func() - self._cache_from
+
+        # cache is still valid
+        if elapsed <= self._cache_duration.total_seconds():
+            return bool(self._cache_value.value)
+
+        # cache is invalid -> recompute
+        state = self._compute_is_enabled()
+        self._cache_from = self._cache_time_func()
+        self._cache_value = State(state)
+        return state
+
+    def _compute_is_enabled(self) -> bool:
         try:
             raw_value = cache.get(self.cache_key)
         except Exception as err:

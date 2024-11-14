@@ -148,11 +148,11 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.admin_views
 
-* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L31-L101) - Base admin extra view to manage all existing feature flags in admin.
+* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L31-L105) - Base admin extra view to manage all existing feature flags in admin.
 
 #### bx_django_utils.feature_flags.data_classes
 
-* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L18-L176) - A feature flag that persistent the state into django cache/database.
+* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L21-L205) - A feature flag that persistent the state into django cache/database.
 
 #### bx_django_utils.feature_flags.test_utils
 
