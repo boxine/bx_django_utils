@@ -1,3 +1,4 @@
+import datetime
 import logging
 from unittest.mock import patch
 
@@ -248,6 +249,27 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         with self.assertRaisesMessage(FeatureFlagDisabled, ''):
             increment()
         self.assertEqual(some_var, 1)
+
+    def test_cache(self):
+        duration = datetime.timedelta(seconds=60)
+        ff = FeatureFlag(
+            cache_key='cache-test',
+            human_name='Cache Test',
+            initial_enabled=True,
+            cache_duration=duration,
+        )
+        self.assertTrue(ff)
+
+        ff.disable()
+        self.assertTrue(ff)  # still enabled due to caching!
+
+        orig_time_func = ff._cache_time_func
+
+        def future():
+            return orig_time_func() + duration.total_seconds() + 1
+
+        ff._cache_time_func = future
+        self.assertFalse(ff)  # now it's disabled due to cache expiration
 
 
 class IsolatedFeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):

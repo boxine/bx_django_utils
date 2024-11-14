@@ -84,6 +84,10 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
             feature_flag.set_state(new_state)
             change_message = f'Set "{feature_flag.human_name}" to {feature_flag.state.name}'
 
+            if hasattr(feature_flag, '_cache_duration'):
+                eta = int(feature_flag._cache_duration.total_seconds())
+                change_message += f' (will take up to {eta} seconds to take full effect)'
+
             # Create a LogEntry for this action:
             content_type_id = ContentType.objects.get_for_model(FeatureFlagModel).id
             log_entry = LogEntry.objects.log_action(
