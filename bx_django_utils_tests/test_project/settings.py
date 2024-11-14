@@ -110,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = []  # Just a test project, so no restrictions
 
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
-USE_L10N = True
 LOCALE_PATHS = (
     BASE_DIR.parent / 'bx_django_utils' / 'locale',
 )

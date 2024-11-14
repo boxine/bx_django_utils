@@ -1,6 +1,6 @@
 from collections import defaultdict
+from collections.abc import Callable
 from pprint import saferepr
-from typing import Callable, Optional
 
 from django.db import connections
 
@@ -112,8 +112,8 @@ class SQLQueryRecorder:
 
     def __init__(
         self,
-        databases: Optional[list[str]] = None,
-        collect_stacktrace: Optional[Callable] = None,
+        databases: list[str] | None = None,
+        collect_stacktrace: Callable | None = None,
         query_explain: bool = False,  # Capture EXPLAIN SQL information?
     ):
         self.logger = Logger()

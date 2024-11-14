@@ -1,6 +1,5 @@
 import tempfile
 from pathlib import Path
-from typing import Union
 from unittest.mock import patch
 
 from bx_py_utils.test_utils.redirect import RedirectOut
@@ -178,7 +177,7 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
         self,
         *,
         options=None,
-        expected_stdout: Union[str, list[str]],
+        expected_stdout: str | list[str],
         expected_stderr='',
         strip_output=True,
         input=None,

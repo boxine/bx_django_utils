@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 VERSION_FILE = pathlib.Path(settings.BASE_DIR) / 'VERSION'
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def get_version(raise_error=False):
     try:
         version_text = VERSION_FILE.read_text()

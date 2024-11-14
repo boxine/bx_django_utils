@@ -1,12 +1,11 @@
 import dataclasses
-from typing import Callable, List, Set
+from collections.abc import Callable
 
 from django.contrib.admin import AdminSite
 from django.contrib.admin.sites import site as default_site
 from django.utils.text import slugify
 
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
-
 
 _APP_LABELS = set()
 _URL_NAMES = set()
@@ -22,7 +21,7 @@ class AdminExtraMeta:
     app_label: str = None  # Optional: Will be set from name, if not defined
 
     # must all be met to display. If not set: only_staff_user() will be added:
-    conditions: Set[Callable] = dataclasses.field(default_factory=set)
+    conditions: set[Callable] = dataclasses.field(default_factory=set)
 
     # Set via set_url_info():
     url: str = None
@@ -67,7 +66,7 @@ class PseudoApp:
     meta: AdminExtraMeta = None
 
     # Will be filled by @register_admin_view():
-    views: List = dataclasses.field(default_factory=list)
+    views: list = dataclasses.field(default_factory=list)
 
     # The Django Admin site for this extra views (optional):
     admin_site: AdminSite = None

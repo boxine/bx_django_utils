@@ -1,5 +1,4 @@
 from collections.abc import Iterator
-from typing import Union
 
 from django.http import HttpRequest
 from django.urls import path, reverse
@@ -17,7 +16,7 @@ class AdminExtraViewRegistry:
     def __init__(self):
         self.pseudo_apps = set()
 
-    def add_view(self, pseudo_app: PseudoApp, view_class: type[Union[AdminExtraViewMixin, View]]) -> None:
+    def add_view(self, pseudo_app: PseudoApp, view_class: type[AdminExtraViewMixin | View]) -> None:
         """
         Collect all admin extra views. Called by our @register_admin_view() decorator.
         """
@@ -93,7 +92,7 @@ class AdminExtraViewRegistry:
 
         return app_list
 
-    def __iter__(self) -> Iterator[type[Union[AdminExtraViewMixin, View]]]:
+    def __iter__(self) -> Iterator[type[AdminExtraViewMixin | View]]:
         """
         Iterate sorted over all registered admin extra view classes.
         """
