@@ -132,6 +132,10 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
             'Get cache key \'feature-flags-test-initial_enabled\' failed: Cache down', output
         )
 
+        # what happens when the flag is flipped while there is a cache problem?
+        with patch.object(data_classes.cache, 'set', side_effect=Exception('Cache down')):
+            self.initial_enabled_test_flag.disable()
+
     def test_cache_usage(self):
         # Test if cache works, in current test setup:
         self.assertIsNone(cache.get('foobar'))

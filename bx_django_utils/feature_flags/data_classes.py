@@ -74,12 +74,16 @@ class FeatureFlag:
             new_state, State
         ), f'Given {new_state!r} (type: {type(new_state).__name__}) is not a State object!'
 
-        state = self._add2cache(state_value=new_state.value)
         create_or_update2(
             ModelClass=FeatureFlagModel,
             lookup={'cache_key': self.cache_key},
             state=new_state,
         )
+        try:
+            state = self._add2cache(state_value=new_state.value)
+        except Exception as err:
+            logger.exception('Set cache key %r failed: %s', self.cache_key, err)
+            state = bool(new_state.value)
         return state
 
     def _add2cache(self, state_value: int) -> bool:
@@ -110,9 +114,12 @@ class FeatureFlag:
         return state
 
     def _compute_is_enabled(self) -> bool:
+        cache_failed = False
+
         try:
             raw_value = cache.get(self.cache_key)
         except Exception as err:
+            cache_failed = True
             # Will only happen, if cache backend is down
             logger.exception('Get cache key %r failed: %s', self.cache_key, err)
             raw_value = None  # Use the initial state
@@ -126,11 +133,15 @@ class FeatureFlag:
                 # We found the flag in database -> store state in the cache
                 # and return the current state
                 state_value = instance['state']
-                return self._add2cache(state_value=state_value)
+                if not cache_failed:
+                    self._add2cache(state_value=state_value)
+                return bool(state_value)
             else:
                 # It's not in the cache and database -> store initial state in cache and database
                 # and return the current state
-                return self.set_state(new_state=self.initial_state)
+                if not cache_failed:
+                    self.set_state(new_state=self.initial_state)
+                return bool(self.initial_state.value)
         else:
             assert raw_value in (0, 1), f'Unknown cache value: {raw_value!r}'
             return bool(raw_value)
