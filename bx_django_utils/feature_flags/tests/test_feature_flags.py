@@ -275,6 +275,46 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         ff._cache_time_func = future
         self.assertFalse(ff)  # now it's disabled due to cache expiration
 
+    def test_prove_split_brain(self):
+        class CacheDown(Exception):
+            pass
+
+        class MalfunctioningCache:
+            def get(self, key):
+                raise CacheDown('Cache down when getting')
+            def set(self, key, value, timeout):
+                raise CacheDown('Cache down when setting')
+
+        ff = FeatureFlag(
+            cache_key='test-cache-outage',
+            human_name='Test Cache Outage',
+            initial_enabled=True,
+        )
+        self.assertEquals(ff.cache_key, 'feature-flags-test-cache-outage')
+
+        # check initial state for sanity
+        self.assertTrue(ff)
+        self.assertEqual(cache.get(ff.cache_key), 1)
+        ff_db = FeatureFlagModel.objects.get(cache_key=ff.cache_key)
+        self.assertEqual(ff_db.state, State.ENABLED)
+
+        # attempt to disable the flag while there's a problem with the cache
+        with patch('bx_django_utils.feature_flags.data_classes.cache', new=MalfunctioningCache()):
+            ff.disable()
+
+            # check state - we should have a split brain because the flag state was written to db
+            # but not cache
+            self.assertFalse(ff)  # because cache is down and db has value 0
+            self.assertEqual(cache.get(ff.cache_key), 1)  # wasn't changed
+            ff_db.refresh_from_db()
+            self.assertEqual(ff_db.state, State.DISABLED)
+
+        # the cache magically recovers - split brain persists
+        self.assertTrue(ff)  # because cache is available and has value 1
+        self.assertEqual(cache.get(ff.cache_key), 1)
+        ff_db.refresh_from_db()
+        self.assertEqual(ff_db.state, State.DISABLED)
+
 
 class IsolatedFeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
     """"""  # noqa - Don't add to README
