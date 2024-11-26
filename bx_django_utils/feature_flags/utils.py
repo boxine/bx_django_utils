@@ -2,19 +2,10 @@ import functools
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from django.core.cache.backends.base import memcache_key_warnings
-from django.core.exceptions import ValidationError
-
 from bx_django_utils.feature_flags.exceptions import FeatureFlagDisabled
 
 if TYPE_CHECKING:
     from bx_django_utils.feature_flags.data_classes import FeatureFlag
-
-
-def validate_cache_key(cache_key: str) -> None:
-    messages = list(memcache_key_warnings(cache_key))
-    if messages:
-        raise ValidationError(messages)
 
 
 def if_feature(

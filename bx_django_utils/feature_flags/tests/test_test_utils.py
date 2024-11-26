@@ -3,12 +3,7 @@ import random
 from django.test import TestCase
 
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
-from bx_django_utils.feature_flags.test_utils import (
-    FeatureFlagTestCaseMixin,
-    get_feature_flag_cache_info,
-    get_feature_flag_db_info,
-)
-
+from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin, get_feature_flag_db_info
 
 TEST_CACHE_KEY = 'feature-flags-test_atomic'
 
@@ -22,8 +17,7 @@ class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
         # We always start fresh: Only with existing entries:
         self.assertEqual(FeatureFlag.registry.keys(), {'feature-flags-foo', 'feature-flags-bar'})
 
-        # Cache and DB empty? (No warp-up made in mixin)
-        self.assertEqual(get_feature_flag_cache_info(), {})
+        # DB empty? (No warp-up made in mixin)
         self.assertEqual(get_feature_flag_db_info(), {})
 
         # Add a new "test_atomic" entry in FeatureFlag.registry:
@@ -36,7 +30,6 @@ class FeatureFlagTestCaseMixinTestCase(FeatureFlagTestCaseMixin, TestCase):
         self.assertFalse(bar_feature_flag.is_enabled)
 
         # Only our "test_atomic" stored?
-        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-test_atomic': 0})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-test_atomic': 0})
 
         # Add garbage to registry -> FeatureFlagTestCaseMixin should reset it:
@@ -55,5 +48,4 @@ class FeatureFlagTestCaseMixinTestCase1(FeatureFlagTestCaseMixin, TestCase):
     warum_up_feature_flag_cache = True
 
     def test_warm_up(self):
-        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})

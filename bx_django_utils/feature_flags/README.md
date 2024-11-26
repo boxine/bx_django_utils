@@ -74,5 +74,5 @@ class ManageFeatureFlagsAdminExtraView(ManageFeatureFlagsBaseView):
 
 ## Performance considerations
 
-By default, each time the flags state is evaluated (e.g. when calling `foo_feature_flag.is_enabled()`), the flag state is fetched from the underlying storage. This may cause poor performance in hot code paths.
+By default, each time the flags state is evaluated (e.g. when calling `foo_feature_flag.is_enabled()`), the flag state is fetched from the database. This may cause poor performance in hot code paths.
 You can limit this evaluation to once per n seconds by passing the `cache_duration=timedelta(seconds=n)` argument to the `FeatureFlag` constructor.
