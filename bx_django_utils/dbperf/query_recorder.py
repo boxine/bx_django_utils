@@ -1,5 +1,5 @@
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from pprint import saferepr
 
 from django.db import connections
@@ -112,7 +112,7 @@ class SQLQueryRecorder:
 
     def __init__(
         self,
-        databases: list[str] | None = None,
+        databases: Iterable[str] | None = None,
         collect_stacktrace: Callable | None = None,
         query_explain: bool = False,  # Capture EXPLAIN SQL information?
     ):
