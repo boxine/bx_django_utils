@@ -209,6 +209,20 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         increment()
         self.assertEqual(some_var, 1)
 
+    def test_decorator_with_retval_factory(self):
+        def default_numbers() -> list[int]:
+            return [97, 98, 99]
+
+        @if_feature(self.initial_enabled_test_flag, retval_factory=default_numbers)
+        def compute_numbers() -> list[int]:
+            return [1, 2, 3]
+
+        self.assertTrue(self.initial_enabled_test_flag)
+        self.assertEqual(compute_numbers(), [1, 2, 3])
+        self.initial_enabled_test_flag.disable()
+        self.assertFalse(self.initial_enabled_test_flag)
+        self.assertEqual(compute_numbers(), [97, 98, 99])
+
     def test_decorator_with_args(self):
         some_var = 0
         call_kwargs = None

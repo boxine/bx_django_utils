@@ -161,7 +161,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.utils
 
-* [`if_feature()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/utils.py#L20-L38) - A decorator that only executed the decorated function if the given feature flag is enabled.
+* [`if_feature()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/utils.py#L20-L48) - A decorator that only executes the decorated function if the given feature flag is enabled.
 
 ### bx_django_utils.filename
 
