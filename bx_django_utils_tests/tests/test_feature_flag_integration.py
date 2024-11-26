@@ -4,14 +4,12 @@ from unittest.mock import patch
 
 from bx_py_utils.test_utils.datetime import parse_dt
 from django.contrib.admin.models import LogEntry
-from django.core.cache import cache
 from django.template.defaulttags import CsrfTokenNode
 from django.test import TestCase
 from django.utils import timezone
 
 from bx_django_utils.feature_flags.test_utils import (
     FeatureFlagTestCaseMixin,
-    get_feature_flag_cache_info,
     get_feature_flag_db_info,
     get_feature_flag_states,
 )
@@ -143,21 +141,18 @@ class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
 
     def test_persistent(self):
         # Nothing stored, yet:
-        self.assertEqual(get_feature_flag_cache_info(), {})
         self.assertEqual(get_feature_flag_db_info(), {})
 
         # Check initial state of "Foo"-Flag:
         self.assertTrue(foo_feature_flag.is_enabled)  # Foo initial == enabled
 
         # Check will persistent the current stage of the flag:
-        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-foo': 1})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-foo': 1})
 
         # Check initial state of "Bar"-Flag:
         self.assertFalse(bar_feature_flag.is_enabled)  # Bar initial == disabled
 
         # Now both are persistent:
-        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 0, 'feature-flags-foo': 1})
         # Check get_feature_flag_states():
         self.assertEqual(get_feature_flag_states(), {'feature-flags-bar': False, 'feature-flags-foo': True})
@@ -172,19 +167,11 @@ class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
         self.assertFalse(foo_feature_flag.is_enabled)
         self.assertTrue(bar_feature_flag.is_enabled)
 
-        # Remove the states from the cache:
-        cache.clear()
-
-        # Cache empty, but database holds still the data:
-        self.assertEqual(get_feature_flag_cache_info(), {})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 1, 'feature-flags-foo': 0})
 
         # State should be not changed:
         self.assertFalse(foo_feature_flag.is_enabled)
         self.assertTrue(bar_feature_flag.is_enabled)
-
-        # Now it's in the cache:
-        self.assertEqual(get_feature_flag_cache_info(), {'feature-flags-bar': 1, 'feature-flags-foo': 0})
         self.assertEqual(get_feature_flag_db_info(), {'feature-flags-bar': 1, 'feature-flags-foo': 0})
 
     def test_temp_enable(self):

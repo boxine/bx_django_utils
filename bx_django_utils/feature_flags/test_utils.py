@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 from django.conf import settings
-from django.core.cache import cache
 from django.test import override_settings
 
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
@@ -15,16 +14,6 @@ def get_feature_flag_states() -> dict:
     If FeatureFlagTestCaseMixin used -> the current state is the initial state!
     """
     return {feature_flag.cache_key: feature_flag.is_enabled for feature_flag in FeatureFlag.values()}
-
-
-def get_feature_flag_cache_info() -> dict:
-    # Not in README: Probably only useful for internal use.
-    result = {}
-    for cache_key in sorted(FeatureFlag.registry.keys()):
-        state = cache.get(cache_key)
-        if state is not None:
-            result[cache_key] = state
-    return result
 
 
 def get_feature_flag_db_info() -> dict:
