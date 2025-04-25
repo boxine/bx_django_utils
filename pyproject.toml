@@ -21,20 +21,18 @@ classifiers = [
 ]
 license = {text = "MIT"}
 readme="README.md"
-requires-python = ">=3.10,<4"
 
 
+requires-python = ">=3.11"
 dependencies = [
     'django>=4.2',
     'bx_py_utils>=92',  # https://github.com/boxine/bx_py_utils
     'python-stdnum',  # https://arthurdejong.org/python-stdnum/
 ]
-
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     'boto3>=1.25.0',  # needed for e.g.: bx_django_utils/aws/ stuff!
     'requests-mock',
-    'tox>=4.4.4',  # https://github.com/tox-dev/tox
     'coverage',  # https://github.com/nedbat/coveragepy
     'flake8',  # https://github.com/pycqa/flake8
     'flake8-bugbear',  # https://github.com/PyCQA/flake8-bugbear
@@ -53,6 +51,8 @@ dev = [
     #
     'setuptools',  # Because of: https://github.com/jazzband/django-polymorphic/issues/599
     'django-polymorphic',  # https://github.com/jazzband/django-polymorphic/
+    "uv",  # https://github.com/astral-sh/uv
+    "nox",  # https://github.com/wntrblm/nox
 
     # https://github.com/akaihola/darker
     # https://github.com/ikamensh/flynt
@@ -92,9 +92,7 @@ diff = false
 check = false
 stdout = false
 isort = true
-lint = [
-    "flake8",
-]
+lint = []
 log_level = "INFO"
 
 
@@ -165,17 +163,19 @@ exclude = ['.venv', 'tests', 'migrations']
 initial_revision = "013cb11"
 initial_date = 2024-07-08T14:39:09+02:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "pipenv-python"
+cookiecutter_directory = "make-uv-python"
+applied_migrations = [
+    "4662321", # 2025-04-22T20:40:34+02:00
+]
 
 [manageprojects.cookiecutter_context.cookiecutter]
 full_name = "Jens Diemer"
 github_username = "jedie"
 author_email = "jens.diemer@boxine.de"
 package_name = "bx_django_utils"
-package_version = "0.0.1"
+package_version = "85"
 package_description = "Various Django utility functions"
 package_url = "https://github.com/boxine/bx_django_utils"
 issues_url = "https://github.com/boxine/bx_django_utils/issues"
 license = "MIT"
 _template = "https://github.com/jedie/cookiecutter_templates/"
-applied_migrations = ["d970456", "89aadc0", "53a7e85", "877e2ec"]

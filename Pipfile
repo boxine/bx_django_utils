@@ -1,5 +1,0 @@
-[packages]
-bx_django_utils = {path = ".", editable = true}
-
-[dev-packages]
-bx_django_utils = {path = ".", editable = true, extras = ["dev"]}
