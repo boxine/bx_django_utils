@@ -214,6 +214,10 @@ Utilities to manipulate objects in database via models:
 * [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L98-L241) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
 * [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L80-L95) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
+#### bx_django_utils.models.meta
+
+* [`get_field_choices()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/meta.py#L4-L20) - Build choices to select model fields. Use the verbose name of the field and handle related fields, too.
+
 #### bx_django_utils.models.queryset_utils
 
 * [`remove_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/queryset_utils.py#L7-L37) - Remove an applied .filter() from a QuerySet
