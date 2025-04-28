@@ -28,6 +28,7 @@ update-requirements:  ## Update requirements
 	.venv/bin/pip install -U uv
 	.venv/bin/uv lock --upgrade
 	.venv/bin/uv sync
+	$(MAKE) pip-audit
 
 .PHONY: lint
 lint: ## Run code formatters and linter
@@ -46,18 +47,23 @@ nox-list:  ## List all available nox sessions
 .PHONY: nox
 nox:  ## Run tests via nox with all environments
 	.venv/bin/nox
+	$(MAKE) coverage-report
 
 .PHONY: test
 test: ## Run tests
 	RAISE_LOG_OUTPUT=1 ./manage.sh test --parallel --shuffle --buffer
 
-.PHONY: coverage
-coverage:  ## Run tests with coverage
-	.venv/bin/coverage run
+.PHONY: coverage-report
+coverage-report:  ## Creates coverage report
 	.venv/bin/coverage combine --append
 	.venv/bin/coverage report
 	.venv/bin/coverage xml
 	.venv/bin/coverage json
+
+.PHONY: coverage
+coverage:  ## Run tests with coverage
+	.venv/bin/coverage run
+	$(MAKE) coverage-report
 
 .PHONY: update-test-snapshot-files
 update-test-snapshot-files:   ## Update all snapshot files (by remove and recreate all snapshot files)
@@ -85,12 +91,12 @@ docker-test:  ## Run tests in docker
 .PHONY: pip-audit
 pip-audit:  ## Run https://github.com/pypa/pip-audit
 	.venv/bin/uv export --no-header --frozen --no-editable --no-emit-project -o /tmp/temp_requirements.txt
-	.venv/bin/pip-audit --strict --require-hashes -r /tmp/temp_requirements.txt
+	.venv/bin/pip-audit --strict --require-hashes --disable-pip -r /tmp/temp_requirements.txt
 
 .PHONY: publish
 publish:  ## Release new version to PyPi
 	.venv/bin/pip install -e .
-	.venv/bin/pipenv run python bx_django_utils_tests/test_project/publish.py
+	.venv/bin/python bx_django_utils_tests/test_project/publish.py
 
 .PHONY: makemessages
 makemessages: ## Make and compile locales message files
