@@ -48,11 +48,13 @@ dev = [
     'packaging',  # https://pypi.org/project/packaging/
     'build',  # https://github.com/pypa/build
     'EditorConfig',  # https://pypi.org/project/EditorConfig/
+    'pip-audit',  # https://github.com/pypa/pip-audit
+    'uv',  # https://github.com/astral-sh/uv
+    'hatchling',  # https://github.com/pypa/hatch/tree/master/backend
+    'nox',  # https://github.com/wntrblm/nox
     #
     'setuptools',  # Because of: https://github.com/jazzband/django-polymorphic/issues/599
     'django-polymorphic',  # https://github.com/jazzband/django-polymorphic/
-    "uv",  # https://github.com/astral-sh/uv
-    "nox",  # https://github.com/wntrblm/nox
 
     # https://github.com/akaihola/darker
     # https://github.com/ikamensh/flynt
@@ -67,19 +69,19 @@ dev = [
 Documentation = "https://github.com/boxine/bx_django_utils/"
 Source = "https://github.com/boxine/bx_django_utils/"
 
+
 [project.scripts]
 bx_django_utils = "bx_django_utils.__main__:main"
 
 [build-system]
-requires = ["setuptools>=61.0", "setuptools_scm>=7.1"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["bx_django_utils*"]
+[tool.hatch.build.targets.wheel]
+packages = ["bx_django_utils"]
 
-[tool.setuptools.dynamic]
-version = {attr = "bx_django_utils.__version__"}
+[tool.hatch.version]
+path = "bx_django_utils/__init__.py"
 
 
 [tool.darker]

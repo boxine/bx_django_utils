@@ -2,7 +2,6 @@
     Helper to publish this Project to PyPi
 """
 
-import subprocess
 from pathlib import Path
 
 from bx_py_utils.path import assert_is_file
@@ -20,8 +19,6 @@ def publish():
     """
     package_path = Path(bx_django_utils.__file__).parent.parent
     assert_is_file(package_path / 'pyproject.toml')
-
-    subprocess.check_call(['pipenv', 'check'])
 
     verbose_check_call('make', 'test')  # don't publish if tests fail
     verbose_check_call('make', 'fix-code-style')  # don't publish if code style wrong
