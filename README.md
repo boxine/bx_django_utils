@@ -93,6 +93,16 @@ Helpers to build Admin URLs
 * [`ExistingCountedListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L26-L62) - Advanced SimpleListFilter that list only existing filter values with counts.
 * [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L8-L23) - Similar to SimpleListFilter, but don't add "All" choice.
 
+#### bx_django_utils.admin_utils.log_entry
+
+Helper functions around Django's admin LogEntry model.
+
+* [`create_log_entry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L24-L45) - Helper to create `LogEntry` entries for a model instance.
+* [`get_change_message_strings()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L48-L56) - Get `LogEntry` change messages as plain strings build by `LogEntry.get_change_message()`.
+* [`get_log_entry_qs()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L79-L102) - Get a QuerySet of LogEntry objects, with optional filtering by model, object ID, and action flag.
+* [`get_log_message_data()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L59-L76) - Get `LogEntry` change messages data structure as list.
+* [`validate_action_flag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L16-L21) - Validate that the action flag is one of the allowed values.
+
 ### bx_django_utils.approve_workflow
 
 Base model/admin/form classes to implement a model with draft/approve versions workflow
