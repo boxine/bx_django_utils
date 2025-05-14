@@ -298,6 +298,10 @@ Utilities to manage text fixtures in JSON files.
 * [`AssertModelCleanCalled()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L35-L86) - Context manager for assert that full_clean() was called for every model instance.
 * [`CleanMock()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L6-L32) - Track if full_clean() was called.
 
+#### bx_django_utils.test_utils.model_primary_key
+
+* [`deterministic_primary_key()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_primary_key.py#L11-L50) - Context manager for unittests to use deterministic primary key for a model creation.
+
 #### bx_django_utils.test_utils.playwright
 
 Use Playwright in Unittest + Fast Django user login
