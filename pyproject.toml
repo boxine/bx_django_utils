@@ -73,6 +73,15 @@ Source = "https://github.com/boxine/bx_django_utils/"
 [project.scripts]
 bx_django_utils = "bx_django_utils.__main__:main"
 
+
+[tool.bx_py_utils.doc_write]
+docstring_prefix = 'DocWrite:'
+macro_prefix = 'DocWriteMacro:'
+output_base_path = './docs/'
+search_paths = ['./bx_django_utils/', './bx_django_utils_tests/']
+delete_obsolete_files = true
+
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -102,10 +111,6 @@ log_level = "INFO"
 profile = "black"
 
 
-[tool.pytest.ini_options]
-filterwarnings = []
-
-
 [tool.coverage.run]
 branch = true
 parallel = true
@@ -124,32 +129,6 @@ exclude_lines = [
     'raise NotImplementedError',
     'if __name__ == .__main__.:',
 ]
-
-
-[tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist =
-    py{310,311,312}-django{42,50,51}
-    py313-django51
-skip_missing_interpreters = True
-
-[testenv]
-passenv = *
-deps =
-    .[dev]
-    django42: django>=4.2,<4.3
-    django50: django>=5.0,<5.1
-    django51: django>=5.1,<5.2
-commands_pre =
-    {envpython} -m playwright install chromium firefox
-commands =
-    {envpython} -m coverage run --context='{envname}'
-    {envpython} -m coverage combine --append
-    {envpython} -m coverage xml
-    {envpython} -m coverage report
-"""
 
 
 [tool.mypy]
