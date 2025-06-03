@@ -31,10 +31,19 @@ class TestUtilsTestCase(TestCase):
             user2 = User.objects.create(username='create')
             self.assertEqual(user2.pk, 10002)
 
-        self.assertEqual(
-            sorted(User.objects.values_list('id', 'username')),
-            [(10001, 'baker'), (10002, 'create')],
-        )
+            self.assertEqual(
+                sorted(User.objects.values_list('id', 'username')),
+                [(10001, 'baker'), (10002, 'create')],
+            )
+
+            # Handle existing primary key -> Don't increment, so that a new object will be created!
+            user = User(username='NEW NAME', id=10001)
+            user.save()
+
+            self.assertEqual(
+                sorted(User.objects.values_list('id', 'username')),
+                [(10001, 'NEW NAME'), (10002, 'create')],
+            )
 
     def test_deterministic_primary_key_one_uuid_model(self):
         """DocWrite: test-tools.md ## deterministic_primary_key()

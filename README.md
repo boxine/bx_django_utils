@@ -300,7 +300,7 @@ Utilities to manage text fixtures in JSON files.
 
 #### bx_django_utils.test_utils.model_primary_key
 
-* [`deterministic_primary_key()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_primary_key.py#L11-L50) - Context manager for unittests to use deterministic primary key for a model creation.
+* [`deterministic_primary_key()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_primary_key.py#L11-L57) - Context manager for unittests to use deterministic primary key for a model creation.
 
 #### bx_django_utils.test_utils.playwright
 

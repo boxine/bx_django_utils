@@ -21,9 +21,16 @@ def deterministic_primary_key(*ModelClasses, force_overwrite_pk: bool = True):
             # Already saved in DB -> No need to set a new primary key
             return
 
-        if instance.pk and not force_overwrite_pk:
-            # A primary key is set to create this object and we should not overwrite it
-            return
+        if pk := instance.pk:
+            if not force_overwrite_pk:
+                # A primary key is set to create this object and we should not overwrite it
+                return
+
+            # Check if object already exists in the database.
+            # Otherwise, we would create a *new* object instead of updating the existing one!
+            if sender.objects.filter(pk=pk).exists():
+                # Already exists -> Nothing to do
+                return
 
         next_index = sender.objects.count() + 1
         opts: Options = instance._meta
