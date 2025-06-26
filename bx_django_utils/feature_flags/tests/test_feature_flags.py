@@ -1,3 +1,4 @@
+import copy
 import datetime
 
 from django.test import TestCase
@@ -184,7 +185,10 @@ class FeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         )
         self.assertTrue(ff)
 
-        ff.disable()
+        # Another process has another reference
+        another_reference = copy.deepcopy(ff)
+        another_reference.disable()
+        self.assertFalse(another_reference)  # updated in that process
         self.assertTrue(ff)  # still enabled due to caching!
 
         orig_time_func = ff._cache_time_func

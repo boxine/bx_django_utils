@@ -73,6 +73,10 @@ class FeatureFlag:
             state=new_state,
         )
 
+        if hasattr(self, '_cache_duration'):
+            self._cache_from = self._cache_time_func()
+            self._cache_value = new_state
+
         return bool(obj.instance.state)
 
     def reset(self) -> None:
