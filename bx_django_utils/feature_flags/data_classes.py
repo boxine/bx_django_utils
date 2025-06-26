@@ -115,10 +115,11 @@ class FeatureFlag:
         if not was_enabled:
             self.enable()
 
-        yield
-
-        if not was_enabled:
-            self.disable()
+        try:
+            yield
+        finally:
+            if not was_enabled:
+                self.disable()
 
     @contextmanager
     def temp_disable(self) -> Iterator[None]:
@@ -129,10 +130,11 @@ class FeatureFlag:
         if not was_disabled:
             self.disable()
 
-        yield
-
-        if not was_disabled:
-            self.enable()
+        try:
+            yield
+        finally:
+            if not was_disabled:
+                self.enable()
 
     @property
     def state(self):
