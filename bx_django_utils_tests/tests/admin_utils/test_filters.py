@@ -3,7 +3,10 @@ from model_bakery import baker
 
 from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 from bx_django_utils.test_utils.users import make_test_user
-from bx_django_utils_tests.test_app.models import CreateOrUpdateTestModel
+from bx_django_utils_tests.test_app.models import (
+    ColorFieldTestModel,
+    CreateOrUpdateTestModel,
+)
 
 
 class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
@@ -209,4 +212,85 @@ class ExistingCountedListFilterTestCase(HtmlAssertionMixin, TestCase):
                 '?_changelist_filters=name%3D%25253Cfoo%25253E%252B%25252F%252B%25253Cbar%25253E">'
                 'foo-bar</a></td>'
             ],
+        )
+
+
+class YesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
+    def _get_changelist_items(self, response):
+        results = response.context['results']
+        items = [items[-2] for items in results]
+        return items
+
+    def test_happy_path(self):
+        self.client.force_login(make_test_user(is_superuser=True))
+        baker.make(
+            ColorFieldTestModel,
+            pk=1,
+            required_color='#000001',
+            optional_color=None,
+        )
+        baker.make(
+            ColorFieldTestModel,
+            pk=2,
+            required_color='#000002',
+            optional_color='#000003',
+        )
+        response = self.client.get('/admin/test_app/colorfieldtestmodel/')
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<p class="paginator">2 color field test models</p>',  # both items
+                '<summary>By Optional Color set</summary>',
+                '<a href="?optional_color=1">Yes</a>',
+                '<a href="?optional_color=0">No</a>',
+            ),
+        )
+
+        # No filter active -> both items
+        self.assertEqual(
+            self._get_changelist_items(response),
+            [
+                '<td class="field-required_color">#000002</td>',
+                '<td class="field-required_color">#000001</td>',
+            ],
+        )
+
+        ###################################################################################
+
+        response = self.client.get(
+            '/admin/test_app/colorfieldtestmodel/?optional_color=0'
+        )
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<p class="paginator">1 color field test model</p>',  # only one item
+                '<summary>By Optional Color set</summary>',
+                '<a href="?optional_color=1">Yes</a>',
+                '<li class="selected"><a href="?optional_color=0">No</a></li>',
+            ),
+        )
+        # Now we get only items with "optional_color__isnull=True":
+        self.assertEqual(
+            self._get_changelist_items(response),
+            ['<td class="field-required_color">#000001</td>'],
+        )
+
+        ###################################################################################
+
+        response = self.client.get(
+            '/admin/test_app/colorfieldtestmodel/?optional_color=1'
+        )
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<p class="paginator">1 color field test model</p>',  # only one item
+                '<summary>By Optional Color set</summary>',
+                '<li class="selected"><a href="?optional_color=1">Yes</a></li>',
+                '<a href="?optional_color=0">No</a>',
+            ),
+        )
+        # Now we get only items with "optional_color__isnull=False":
+        self.assertEqual(
+            self._get_changelist_items(response),
+            ['<td class="field-required_color">#000002</td>'],
         )

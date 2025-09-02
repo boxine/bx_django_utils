@@ -1,8 +1,82 @@
+import inspect
 from urllib.parse import quote_plus, unquote_plus
 
 from django.contrib import admin
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models import Count
+from django.db.models import Count, QuerySet
+from django.utils.translation import gettext_lazy as _
+
+
+def register_list_filter(
+    key: str,
+    title: str,
+    order: int = 0,  # Optional number to define the order of the filters
+):
+    """
+    Decorator to register a filter method in a DecoratedSimpleListFilter.
+    """
+    def decorator(func):
+        func._filter_key = key
+        func._filter_title = title
+        func._filter_order = order
+        return func
+
+    return decorator
+
+
+class DecoratedSimpleListFilter(admin.SimpleListFilter):
+    """
+    Like SimpleListFilter but filters can be registered via register_list_filter() decorator.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.lookups_data = []
+        self.key2method = {}
+
+        filter_methods = (
+            method
+            for name, method in inspect.getmembers(self, predicate=inspect.ismethod)
+            if hasattr(method, '_filter_key')
+        )
+        for method in sorted(
+            filter_methods, key=lambda m: (m._filter_order, m._filter_key)
+        ):
+            key = method._filter_key
+            assert key not in self.key2method, (
+                f'Duplicate {key=} in {self.__class__.__name__}.{method.__name__}'
+            )
+            self.key2method[key] = method
+            self.lookups_data.append((key, method._filter_title))
+
+        self.lookups_data = tuple(self.lookups_data)
+        super().__init__(*args, **kwargs)
+
+    def lookups(self, request, model_admin):
+        return self.lookups_data
+
+    def queryset(self, request, queryset: QuerySet) -> QuerySet | None:
+        value = self.value()
+        if method := self.key2method.get(value):
+            return method(queryset)
+
+
+class YesNoListFilter(DecoratedSimpleListFilter):
+    """
+    Quick way to create a Yes/No change list filter.
+    """
+    def filter_yes(self, queryset):
+        raise NotImplementedError
+
+    def filter_no(self, queryset):
+        raise NotImplementedError
+
+    @register_list_filter('1', _('Yes'), order=1)
+    def _filter_yes(self, queryset):
+        return self.filter_yes(queryset)
+
+    @register_list_filter('0', _('No'), order=2)
+    def _filter_no(self, queryset):
+        return self.filter_no(queryset)
 
 
 class NotAllSimpleListFilter(admin.SimpleListFilter):

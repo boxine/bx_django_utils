@@ -2,8 +2,14 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 
-from bx_django_utils.admin_utils.filters import ExistingCountedListFilter
-from bx_django_utils.translation import TranslationFieldAdmin, validate_unique_translations
+from bx_django_utils.admin_utils.filters import (
+    ExistingCountedListFilter,
+    YesNoListFilter,
+)
+from bx_django_utils.translation import (
+    TranslationFieldAdmin,
+    validate_unique_translations,
+)
 from bx_django_utils_tests.test_app.admin_filters_demo import NotAllSimpleListFilterDemo
 from bx_django_utils_tests.test_app.models import (
     ColorFieldTestModel,
@@ -38,12 +44,28 @@ class CreateOrUpdateTestModelAdmin(admin.ModelAdmin):
     list_display_links = ('name', 'slug')
     readonly_fields = ('create_dt', 'update_dt')
     prepopulated_fields = {'slug': ('name',)}
-    list_filter = (NotAllSimpleListFilterDemo, NameListFilter, SlugListFilter)
+    list_filter = (
+        NotAllSimpleListFilterDemo,
+        NameListFilter,
+        SlugListFilter,
+    )
+
+
+class OptionalColorIsSet(YesNoListFilter):
+    title = 'Optional Color set'
+    parameter_name = 'optional_color'
+
+    def filter_yes(self, queryset):
+        return queryset.filter(optional_color__isnull=False)
+
+    def filter_no(self, queryset):
+        return queryset.filter(optional_color__isnull=True)
 
 
 @admin.register(ColorFieldTestModel)
 class ColorFieldTestModelAdmin(admin.ModelAdmin):
-    list_display = ('required_color', 'optional_color')
+    list_display = ('pk', 'required_color', 'optional_color')
+    list_filter = (OptionalColorIsSet,)
 
 
 @admin.register(TranslatedModel)
