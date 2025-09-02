@@ -60,7 +60,7 @@ dev = [
     # https://github.com/ikamensh/flynt
     # https://github.com/pycqa/isort
     # https://github.com/pygments/pygments
-    'darker[flynt, isort, color]',
+    'darker[flynt, isort, color] != 3.0.0',  # TODO: Switch to ruff
 
     'typeguard',  # https://github.com/agronholm/typeguard/
 ]
