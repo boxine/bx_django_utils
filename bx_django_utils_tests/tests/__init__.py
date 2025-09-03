@@ -1,8 +1,9 @@
 import os
-import unittest.util
 from pathlib import Path
+import unittest.util
 
 from typeguard import install_import_hook
+
 
 # Check type annotations via typeguard in all tests:
 install_import_hook(packages=('bx_django_utils', 'bx_django_utils_tests'))

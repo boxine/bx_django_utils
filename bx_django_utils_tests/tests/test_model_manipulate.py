@@ -24,10 +24,10 @@ from bx_django_utils.test_utils.datetime import MockDatetimeGenerator
 from bx_django_utils.test_utils.model_clean_assert import AssertModelCleanCalled
 from bx_django_utils_tests.test_app.models import (
     CreateOrUpdateTestModel,
+    PolymorphicBike,
+    PolymorphicCar,
     StoreSaveModel,
     TimetrackingTestModel,
-    PolymorphicCar,
-    PolymorphicBike,
 )
 
 

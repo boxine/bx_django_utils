@@ -1,7 +1,7 @@
+from importlib import import_module
 import inspect
 import os
 import sys
-from importlib import import_module
 
 
 DEFAULT_EXCLUDED_MODULES = (

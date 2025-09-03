@@ -1,5 +1,5 @@
-import uuid
 from unittest import TestCase
+import uuid
 
 from bx_py_utils.test_utils.datetime import parse_dt
 

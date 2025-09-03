@@ -1,11 +1,12 @@
-import dataclasses
 from collections.abc import Callable
+import dataclasses
 
 from django.contrib.admin import AdminSite
 from django.contrib.admin.sites import site as default_site
 from django.utils.text import slugify
 
 from bx_django_utils.admin_extra_views.conditions import only_staff_user
+
 
 _APP_LABELS = set()
 _URL_NAMES = set()

@@ -5,6 +5,7 @@ from django.test import TestCase
 from bx_django_utils.feature_flags.data_classes import FeatureFlag
 from bx_django_utils.feature_flags.test_utils import FeatureFlagTestCaseMixin, get_feature_flag_db_info
 
+
 TEST_CACHE_KEY = 'feature-flags-test_atomic'
 
 

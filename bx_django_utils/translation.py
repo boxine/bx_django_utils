@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import json
-import warnings
 from functools import partial
 from itertools import chain
+import json
+import warnings
 
 from django import forms
 from django.apps import apps

@@ -100,9 +100,9 @@ class HtmlAssertionMixin:
         haystack = response.content.decode('utf-8')
         haystack_striped = '\n'.join(line for line in haystack.splitlines() if line.strip())
         msg_prefix = (
-            f'\n{"-"*100}\n'
+            f'\n{"-" * 100}\n'
             f'{haystack_striped}'
-            f'\n{"-"*100}\n'
+            f'\n{"-" * 100}\n'
             f'{msg_prefix}'
         )
         return msg_prefix, haystack
@@ -150,9 +150,9 @@ class HtmlAssertionMixin:
                     #
                     html = self.pformat_response(response)
                     msg = (
-                        f'\n{"-"*100}\n'
+                        f'\n{"-" * 100}\n'
                         f'{html}'
-                        f'\n{"-"*100}\n'
+                        f'\n{"-" * 100}\n'
                         f'{err}'
                     )
                     raise AssertionError(msg)

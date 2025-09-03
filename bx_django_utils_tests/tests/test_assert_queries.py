@@ -1,7 +1,7 @@
+from collections import Counter
 import json
 import pathlib
 import tempfile
-from collections import Counter
 
 from bx_py_utils.environ import OverrideEnviron
 from django.contrib.admin.models import LogEntry

@@ -1,6 +1,7 @@
 import nox
 from nox.sessions import Session
 
+
 PYTHON_VERSIONS = ['3.13', '3.12', '3.11']
 DJANGO_VERSIONS = ['5.2', '5.1', '4.2']
 
