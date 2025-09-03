@@ -21,7 +21,6 @@ def publish():
     assert_is_file(package_path / 'pyproject.toml')
 
     verbose_check_call('make', 'test')  # don't publish if tests fail
-    verbose_check_call('make', 'fix-code-style')  # don't publish if code style wrong
 
     publish_package(
         module=bx_django_utils,
