@@ -55,13 +55,8 @@ dev = [
     #
     'setuptools',  # Because of: https://github.com/jazzband/django-polymorphic/issues/599
     'django-polymorphic',  # https://github.com/jazzband/django-polymorphic/
-
-    # https://github.com/akaihola/darker
-    # https://github.com/ikamensh/flynt
-    # https://github.com/pycqa/isort
-    # https://github.com/pygments/pygments
-    'darker[flynt, isort, color] != 3.0.0',  # TODO: Switch to ruff
-
+    #
+    "ruff", # https://github.com/astral-sh/ruff
     'typeguard',  # https://github.com/agronholm/typeguard/
 ]
 
@@ -93,22 +88,32 @@ packages = ["bx_django_utils"]
 path = "bx_django_utils/__init__.py"
 
 
-[tool.darker]
-revision = "origin/master..."
-src = ['.']
-line_length = 119
-color = true
-skip_string_normalization = true
-diff = false
-check = false
-stdout = false
-isort = true
-lint = []
-log_level = "INFO"
+[tool.ruff]
+# https://docs.astral.sh/ruff/configuration/
+line-length = 120
+exclude = [
+  ".*/",
+]
 
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+preview = true  # Needed for some of the rules
+extend-select = [
+    "E", # pycodestyle: https://docs.astral.sh/ruff/rules/#error-e
+    "I", # isort: https://docs.astral.sh/ruff/rules/#isort-i
+]
+ignore = [
+    "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
+    "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
+]
+
+[tool.ruff.lint.isort]
+# https://docs.astral.sh/ruff/rules/#isort-i
+lines-after-imports = 2
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "single"
 
 
 [tool.coverage.run]

@@ -1,7 +1,7 @@
 import itertools
+from itertools import product
 import json
 import re
-from itertools import product
 
 from bx_py_utils.test_utils.snapshot import assert_html_snapshot
 from django.core.exceptions import ValidationError

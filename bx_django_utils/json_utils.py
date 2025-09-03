@@ -1,11 +1,12 @@
+from collections.abc import Callable
 import datetime
 import decimal
-import uuid
-from collections.abc import Callable
 from typing import Any
+import uuid
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.functional import Promise
+
 
 DJANGO_JSON_ENCODER_TYPES = (  # All types that DjangoJSONEncoder will convert
     datetime.datetime, datetime.date, datetime.time, datetime.timedelta,

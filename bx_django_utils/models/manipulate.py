@@ -3,14 +3,15 @@
     e.g.:
         create/update/delete model entries etc.
 """
-import dataclasses
-import warnings
 from collections.abc import Callable
+import dataclasses
 from typing import Any
 from uuid import UUID
+import warnings
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
+
 
 STORE_BEHAVIOR_IGNORE = "i"  # Ignore the value completely
 STORE_BEHAVIOR_SET_IF_EMPTY = "e"  # Use the value only if we currently have no one.

@@ -1,6 +1,6 @@
+from collections import OrderedDict
 import inspect
 import pickle
-from collections import OrderedDict
 from threading import Lock
 from unittest import mock
 

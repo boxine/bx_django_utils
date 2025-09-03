@@ -1,13 +1,14 @@
+from collections.abc import Callable, Iterable, Iterator
+from contextlib import contextmanager
 import datetime
 import logging
 import time
-from collections.abc import Callable, Iterable, Iterator
-from contextlib import contextmanager
 
 from bx_django_utils.feature_flags.exceptions import NotUniqueFlag
 from bx_django_utils.feature_flags.models import FeatureFlagModel
 from bx_django_utils.feature_flags.state import State
 from bx_django_utils.models.manipulate import create_or_update2
+
 
 logger = logging.getLogger(__name__)
 

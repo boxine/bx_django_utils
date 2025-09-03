@@ -1,9 +1,9 @@
 import collections
-import re
 from collections import Counter
 from difflib import unified_diff
 from pathlib import Path
 from pprint import pformat
+import re
 
 from bx_py_utils.test_utils.snapshot import assert_snapshot
 

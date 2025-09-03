@@ -49,8 +49,8 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.datatypes
 
-* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L14-L57) - Stores information for pseudo app and pseudo models.
-* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L60-L90) - Represents information about a Django App. Instance must be pass to @register_admin_view()
+* [`AdminExtraMeta()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L15-L58) - Stores information for pseudo app and pseudo models.
+* [`PseudoApp()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/datatypes.py#L61-L91) - Represents information about a Django App. Instance must be pass to @register_admin_view()
 
 ###### bx_django_utils.admin_extra_views.management.commands.admin_extra_views
 
@@ -97,11 +97,11 @@ Helpers to build Admin URLs
 
 Helper functions around Django's admin LogEntry model.
 
-* [`create_log_entry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L24-L45) - Helper to create `LogEntry` entries for a model instance.
-* [`get_change_message_strings()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L48-L56) - Get `LogEntry` change messages as plain strings build by `LogEntry.get_change_message()`.
-* [`get_log_entry_qs()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L79-L102) - Get a QuerySet of LogEntry objects, with optional filtering by model, object ID, and action flag.
-* [`get_log_message_data()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L59-L76) - Get `LogEntry` change messages data structure as list.
-* [`validate_action_flag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L16-L21) - Validate that the action flag is one of the allowed values.
+* [`create_log_entry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L25-L46) - Helper to create `LogEntry` entries for a model instance.
+* [`get_change_message_strings()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L49-L57) - Get `LogEntry` change messages as plain strings build by `LogEntry.get_change_message()`.
+* [`get_log_entry_qs()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L80-L103) - Get a QuerySet of LogEntry objects, with optional filtering by model, object ID, and action flag.
+* [`get_log_message_data()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L60-L77) - Get `LogEntry` change messages data structure as list.
+* [`validate_action_flag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L17-L22) - Validate that the action flag is one of the allowed values.
 
 ### bx_django_utils.approve_workflow
 
@@ -162,7 +162,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.data_classes
 
-* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L17-L177) - A feature flag that persistent the state into django cache/database.
+* [`FeatureFlag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/data_classes.py#L18-L178) - A feature flag that persistent the state into django cache/database.
 
 #### bx_django_utils.feature_flags.test_utils
 
@@ -171,7 +171,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.utils
 
-* [`if_feature()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/utils.py#L11-L39) - A decorator that only executes the decorated function if the given feature flag is enabled.
+* [`if_feature()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/utils.py#L12-L40) - A decorator that only executes the decorated function if the given feature flag is enabled.
 
 ### bx_django_utils.filename
 
@@ -182,7 +182,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 Generic "AdminExtraView" view to filter accessible model by any field value.
 
-* [`GenericModelFilterBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/generic_model_filter/admin_views.py#L171-L321) - Base "AdminExtraView" to add this view to the admin interface via @register_admin_view().
+* [`GenericModelFilterBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/generic_model_filter/admin_views.py#L172-L322) - Base "AdminExtraView" to add this view to the admin interface via @register_admin_view().
 
 ### bx_django_utils.http
 
@@ -198,8 +198,8 @@ Generic "AdminExtraView" view to filter accessible model by any field value.
 
 ### bx_django_utils.json_utils
 
-* [`make_json_serializable()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/json_utils.py#L20-L37) - Convert value to a JSON serializable value, with convert callback for special objects.
-* [`to_json()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/json_utils.py#L40-L56) - Convert value to JSON via make_json_serializable() and DjangoJSONEncoder()
+* [`make_json_serializable()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/json_utils.py#L21-L38) - Convert value to a JSON serializable value, with convert callback for special objects.
+* [`to_json()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/json_utils.py#L41-L57) - Convert value to JSON via make_json_serializable() and DjangoJSONEncoder()
 
 #### bx_django_utils.models.color_field
 
@@ -216,13 +216,13 @@ Generic "AdminExtraView" view to filter accessible model by any field value.
 
 Utilities to manipulate objects in database via models:
 
-* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L50-L77) - Result object returned by create_or_update2() with all information about create/save a model.
-* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L39-L47) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
-* [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L20-L23) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
-* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L26-L36) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L244-L262) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
-* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L98-L241) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
-* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L80-L95) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
+* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L51-L78) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L40-L48) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
+* [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L21-L24) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
+* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L27-L37) - Create a new model instance with optional validate before create.
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L245-L263) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L99-L242) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
+* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L81-L96) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
 #### bx_django_utils.models.meta
 

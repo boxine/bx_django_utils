@@ -24,6 +24,7 @@ from bx_django_utils.http import build_url_parameters
 from bx_django_utils.json_utils import make_json_serializable
 from bx_django_utils.models.get_models4user import SelectModelForm
 
+
 SESSION_KEY = 'generic_model_filter'
 IS_NULL_CHECK_PREFIX = 'is_null_check_'
 

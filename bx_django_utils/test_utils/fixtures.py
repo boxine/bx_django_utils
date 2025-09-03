@@ -6,12 +6,12 @@
      * bx_django_utils_tests/test_app/tests/fixtures/fixtures1.py
      * bx_django_utils_tests/test_app/management/commands/renew_fixtures.py
 """
+from importlib import import_module
 import json
 import os
+from pathlib import Path
 import re
 import sys
-from importlib import import_module
-from pathlib import Path
 
 from bx_py_utils.path import assert_is_dir, assert_is_file
 from django.apps import apps

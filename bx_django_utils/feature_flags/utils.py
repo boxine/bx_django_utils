@@ -1,8 +1,9 @@
-import functools
 from collections.abc import Callable
+import functools
 from typing import TYPE_CHECKING, Any
 
 from bx_django_utils.feature_flags.exceptions import FeatureFlagDisabled
+
 
 if TYPE_CHECKING:
     from bx_django_utils.feature_flags.data_classes import FeatureFlag

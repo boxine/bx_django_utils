@@ -1,6 +1,6 @@
-import subprocess
 from importlib.metadata import version
 from pathlib import Path
+import subprocess
 
 from bx_py_utils.path import assert_is_file
 from bx_py_utils.test_utils.unittest_utils import assert_no_flat_tests_functions
@@ -13,6 +13,7 @@ from packaging.version import Version
 import bx_django_utils
 from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 
+
 PACKAGE_ROOT = Path(bx_django_utils.__file__).parent.parent
 assert_is_file(PACKAGE_ROOT / 'pyproject.toml')
 
@@ -22,14 +23,10 @@ class ProjectSetupTestCase(SimpleTestCase):
         try:
             output = subprocess.check_output(['make', 'lint'], stderr=subprocess.STDOUT, cwd=PACKAGE_ROOT, text=True)
         except subprocess.CalledProcessError:
-            # Code style is not correct -> Try to fix it
-            subprocess.check_call(['make', 'fix-code-style'], stderr=subprocess.STDOUT, cwd=PACKAGE_ROOT)
-
-            # Check again:
-            subprocess.check_call(['make', 'lint'], cwd=PACKAGE_ROOT)
+            self.fail('Code style is not correct and can not be fixed! Fix is manual!')
         else:
-            self.assertIn('darker', output)
-            self.assertIn('flake8', output)
+            self.assertIn('ruff', output, f'Output was:\n{output}')
+            self.assertIn('All checks passed!', output, f'Output was:\n{output}')
 
     def test_version(self):
         # We get a version string:

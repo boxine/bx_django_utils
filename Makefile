@@ -31,14 +31,8 @@ update-requirements:  ## Update requirements
 	$(MAKE) pip-audit
 
 .PHONY: lint
-lint: ## Run code formatters and linter
-	.venv/bin/darker --diff --check
-	.venv/bin/flake8 .
-
-.PHONY: fix-code-style
-fix-code-style: ## Fix code formatting
-	.venv/bin/darker
-	.venv/bin/flake8 .
+lint: ## Check/fix code style by run: "ruff check --fix"
+	.venv/bin/ruff check --fix
 
 .PHONY: nox-list
 nox-list:  ## List all available nox sessions
