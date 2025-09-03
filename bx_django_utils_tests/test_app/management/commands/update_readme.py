@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 
 import bx_django_utils
 
+
 README_FILENAME = 'README.md'
 
 
