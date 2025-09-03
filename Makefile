@@ -80,6 +80,10 @@ update-test-migrations:  ## Update migration files from the test project
 	.venv/bin/black bx_django_utils_tests/approve_workflow_test_app/migrations/0001_initial.py
 	.venv/bin/isort bx_django_utils_tests/approve_workflow_test_app/migrations/0001_initial.py
 
+.PHONY: update-readme
+update-readme:   ## Update README.md (will be also done in tests)
+	./manage.sh update_readme
+
 .PHONY: mypy
 mypy:  ## Run mypy
 	.venv/bin/mypy .
