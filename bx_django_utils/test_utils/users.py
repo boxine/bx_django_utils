@@ -44,7 +44,7 @@ def assert_permissions(user, permissions):
     assert all_user_permissions == expected_permissions, (
         f"{tuple(sorted(all_user_permissions))!r}"
         ' is not'
-        f" {tuple(sorted(expected_permissions))}!r"
+        f" {tuple(sorted(expected_permissions))!r}"
     )
 
 
