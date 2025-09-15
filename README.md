@@ -296,6 +296,10 @@ Utilities to manage text fixtures in JSON files.
 * [`assert_html_response_snapshot()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L19-L45) - Assert a HttpResponse via snapshot file using assert_html_snapshot() from bx_py_utils.
 * [`get_django_name_suffix()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/html_assertion.py#L12-L16) - Returns a short Django version string, useable for snapshot "name_suffix" e.g.: "django42"
 
+#### bx_django_utils.test_utils.log_entry
+
+* [`get_django_log_entries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/log_entry.py#L5-L15) - Collect LogEntry data for tests.
+
 #### bx_django_utils.test_utils.model_clean_assert
 
 * [`AssertModelCleanCalled()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/model_clean_assert.py#L35-L86) - Context manager for assert that full_clean() was called for every model instance.
