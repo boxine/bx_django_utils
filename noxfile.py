@@ -2,8 +2,8 @@ import nox
 from nox.sessions import Session
 
 
-PYTHON_VERSIONS = ['3.13', '3.12', '3.11']
-DJANGO_VERSIONS = ['5.2', '5.1', '4.2']
+PYTHON_VERSIONS = ('3.13', '3.12', '3.11')  # TODO: Add v3.14 https://github.com/boxine/bx_django_utils/issues/201
+DJANGO_VERSIONS = ('5.2', '5.1', '4.2')  # TODO: Add v6.x https://github.com/boxine/bx_django_utils/issues/201
 
 
 @nox.session(python=PYTHON_VERSIONS)
