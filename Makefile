@@ -99,7 +99,7 @@ publish:  ## Release new version to PyPi
 .PHONY: makemessages
 makemessages: ## Make and compile locales message files
 	./manage.sh makemessages --all --no-location --no-obsolete
-	./manage.sh compilemessages --ignore=.nox
+	./manage.sh compilemessages --ignore=.nox  --ignore=.venv
 
 .PHONY: start-dev-server
 start-dev-server: ## Start Django dev. server with the test project
