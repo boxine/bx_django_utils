@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bx_django_utils\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-15 13:45+0000\n"
+"POT-Creation-Date: 2026-01-26 14:07+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Jens Diemer\n"
 "Language-Team: \n"
@@ -15,8 +15,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
 msgid "GTIN number"
 msgstr "GTIN Nummer"
+
+msgid "Home"
+msgstr ""
 
 #, python-format
 msgid "%.1f years"
@@ -70,6 +79,12 @@ msgstr "(wird automatisch gesetzt)"
 
 msgid "At least one translation is required."
 msgstr "Mindestens eine Übersetzung ist erforderlich."
+
+#, python-format
+msgid ""
+"A <a href=\"%(url)s\">other %(model_name)s</a> with one of these translation "
+"already exists!"
+msgstr ""
 
 msgid "SHORT_DATETIME_FORMAT"
 msgstr ""
