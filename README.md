@@ -374,31 +374,43 @@ Automatic local user timezone: https://github.com/boxine/bx_django_utils/blob/ma
 
 [comment]: <> (✂✂✂ auto generated end ✂✂✂)
 
-## developing
 
-To start developing e.g.:
+## start development
+
+At least `uv` is needed. Install e.g.: via pipx:
+```bash
+apt-get install pipx
+pipx install uv
+```
+
+Clone the project and just use our `Makefile` e.g.:
 
 ```bash
 ~$ git clone https://github.com/boxine/bx_django_utils.git
 ~$ cd bx_django_utils
 ~/bx_django_utils$ make
-help                 List all commands
-install-poetry       install poetry
-install              install via poetry
-update               Update the dependencies as according to the pyproject.toml file
-lint                 Run code formatters and linter
-fix-code-style       Fix code formatting
-tox-listenvs         List all tox test environments
-tox                  Run unittests via tox with all environments
-test                 Run unittests
-publish              Release new version to PyPi
-docker-test          Run tests in docker
-makemessages         Make and compile locales message files
-start-dev-server     Start Django dev. server with the test project
-clean                Remove created files from the test project (e.g.: SQlite, static files)
-playwright-install   Install test browser for Playwright tests
-playwright-inspector Run Playwright inspector
-playwright-tests     Run only the Playwright tests
+help                       List all commands
+install                    Install via "uv" (Used system installed "uv" tool, e.g.: "pipx install uv")
+update-requirements        Update requirements
+lint                       Check/fix code style by run: "ruff check --fix"
+nox-list                   List all available nox sessions
+nox                        Run tests via nox with all environments and create coverage report
+test                       Run tests
+coverage-report            Creates coverage report
+coverage                   Run tests with coverage (Use better "nox" target)
+update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
+update-test-migrations     Update migration files from the test project by recreating them
+update-readme              Update README.md (will be also done in tests)
+mypy                       Run mypy
+docker-test                Run tests in docker
+pip-audit                  Run https://github.com/pypa/pip-audit
+publish                    Release new version to PyPi
+makemessages               Make and compile locales message files
+start-dev-server           Start Django dev. server with the test project
+clean                      Remove created files from the test project
+playwright-install         Install test browser for Playwright tests
+playwright-inspector       Run Playwright inspector
+playwright-tests           Run only the Playwright tests
 ```
 
 You can start the test project with the Django developing server, e.g.:

@@ -21,8 +21,8 @@ classifiers = [
 license = {text = "MIT"}
 readme="README.md"
 
+requires-python = ">=3.11,<3.14" # TODO: Add v3.14 https://github.com/boxine/bx_django_utils/issues/202
 
-requires-python = ">=3.11"
 dependencies = [
     'django>=4.2,<6.0',  # TODO: Add v6.x https://github.com/boxine/bx_django_utils/issues/201
     'bx_py_utils>=92',  # https://github.com/boxine/bx_py_utils
@@ -107,9 +107,9 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-# https://docs.astral.sh/ruff/rules/#isort-i
+# https://docs.astral.sh/ruff/settings/#lintisort
 lines-after-imports = 2
-force-sort-within-sections = true
+force-sort-within-sections = true  # TODO: Remove this
 
 [tool.ruff.format]
 quote-style = "single"
@@ -151,6 +151,7 @@ cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
 cookiecutter_directory = "make-uv-python"
 applied_migrations = [
     "4662321", # 2025-04-22T20:40:34+02:00
+    "af6dd62", # 2026-01-26T16:04:53+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
