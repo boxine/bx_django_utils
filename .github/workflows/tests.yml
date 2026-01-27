@@ -1,4 +1,6 @@
 name: tests
+permissions:
+  contents: read
 
 on:
   push:
@@ -29,11 +31,18 @@ jobs:
         git checkout $GITHUB_SHA || (git fetch && git checkout $GITHUB_SHA)
 
     - name: 'Set up Python ${{ matrix.python-version }}'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@main
       # https://github.com/marketplace/actions/setup-python
       with:
         python-version: '${{ matrix.python-version }}'
         cache: 'pip' # caching pip dependencies
+        cache-dependency-path: '**/requirements.*.txt'
+
+    - name: Install uv and set the Python version
+      # https://docs.astral.sh/uv/guides/integration/github/#multiple-python-versions
+      uses: astral-sh/setup-uv@main
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: 'Install'
       run: |
@@ -49,8 +58,9 @@ jobs:
         .venv/bin/nox -s "tests-${{ matrix.python-version }}(django='${{ matrix.django-version }}')"
 
     - name: 'Upload coverage report'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@main
       # https://github.com/marketplace/actions/codecov
       with:
         fail_ci_if_error: false
         verbose: true
+
