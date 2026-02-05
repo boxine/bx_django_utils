@@ -98,8 +98,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(BASE_DIR / 'db.sqlite3'),
+    },
+    'second': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db_second.sqlite3'),
     }
 }
+DATABASE_ROUTERS = ['bx_django_utils_tests.test_project.routers.MultiDBRouter']
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation

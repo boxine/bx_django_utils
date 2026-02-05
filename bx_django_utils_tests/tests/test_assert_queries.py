@@ -10,6 +10,7 @@ from django.db import connection, transaction
 from django.test import TestCase
 
 from bx_django_utils.test_utils.assert_queries import AssertQueries
+from bx_django_utils_tests.test_app.models import ColorFieldTestModelSecondary
 
 
 def make_database_queries(count=1):
@@ -22,6 +23,7 @@ def make_database_queries2(count=1):
 
 
 class AssertQueriesTestCase(TestCase):
+    databases = ['default', 'second']
 
     def get_instance(self):
         with AssertQueries() as queries:
@@ -89,6 +91,7 @@ class AssertQueriesTestCase(TestCase):
         queries = self.get_instance()
         queries.assert_table_counts(Counter(auth_permission=1))
         queries.assert_table_counts({'auth_permission': 1})
+        queries.assert_databases_touched('default')
 
         with self.assertRaises(AssertionError) as err:
             queries.assert_table_counts(Counter(auth_permission=2, foo=1, bar=3))
@@ -100,6 +103,18 @@ class AssertQueriesTestCase(TestCase):
         assert '+auth_permission: 1\n' in msg
         assert 'Captured queries were:\n' in msg
         assert '1. SELECT "auth_permission"' in msg
+
+    def test_assert_two_touched_dbs(self):
+        with AssertQueries(databases=['default', 'second']) as queries:
+            Permission.objects.all().first()
+        with self.assertRaises(AssertionError):
+            # only 1 touched.
+            queries.assert_databases_touched('default', 'second')
+
+        with AssertQueries(databases=['default', 'second']) as queries:
+            Permission.objects.all().first()
+            ColorFieldTestModelSecondary.objects.count()
+        queries.assert_databases_touched('default', 'second')
 
     def test_assert_table_counts_exclude(self):
         with AssertQueries() as queries:

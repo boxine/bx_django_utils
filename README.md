@@ -152,7 +152,7 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 
 #### bx_django_utils.dbperf.query_recorder
 
-* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L95-L176) - A context manager that allows recording SQL queries executed during its lifetime.
+* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L106-L185) - A context manager that allows recording SQL queries executed during its lifetime.
 
 ### bx_django_utils.feature_flags
 
@@ -261,7 +261,7 @@ Utilities / helper for writing tests.
 
 #### bx_django_utils.test_utils.assert_queries
 
-* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L34-L287) - Assert executed database queries: Check table names, duplicate/similar Queries.
+* [`AssertQueries()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/assert_queries.py#L34-L295) - Assert executed database queries: Check table names, duplicate/similar Queries.
 
 #### bx_django_utils.test_utils.cache
 
@@ -383,7 +383,15 @@ apt-get install pipx
 pipx install uv
 ```
 
-Clone the project and just use our `Makefile` e.g.:
+you should be able to then do
+```bash
+make install
+make playwright-install
+```
+
+and validate everything works with `make test`
+
+For other options, you can check out our makefile:
 
 ```bash
 ~$ git clone https://github.com/boxine/bx_django_utils.git
