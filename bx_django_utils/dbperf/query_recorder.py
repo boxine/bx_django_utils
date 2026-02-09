@@ -1,5 +1,6 @@
 from collections import defaultdict
 from collections.abc import Callable, Iterable
+from functools import partial
 from pprint import saferepr
 
 from django.db import connections
@@ -92,6 +93,16 @@ class Logger:
         return results
 
 
+def _get_cursor_wrapper(*, cursor, connection, logger, collect_stacktrace, query_explain):
+    return RecordingCursorWrapper(
+        cursor(),
+        connection,
+        logger,
+        collect_stacktrace=collect_stacktrace,
+        query_explain=query_explain,
+    )
+
+
 class SQLQueryRecorder:
     """
     A context manager that allows recording SQL queries executed during its lifetime.
@@ -135,26 +146,23 @@ class SQLQueryRecorder:
             connection._recording_cursor = connection.cursor
             connection._recording_chunked_cursor = connection.chunked_cursor
 
-            def cursor():
-                return RecordingCursorWrapper(
-                    connection._recording_cursor(),  # noqa:B023
-                    connection,  # noqa:B023
-                    self.logger,
-                    collect_stacktrace=self.collect_stacktrace,
-                    query_explain=self.query_explain,
-                )
+            common_kwargs = {
+                'connection': connection,
+                'logger': self.logger,
+                'collect_stacktrace': self.collect_stacktrace,
+                'query_explain': self.query_explain
+            }
 
-            def chunked_cursor():
-                return RecordingCursorWrapper(
-                    connection._recording_chunked_cursor(),  # noqa:B023
-                    connection,  # noqa:B023
-                    self.logger,
-                    collect_stacktrace=self.collect_stacktrace,
-                    query_explain=self.query_explain,
-                )
-
-            connection.cursor = cursor
-            connection.chunked_cursor = chunked_cursor
+            connection.cursor = partial(
+                _get_cursor_wrapper,
+                cursor=connection._recording_cursor,
+                **common_kwargs
+            )
+            connection.chunked_cursor = partial(
+                _get_cursor_wrapper,
+                cursor=connection._recording_chunked_cursor,
+                **common_kwargs
+            )
 
         self.running = True
         return self
@@ -166,6 +174,7 @@ class SQLQueryRecorder:
 
             # undo the cursor wrapping so the connection is 'clean' again
             del connection._recording_cursor
+            del connection._recording_chunked_cursor
             del connection.cursor
             del connection.chunked_cursor
 

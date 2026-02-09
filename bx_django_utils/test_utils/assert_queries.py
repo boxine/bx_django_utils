@@ -175,6 +175,14 @@ class AssertQueries(SQLQueryRecorder):
             ))
             raise AssertionError(self.build_error_message(f'Table names does not match:\n{diff}'))
 
+    def assert_databases_touched(self, *expected_database_aliases):
+        touched_keys = self.logger._databases.keys()
+        if set(expected_database_aliases) != touched_keys:
+            raise AssertionError(
+                self.build_error_message(f'Not all expected tables were touched, '
+                                         f'expected: {expected_database_aliases}, touched: {touched_keys}')
+            )
+
     def assert_table_counts(self, table_counts: Counter | dict, exclude: tuple[str, ...] | None = None):
         if not isinstance(table_counts, Counter):
             table_counts = Counter(table_counts)

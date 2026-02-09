@@ -41,6 +41,17 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='ColorFieldTestModelSecondary',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('required_color', bx_django_utils.models.color_field.ColorModelField(max_length=7)),
+                (
+                    'optional_color',
+                    bx_django_utils.models.color_field.ColorModelField(blank=True, max_length=7, null=True),
+                ),
+            ],
+        ),
+        migrations.CreateModel(
             name='ConnectedUniqueSlugModel1',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
