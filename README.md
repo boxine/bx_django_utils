@@ -366,7 +366,8 @@ Automatic local user timezone: https://github.com/boxine/bx_django_utils/blob/ma
 
 ### bx_django_utils.version
 
-* [`DetermineVersionCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/version.py#L50-L78) - Write application version determined from git as a command
+* [`DetermineVersionCommand()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/version.py#L58-L108) - Write application version determined from git as a command
+* [`get_version()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/version.py#L12-L26) - Get version of this application. First try to read it from file, then determine from git.
 
 #### bx_django_utils.view_utils.dynamic_menu_urls
 
