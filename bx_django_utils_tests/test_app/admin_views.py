@@ -20,10 +20,7 @@ def only_john_can_access(request):
     user: User = request.user
     if user.is_superuser:
         return True
-    if user.username == 'john':
-        return True
-    else:
-        return False
+    return user.username == 'john'
 
 
 pseudo_app1 = PseudoApp(meta=AdminExtraMeta(name='Pseudo App 1'))

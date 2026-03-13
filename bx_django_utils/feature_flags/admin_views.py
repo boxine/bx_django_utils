@@ -52,15 +52,15 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
             last_change_qs = log_entry_qs.filter(Q(object_id=cache_key) | Q(change_message__contains=human_name))
 
             feature_flags.append(
-                dict(
-                    cache_key=cache_key,
-                    human_name=human_name,
-                    description=instance.description,
-                    state=instance.state,
-                    initial_state=instance.initial_state,
-                    opposite_state=instance.opposite_state,
-                    last_change=last_change_qs.last(),
-                )
+                {
+                    'cache_key': cache_key,
+                    'human_name': human_name,
+                    'description': instance.description,
+                    'state': instance.state,
+                    'initial_state': instance.initial_state,
+                    'opposite_state': instance.opposite_state,
+                    'last_change': last_change_qs.last(),
+                }
             )
         if not feature_flags:
             messages.info(self.request, _('No feature flags currently registered'))

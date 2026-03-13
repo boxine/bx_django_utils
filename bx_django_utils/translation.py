@@ -153,7 +153,7 @@ class TranslationField(models.JSONField):
         self,
         *args,
         language_codes: tuple | None = None,
-        languages: tuple = None,
+        languages: tuple | None = None,
         min_value_length: int | None = None,
         max_value_length: int | None = None,
         **kwargs,
@@ -358,7 +358,7 @@ class TranslationSlugField(TranslationField):
     def __init__(
         self,
         *args,
-        populate_from: str = None,
+        populate_from: str | None = None,
         unique=True,
         additional_uniqueness: tuple[dict] | None = None,
         **kwargs,

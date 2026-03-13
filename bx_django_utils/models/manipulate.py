@@ -99,7 +99,7 @@ def update_model_field(*, instance, field_name, old_value, new_value, result: Cr
 def create_or_update2(
     *,
     ModelClass: type[models.Model],
-    lookup: dict = None,
+    lookup: dict | None = None,
     call_full_clean: bool = True,
     validate_unique: bool = False,
     store_behavior: dict | None = None,
@@ -242,7 +242,13 @@ def create_or_update2(
     return result
 
 
-def create_or_update(*, ModelClass: type[models.Model], lookup: dict = None, call_full_clean: bool = True, **values):
+def create_or_update(
+    *,
+    ModelClass: type[models.Model],
+    lookup: dict | None = None,
+    call_full_clean: bool = True,
+    **values,
+):
     """
     Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
     """

@@ -6,7 +6,7 @@ from bx_django_utils_tests.test_app.models import ColorFieldTestModel, ColorFiel
 
 
 class DatabaseRoutersTestCase(TestCase):
-    databases = ['default', 'second']
+    databases = ('default', 'second')
 
     def test_database_router(self):
         baker.make(

@@ -23,7 +23,7 @@ def make_database_queries2(count=1):
 
 
 class AssertQueriesTestCase(TestCase):
-    databases = ['default', 'second']
+    databases = ('default', 'second')
 
     def get_instance(self):
         with AssertQueries() as queries:
@@ -349,10 +349,9 @@ class AssertQueriesTestCase(TestCase):
 
         # SAVEPOINT...RELEASE SAVEPOINT
 
-        with AssertQueries() as queries:
-            with transaction.atomic():
-                group.name = 'foobar'
-                group.save()
+        with AssertQueries() as queries, transaction.atomic():
+            group.name = 'foobar'
+            group.save()
 
         queries.assert_queries(
             table_counts=Counter({

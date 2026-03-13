@@ -160,7 +160,7 @@ def assert_user_properties(user, properties: dict, raw_password: str | None = No
         )
 
     current_props = {}
-    for attr_name in properties.keys():
+    for attr_name in properties:
         if attr_name == 'permissions':
             current_props['permissions'] = sorted(user.get_all_permissions())
         else:
@@ -168,6 +168,5 @@ def assert_user_properties(user, properties: dict, raw_password: str | None = No
 
     assert_equal(current_props, properties)
 
-    if raw_password is not None:
-        if not user.check_password(raw_password):
-            raise AssertionError(f'Password {raw_password!r} is wrong!')
+    if raw_password is not None and not user.check_password(raw_password):
+        raise AssertionError(f'Password {raw_password!r} is wrong!')

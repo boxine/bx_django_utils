@@ -219,7 +219,7 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
 
     def test_renew_all(self):
         stdout_output = self.call_command(
-            options=dict(all=True),
+            options={'all': True},
             expected_stdout=[
                 '1. renew "fixture1" file "/path/to/fixture1.json ...',
                 'Mocked renew "fixture1"',
@@ -234,7 +234,7 @@ class RenewAllFixturesBaseCommandTestCase(SimpleTestCase):
 
     def test_renew_all_with_regex(self):
         stdout_output = self.call_command(
-            options=dict(all=True, filter='fixture2'),
+            options={'all': True, 'filter': 'fixture2'},
             expected_stdout=[
                 '1. renew "fixture2" file "/path/to/fixture2.json ...',
                 'Mocked renew "fixture2"',

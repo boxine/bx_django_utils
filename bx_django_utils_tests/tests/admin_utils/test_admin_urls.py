@@ -47,7 +47,7 @@ class AdminUrlsSimpleTestCase(TestCase):
         )
 
         # Optional parameters:
-        url = admin_model_url(model_or_instance=User, params=dict(is_staff__exact=1))
+        url = admin_model_url(model_or_instance=User, params={'is_staff__exact': 1})
         self.assertEqual(url, '/admin/auth/user/?is_staff__exact=1')
 
         with self.assertRaisesMessage(

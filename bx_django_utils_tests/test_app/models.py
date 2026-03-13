@@ -60,10 +60,8 @@ class StoreSaveModel(models.Model):
             self._save_calls.saves = []
 
         self._save_calls.saves.append(pluck(kwargs, ('arg', 'other_arg')))
-        if 'arg' in kwargs:
-            del kwargs['arg']
-        if 'other_arg' in kwargs:
-            del kwargs['other_arg']
+        kwargs.pop('arg', None)
+        kwargs.pop('other_arg', None)
 
         return super().save(**kwargs)
 
@@ -140,11 +138,11 @@ class ConnectedUniqueSlugModel1(models.Model):
         languages=LANGUAGES,
         populate_from='translated',
         additional_uniqueness=(
-            dict(
-                app_label='test_app',
-                model_name='ConnectedUniqueSlugModel2',
-                field_name='translated_slug',
-            ),
+            {
+                'app_label': 'test_app',
+                'model_name': 'ConnectedUniqueSlugModel2',
+                'field_name': 'translated_slug',
+            },
         ),
     )
 
@@ -161,11 +159,11 @@ class ConnectedUniqueSlugModel2(models.Model):
         languages=LANGUAGES,
         populate_from='translated',
         additional_uniqueness=(
-            dict(
-                app_label='test_app',
-                model_name='ConnectedUniqueSlugModel1',
-                field_name='translated_slug',
-            ),
+            {
+                'app_label': 'test_app',
+                'model_name': 'ConnectedUniqueSlugModel1',
+                'field_name': 'translated_slug',
+            },
         ),
     )
 

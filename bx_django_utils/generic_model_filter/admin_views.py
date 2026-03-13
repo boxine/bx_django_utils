@@ -163,7 +163,7 @@ class ModelFilterData:
         """
         :return: all current information as URL encoded string
         """
-        parms = dict(model_name=self.model_name)
+        parms = {'model_name': self.model_name}
         if self.field_names:
             parms['field_names'] = self.field_names
         return build_url_parameters(**parms)

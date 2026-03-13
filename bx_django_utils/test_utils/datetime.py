@@ -29,7 +29,7 @@ class MockDatetimeGenerator:
             assert isinstance(offset, datetime.timedelta)
             self.now = datetime.datetime(
                 2000, 1, 1, 0, 0, 0,
-                tzinfo=datetime.timezone.utc
+                tzinfo=datetime.UTC
             )
         else:
             self.now = None
@@ -42,7 +42,7 @@ class MockDatetimeGenerator:
             self.num += 1
             dt = datetime.datetime(
                 2000 + self.num, 1, 1, 0, 0, 0,
-                tzinfo=datetime.timezone.utc
+                tzinfo=datetime.UTC
             )
             return dt
         else:
