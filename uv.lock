@@ -151,7 +151,7 @@ dev = [
     { name = "hatchling" },
     { name = "lxml" },
     { name = "manageprojects", version = "0.27.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "manageprojects", version = "0.27.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "manageprojects", version = "0.27.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "model-bakery" },
     { name = "nox" },
     { name = "packaging" },
@@ -931,7 +931,7 @@ wheels = [
 
 [[package]]
 name = "manageprojects"
-version = "0.27.2"
+version = "0.27.3"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -947,9 +947,9 @@ dependencies = [
     { name = "ty", marker = "python_full_version >= '3.12'" },
     { name = "tyro", marker = "python_full_version >= '3.12'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6a/72/6dbeaa39025cdab6e00a2a84c184ba2e6f1a6ec487e6d598b26623ccc06e/manageprojects-0.27.2.tar.gz", hash = "sha256:66bc6c50fcfe518f48ae782f570f0ed516e2b76cbc450f96bf820cd884d4c909", size = 149380, upload-time = "2026-01-26T08:39:49.315Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/31/fde8602d69586f1c36f2ee0937a318268cf87953f7eb3b235e178e33bfe7/manageprojects-0.27.3.tar.gz", hash = "sha256:d79efec60d8acdcc213a5dafe8b6abded9d32f77cfda3887bb40587687087353", size = 151134, upload-time = "2026-03-13T15:43:58.514Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/07/53/a2b78593ff4d4f015ebd8d7727dbe62d6b701f5334c682984cae6929623e/manageprojects-0.27.2-py3-none-any.whl", hash = "sha256:a77d5a8740ba105cffd71425c4c569d3bc1b65691eddd3c1721e8df7780a46d0", size = 101300, upload-time = "2026-01-26T08:39:47.744Z" },
+    { url = "https://files.pythonhosted.org/packages/2f/2a/d0de2247e9e463c79a98b5d73631de5027a8cf491c628a7beeeb66666cae/manageprojects-0.27.3-py3-none-any.whl", hash = "sha256:5c864cc50541dbf368c81fd8a53429be7eb1f8ec4811ec4b41039d2a007038c8", size = 102330, upload-time = "2026-03-13T15:43:57.087Z" },
 ]
 
 [[package]]
