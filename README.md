@@ -45,7 +45,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.conditions
 
-* [`only_staff_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/conditions.py#L4-L15) - Pass only active staff users. The default condition for all admin extra views.
+* [`only_staff_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/conditions.py#L4-L13) - Pass only active staff users. The default condition for all admin extra views.
 
 #### bx_django_utils.admin_extra_views.datatypes
 
@@ -223,7 +223,7 @@ Utilities to manipulate objects in database via models:
 * [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L40-L48) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
 * [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L21-L24) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
 * [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L27-L37) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L245-L263) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L245-L269) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
 * [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L99-L242) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
 * [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L81-L96) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
@@ -319,7 +319,7 @@ Use Playwright in Unittest + Fast Django user login
 #### bx_django_utils.test_utils.users
 
 * [`assert_permissions()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L33-L48) - Check user permissions.
-* [`assert_user_properties()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L151-L173) - Check a user instance with all properties and password (optional)
+* [`assert_user_properties()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L151-L172) - Check a user instance with all properties and password (optional)
 * [`filter_permission_names()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L12-L30) - Generate a Permission model query filtered by names, e.g.: ['<app_label>.<codename>', ...]
 * [`make_max_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L114-L148) - Create a test user with all permissions *except* the {exclude_permissions} ones.
 * [`make_minimal_test_user()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/users.py#L87-L111) - Create a test user and set given permissions.

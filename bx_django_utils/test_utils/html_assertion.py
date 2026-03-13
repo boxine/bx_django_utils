@@ -174,7 +174,7 @@ class HtmlAssertionMixin:
             fetch_redirect_response=False,
             **kwargs):
 
-        msg_prefix, haystack = self.get_msg_prefix_and_haystack(response, msg_prefix=msg_prefix)
+        msg_prefix, _haystack = self.get_msg_prefix_and_haystack(response, msg_prefix=msg_prefix)
         self.assertRedirects(
             response,
             expected_url=expected_url,

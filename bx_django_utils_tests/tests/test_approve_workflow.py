@@ -31,9 +31,11 @@ class BaseApproveModelTestCase(TestCase):
         assert draft.get_missing_field_info() == [('title', 'A Title', '')]
 
         # We can't approve with required fields:
-        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
-            with self.assertRaisesMessage(ValidationError, "{'title': ['This field cannot be blank.']}"):
-                draft.approve()
+        with (
+            self.assertLogs('bx_django_utils', level=logging.WARNING) as logs,
+            self.assertRaisesMessage(ValidationError, "{'title': ['This field cannot be blank.']}"),
+        ):
+            draft.approve()
 
         # Not set "ready_to_approve" generates only a warning:
         assert logs.output == [
@@ -53,9 +55,11 @@ class BaseApproveModelTestCase(TestCase):
         # "blocked" entries can't approve:
 
         draft.blocked = True
-        with self.assertLogs('bx_django_utils', level=logging.DEBUG) as logs:
-            with self.assertRaisesMessage(ValidationError, 'Blocked entries can not approved!'):
-                draft.approve()
+        with (
+            self.assertLogs('bx_django_utils', level=logging.DEBUG) as logs,
+            self.assertRaisesMessage(ValidationError, 'Blocked entries can not approved!'),
+        ):
+            draft.approve()
         assert ApproveTestModel.objects.count() == 1  # only one draft exists
         assert logs.output == [
             'DEBUG:bx_django_utils.approve_workflow.models:Approve <ApproveTestModel '
@@ -181,11 +185,13 @@ class BaseApproveModelTestCase(TestCase):
 
         # Can't publish if relations has missing fields, too:
 
-        with self.assertLogs('bx_django_utils', level=logging.WARNING) as logs:
-            with self.assertRaisesMessage(ValidationError, "{'relation_title': ['This field cannot be blank.']}"):
-                draft.approve()
+        with (
+            self.assertLogs('bx_django_utils', level=logging.WARNING) as logs,
+            self.assertRaisesMessage(ValidationError, "{'relation_title': ['This field cannot be blank.']}"),
+        ):
+            draft.approve()
         assert logs.output == [
-            "WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
+            'WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:'
             " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel"
         ]
 

@@ -8,8 +8,6 @@ if TYPE_CHECKING:
 class NotUniqueFlag(AssertionError):
     """"""  # noqa - don't add in README
 
-    pass
-
 
 class FeatureFlagDisabled(Exception):
     """"""  # noqa - don't add in README

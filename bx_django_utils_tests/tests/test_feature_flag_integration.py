@@ -178,14 +178,14 @@ class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
         self.assertTrue(foo_feature_flag)
         self.assertFalse(bar_feature_flag)
 
-        with self.assertRaises(ZeroDivisionError):
-            with (
-                foo_feature_flag.temp_enable(),
-                bar_feature_flag.temp_enable(),
-            ):
-                self.assertTrue(foo_feature_flag)
-                self.assertTrue(bar_feature_flag)
-                1 / 0
+        with (
+            self.assertRaises(ZeroDivisionError),
+            foo_feature_flag.temp_enable(),
+            bar_feature_flag.temp_enable(),
+        ):
+            self.assertTrue(foo_feature_flag)
+            self.assertTrue(bar_feature_flag)
+            1 / 0  # noqa
 
         self.assertTrue(foo_feature_flag)
         self.assertFalse(bar_feature_flag)
@@ -194,14 +194,14 @@ class PersistentFeatureFlagTestCase(FeatureFlagTestCaseMixin, TestCase):
         self.assertTrue(foo_feature_flag)
         self.assertFalse(bar_feature_flag)
 
-        with self.assertRaises(ZeroDivisionError):
-            with (
-                foo_feature_flag.temp_disable(),
-                bar_feature_flag.temp_disable(),
-            ):
-                self.assertFalse(foo_feature_flag)
-                self.assertFalse(bar_feature_flag)
-                1 / 0
+        with (
+            self.assertRaises(ZeroDivisionError),
+            foo_feature_flag.temp_disable(),
+            bar_feature_flag.temp_disable(),
+        ):
+            self.assertFalse(foo_feature_flag)
+            self.assertFalse(bar_feature_flag)
+            1 / 0  # noqa
 
         self.assertTrue(foo_feature_flag)
         self.assertFalse(bar_feature_flag)

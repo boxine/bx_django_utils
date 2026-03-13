@@ -16,7 +16,7 @@ from bx_django_utils.test_utils.assert_queries import AssertQueries
 class LogEntryTestCase(TestCase):
     """"""  # noqa - don't add in README
 
-    databases = ['default', 'second']
+    databases = ('default', 'second')
     maxDiff = None
 
     def test_basic(self):

@@ -164,7 +164,7 @@ class TranslationFieldTestCase(TestCase):
         # Update existing entry:
         result = create_or_update2(
             ModelClass=TranslatedModel,
-            lookup=dict(pk=instance.pk),
+            lookup={'pk': instance.pk},
             translated={'de-de': 'Hallo', 'en-us': 'Hello'},
             not_translated='Not the default.',
         )
@@ -188,7 +188,7 @@ class TranslationFieldTestCase(TestCase):
         # We have a special callback to avoid deleting translations:
         result = create_or_update2(
             ModelClass=TranslatedModel,
-            lookup=dict(pk=instance.pk),
+            lookup={'pk': instance.pk},
             update_model_field_callback=create_or_update_translation_callback,
             translated={'de-de': 'Hallo !', 'es': 'Hola'},
         )
@@ -406,7 +406,7 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
-        self.assertIn('was changed successfully', [str(m) for m in messages][0])
+        self.assertIn('was changed successfully', next(str(m) for m in messages))
 
         obj.refresh_from_db()
         self.assertEqual(obj.translated, {'de-de': 'ZUG', 'en-us': 'TRAIN', 'es': 'TREN', '_meta': {'a': [123]}})
@@ -447,7 +447,7 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(response.headers['content-type'], 'text/html; charset=utf-8')
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
-        self.assertIn('was added successfully', [str(m) for m in messages][0])
+        self.assertIn('was added successfully', next(str(m) for m in messages))
 
         # was persisted?
         self.assertEqual(TranslatedModel.objects.count(), 1)
@@ -764,13 +764,12 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
             'pt-br': (),
         }
         for django_code, expected_codes in matrix.items():
-            with self.subTest(django_code=django_code):
-                with translation.override(django_code):
-                    self.assertEqual(
-                        get_user_priorities(existing_codes),
-                        expected_codes,
-                        f'Requested {django_code=}',
-                    )
+            with self.subTest(django_code=django_code), translation.override(django_code):
+                self.assertEqual(
+                    get_user_priorities(existing_codes),
+                    expected_codes,
+                    f'Requested {django_code=}',
+                )
 
     def test_user_language_priorities(self):
         fallback_codes = ('en-int', 'en')
@@ -781,7 +780,6 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
             'en': ('en', 'en-int', 'de-de', 'de-at'),
             'en-gb': ('en', 'en-int', 'de-de', 'de-at'),
             'en-int': ('en-int', 'en', 'de-de', 'de-at'),
-            #
             'de-at': ('de-at', 'de-de', 'en-int', 'en'),
             'de': ('de-de', 'de-at', 'en-int', 'en'),
             # Complete unsupported languages -> Use fallback + existing codes:
@@ -792,13 +790,12 @@ class TranslationSlugTestCase(HtmlAssertionMixin, TestCase):
             'pt-br': ('en-int', 'en', 'de-de', 'de-at'),
         }
         for django_code, content_codes in matrix.items():
-            with self.subTest(django_code=django_code):
-                with translation.override(django_code):
-                    self.assertEqual(
-                        user_language_priorities(fallback_codes, existing_codes),
-                        content_codes,
-                        f'Requested {django_code=}',
-                    )
+            with self.subTest(django_code=django_code), translation.override(django_code):
+                self.assertEqual(
+                    user_language_priorities(fallback_codes, existing_codes),
+                    content_codes,
+                    f'Requested {django_code=}',
+                )
 
     def test_fill_missing_slugs(self):
         instance = TranslatedSlugTestModel.objects.create(translated={'de-de': 'One !'})

@@ -28,9 +28,10 @@ class HumanizeTestCase(SimpleTestCase):
         assert_html_snapshot(got=html, validate=True)
 
         # No <span title=""> without settings.VISIBLE_TIMEZONES:
-        with self.settings(VISIBLE_TIMEZONES=[]):
-            with timezone.override(zoneinfo.ZoneInfo('Europe/Berlin')), translation.override(
-                'de-de'
-            ):
-                html = human_timezone_datetime(dt=parse_dt('2000-01-01T00:00:00+0000'))
+        with (
+            self.settings(VISIBLE_TIMEZONES=[]),
+            timezone.override(zoneinfo.ZoneInfo('Europe/Berlin')),
+            translation.override('de-de'),
+        ):
+            html = human_timezone_datetime(dt=parse_dt('2000-01-01T00:00:00+0000'))
         self.assertHTMLEqual(html, '01.01.2000 01:00<br><small>(Europe/Berlin)</small>')

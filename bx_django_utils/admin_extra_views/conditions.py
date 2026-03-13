@@ -10,6 +10,4 @@ def only_staff_user(request):
         return False
     if not user.is_active:
         return False
-    if not user.is_staff:
-        return False
-    return True
+    return user.is_staff

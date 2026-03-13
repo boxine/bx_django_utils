@@ -73,7 +73,7 @@ class AssertQueries(SQLQueryRecorder):
     @staticmethod
     def get_table_name(query):
         sql = query['sql']
-        if sql.startswith('SAVEPOINT') or sql.startswith('RELEASE SAVEPOINT'):
+        if sql.startswith(('SAVEPOINT', 'RELEASE SAVEPOINT')):
             # transaction statements
             return
 

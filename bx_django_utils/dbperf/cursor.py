@@ -55,7 +55,7 @@ class RecordingCursorWrapper:
 
     def _quote_expr(self, element):
         if isinstance(element, str):
-            return "'%s'" % element.replace("'", "''")
+            return "'{}'".format(element.replace("'", "''"))
         else:
             return repr(element)
 
