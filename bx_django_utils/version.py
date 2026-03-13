@@ -1,38 +1,46 @@
 import functools
-import pathlib
+from pathlib import Path
 import subprocess
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
 
-VERSION_FILE = pathlib.Path(settings.BASE_DIR) / 'VERSION'
+DEFAULT_VERSION_FILE_NAME = 'VERSION'
 
 
 @functools.lru_cache
-def get_version(raise_error=False):
+def get_version(raise_error=False, base_dir: Path | None = None, file_name: str = DEFAULT_VERSION_FILE_NAME):
+    """
+    Get version of this application. First try to read it from file, then determine from git.
+    """
+    if not base_dir:
+        base_dir = Path(settings.BASE_DIR)
+    version_file = base_dir / file_name
     try:
-        version_text = VERSION_FILE.read_text()
+        version_text = version_file.read_text()
         return version_text.strip()
     except OSError:
         pass
 
-    return determine_version(raise_error=raise_error)
+    return determine_version(raise_error=raise_error, base_dir=version_file.parent)
 
 
-def determine_version(raise_error=False):
-    return _git_version(settings.BASE_DIR, raise_error=raise_error)
+def determine_version(raise_error=False, base_dir: Path | None = None):
+    if not base_dir:
+        base_dir = settings.BASE_DIR
+    return _git_version(base_dir=base_dir, raise_error=raise_error)
 
 
-def _git_version(cwd, raise_error=False):
+def _git_version(base_dir: Path, raise_error=False):
     try:
-        tags_str = subprocess.check_output(['git', 'tag', '--points-at', 'HEAD'], cwd=cwd).decode('utf-8').strip()
-        sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=cwd).decode('utf-8').strip()
+        tags_str = subprocess.check_output(['git', 'tag', '--points-at', 'HEAD'], cwd=base_dir).decode('utf-8').strip()
+        sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=base_dir).decode('utf-8').strip()
 
         names = tags_str.split() + [sha]
         res = '/'.join(names)
 
-        status = subprocess.check_output(['git', 'status', '--untracked-files=no', '--porcelain'], cwd=cwd).decode(
+        status = subprocess.check_output(['git', 'status', '--untracked-files=no', '--porcelain'], cwd=base_dir).decode(
             'utf-8'
         )
 
@@ -63,16 +71,38 @@ class DetermineVersionCommand(BaseCommand):
             '-w',
             '--write-file',
             action='store_true',
-            help=f'Write to version file ({VERSION_FILE}). Implies --raise-error (we never want to write "unknown")',
+            help='Write to version file. Implies --raise-error (we never want to write "unknown")',
+        )
+        parser.add_argument(
+            '--version-file-name',
+            type=str,
+            default=DEFAULT_VERSION_FILE_NAME,
+            help='Name of the version file (default: %(default)s)',
+        )
+        parser.add_argument(
+            '--base',
+            type=Path,
+            default=None,
+            help='Optional path to version file',
         )
 
     def handle(self, **options):
-        func = get_version if options['get_from_file'] else determine_version
+        base = options.get('base')
+        if not base:
+            base = settings.BASE_DIR
+        base_dir = Path(base)
+        file_name = options['version_file_name']
+
         raise_error = options['raise_error'] and options['write_file']
-        v = func(raise_error=raise_error)
+
+        if options['get_from_file']:
+            v = get_version(raise_error=raise_error, base_dir=base_dir, file_name=file_name)
+        else:
+            v = determine_version(raise_error=raise_error, base_dir=base_dir)
 
         if options['write_file']:
-            VERSION_FILE.write_text(v)
-            print(f'Wrote version {v} to {VERSION_FILE}')
+            version_file = base_dir / file_name
+            version_file.write_text(v)
+            print(f'Wrote version {v} to {version_file}')
         else:
             print(v)
