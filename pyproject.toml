@@ -59,6 +59,17 @@ dev = [
     'typeguard',  # https://github.com/agronholm/typeguard/
 ]
 
+
+[tool.uv]
+# Don't install bleed-edge versions of dependencies, to avoid undetected issues and supply chain attacks.
+exclude-newer = "1 week"
+
+# Exclude own packages from the "exclude-newer" rule and
+# add external packages temporarily to fix known issues or current CVEs
+# TODO: Remove requests - v2.33.0 fixed CVE-2026-25645
+exclude-newer-package = { requests = "2026-03-25T18:00:00Z", cryptography="2026-03-27T00:00:00Z" }
+
+
 [project.urls]
 Documentation = "https://github.com/boxine/bx_django_utils/"
 Source = "https://github.com/boxine/bx_django_utils/"
@@ -97,6 +108,7 @@ exclude = [
 
 
 [tool.ruff.lint]
+preview = true  # Needed for some of the rules
 extend-select = [
     "E", # pycodestyle: https://docs.astral.sh/ruff/rules/#error-e
     "I", # isort: https://docs.astral.sh/ruff/rules/#isort-i
@@ -152,6 +164,7 @@ cookiecutter_directory = "make-uv-python"
 applied_migrations = [
     "4662321", # 2025-04-22T20:40:34+02:00
     "af6dd62", # 2026-01-26T16:04:53+01:00
+    "69ee933", # 2026-03-28T10:01:57+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
