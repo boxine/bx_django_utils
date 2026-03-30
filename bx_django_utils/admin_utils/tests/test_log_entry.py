@@ -1,5 +1,6 @@
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.test import TestCase
 from model_bakery import baker
@@ -118,8 +119,8 @@ class LogEntryTestCase(TestCase):
 
         # create_log_entry() validates the created entry:
         with self.assertRaisesMessage(
-            ValueError,
-            expected_message="Field 'action_flag' expected a number but got 'Bam!'.",
+            ValidationError,
+            expected_message='“Bam!” value must be an integer.',
         ):
             create_log_entry(
                 user=user1,

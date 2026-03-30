@@ -90,7 +90,7 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
 
             # Create a LogEntry for this action:
             content_type_id = ContentType.objects.get_for_model(FeatureFlagModel).id
-            log_entry = LogEntry.objects.log_action(
+            log_entry = LogEntry(
                 user_id=self.request.user.id,
                 content_type_id=content_type_id,
                 action_flag=CHANGE,
@@ -99,6 +99,7 @@ class ManageFeatureFlagsBaseView(AdminExtraViewMixin, FormView):
                 object_repr=change_message,  # Rendered in Django log list on index page!
             )
             log_entry.full_clean()
+            log_entry.save(force_insert=True)
 
             messages.success(self.request, change_message)
 

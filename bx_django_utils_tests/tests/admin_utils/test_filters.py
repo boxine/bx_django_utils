@@ -1,3 +1,4 @@
+import django
 from django.test import TestCase
 from model_bakery import baker
 
@@ -236,15 +237,31 @@ class YesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
             optional_color='#000003',
         )
         response = self.client.get('/admin/test_app/colorfieldtestmodel/')
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<p class="paginator">2 color field test models</p>',  # both items
-                '<summary>By Optional Color set</summary>',
-                '<a href="?optional_color=1">Yes</a>',
-                '<a href="?optional_color=0">No</a>',
-            ),
-        )
+        if django.VERSION >= (6, 0):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    """
+                    <nav class="paginator" aria-labelledby="pagination">
+                        <h2 id="pagination" class="visually-hidden">Pagination color field test models</h2>
+                        2 color field test models
+                    </nav>
+                    """,  # both items
+                    '<summary>By Optional Color set</summary>',
+                    '<a href="?optional_color=1">Yes</a>',
+                    '<a href="?optional_color=0">No</a>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<p class="paginator">2 color field test models</p>',  # both items
+                    '<summary>By Optional Color set</summary>',
+                    '<a href="?optional_color=1">Yes</a>',
+                    '<a href="?optional_color=0">No</a>',
+                ),
+            )
 
         # No filter active -> both items
         self.assertEqual(
@@ -257,18 +274,32 @@ class YesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
 
         ###################################################################################
 
-        response = self.client.get(
-            '/admin/test_app/colorfieldtestmodel/?optional_color=0'
-        )
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<p class="paginator">1 color field test model</p>',  # only one item
-                '<summary>By Optional Color set</summary>',
-                '<a href="?optional_color=1">Yes</a>',
-                '<li class="selected"><a href="?optional_color=0">No</a></li>',
-            ),
-        )
+        response = self.client.get('/admin/test_app/colorfieldtestmodel/?optional_color=0')
+        if django.VERSION >= (6, 0):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    """
+                    <nav class="paginator" aria-labelledby="pagination">
+                        <h2 id="pagination" class="visually-hidden">Pagination color field test models</h2>
+                        1 color field test model
+                    </nav>
+                    """,  # only one item
+                    '<summary>By Optional Color set</summary>',
+                    '<a href="?optional_color=1">Yes</a>',
+                    '<a href="?optional_color=0">No</a>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<p class="paginator">1 color field test model</p>',  # only one item
+                    '<summary>By Optional Color set</summary>',
+                    '<a href="?optional_color=1">Yes</a>',
+                    '<li class="selected"><a href="?optional_color=0">No</a></li>',
+                ),
+            )
         # Now we get only items with "optional_color__isnull=True":
         self.assertEqual(
             self._get_changelist_items(response),
@@ -277,18 +308,32 @@ class YesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
 
         ###################################################################################
 
-        response = self.client.get(
-            '/admin/test_app/colorfieldtestmodel/?optional_color=1'
-        )
-        self.assert_html_parts(
-            response,
-            parts=(
-                '<p class="paginator">1 color field test model</p>',  # only one item
-                '<summary>By Optional Color set</summary>',
-                '<li class="selected"><a href="?optional_color=1">Yes</a></li>',
-                '<a href="?optional_color=0">No</a>',
-            ),
-        )
+        response = self.client.get('/admin/test_app/colorfieldtestmodel/?optional_color=1')
+        if django.VERSION >= (6, 0):
+            self.assert_html_parts(
+                response,
+                parts=(
+                    """
+                    <nav class="paginator" aria-labelledby="pagination">
+                        <h2 id="pagination" class="visually-hidden">Pagination color field test models</h2>
+                        1 color field test model
+                    </nav>
+                    """,  # only one item
+                    '<summary>By Optional Color set</summary>',
+                    '<li class="selected"><a href="?optional_color=1">Yes</a></li>',
+                    '<a href="?optional_color=0">No</a>',
+                ),
+            )
+        else:
+            self.assert_html_parts(
+                response,
+                parts=(
+                    '<p class="paginator">1 color field test model</p>',  # only one item
+                    '<summary>By Optional Color set</summary>',
+                    '<li class="selected"><a href="?optional_color=1">Yes</a></li>',
+                    '<a href="?optional_color=0">No</a>',
+                ),
+            )
         # Now we get only items with "optional_color__isnull=False":
         self.assertEqual(
             self._get_changelist_items(response),

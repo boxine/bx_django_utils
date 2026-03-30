@@ -34,7 +34,7 @@ def create_log_entry(
     Note: `call_full_clean` will result in additional database queries.
     """
     content_type = ContentType.objects.get_for_model(instance)
-    log_entry = LogEntry.objects.log_action(
+    log_entry = LogEntry(
         user_id=user.id,
         content_type_id=content_type.pk,
         object_id=instance.pk,
@@ -43,6 +43,7 @@ def create_log_entry(
         change_message=change_message,
     )
     log_entry.full_clean()
+    log_entry.save(force_insert=True)
     return log_entry
 
 
