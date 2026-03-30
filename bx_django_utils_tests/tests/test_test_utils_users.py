@@ -12,7 +12,7 @@ class UserUtilsTestCase(TestCase):
             pass
 
         with self.assertRaisesMessage(
-            AssertionError, "Given user object (type='Wrong') is not a 'auth.User' instance."
+            TypeError, "Given user object (type='Wrong') is not a 'auth.User' instance."
         ):
             assert_user_properties(user=Wrong(), properties={})
 

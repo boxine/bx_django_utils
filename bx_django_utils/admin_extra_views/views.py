@@ -16,7 +16,7 @@ class Redirect2AdminExtraView(RedirectView):
 
         assert self.admin_view is not None
         if not issubclass(self.admin_view, AdminExtraViewMixin):
-            raise ValueError(f'Admin view {self.admin_view} must subclass AdminExtraViewMixin.')
+            raise TypeError(f'Admin view {self.admin_view} must subclass AdminExtraViewMixin.')
 
     def get_redirect_url(self, *args, **kwargs):
         url = reverse_admin_extra_view(view_class=self.admin_view)

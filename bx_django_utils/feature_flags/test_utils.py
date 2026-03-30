@@ -61,7 +61,7 @@ class FeatureFlagTestCaseMixin(ClearCacheMixin):
 
         if self.warum_up_feature_flag_cache:
             for feature_flag in FeatureFlag.registry.values():
-                feature_flag.is_enabled  # noqa: Will fill the cache with the initial state
+                feature_flag.is_enabled  # noqa B018 Will fill the cache with the initial state
 
     def tearDown(self):
         super().tearDown()
