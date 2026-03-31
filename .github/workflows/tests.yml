@@ -17,9 +17,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.13", "3.12", "3.11"]
-        django-version: ["5.2", "5.1", "4.2"]
+        python-version: ["3.14", "3.13", "3.12"]
+        django-version: ["6.0", "5.2", "4.2"]
         exclude:
+          - python-version: "3.14"
+            django-version: "4.2"
           - python-version: "3.13"
             django-version: "4.2"
     steps:

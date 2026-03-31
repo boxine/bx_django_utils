@@ -21,10 +21,10 @@ class AdminExtraViewRegistry:
         Collect all admin extra views. Called by our @register_admin_view() decorator.
         """
         if not issubclass(view_class, AdminExtraViewMixin):
-            raise ValueError('Wrapped class must subclass AdminExtraViewMixin.')
+            raise TypeError('Wrapped class must subclass AdminExtraViewMixin.')
 
         if not isinstance(view_class.meta, AdminExtraMeta):
-            raise ValueError(f'View {view_class} must have a "AdminExtraMeta" instance.')
+            raise TypeError(f'View {view_class} must have a "AdminExtraMeta" instance.')
 
         view_class.meta.setup_app(pseudo_app)
 
@@ -110,7 +110,7 @@ def register_admin_view(*, pseudo_app):
 
     def _model_admin_wrapper(view_class):
         if not isinstance(pseudo_app, PseudoApp):
-            raise ValueError('Keyword argument "pseudo_app" must be a PseudoApp instance.')
+            raise TypeError('Keyword argument "pseudo_app" must be a PseudoApp instance.')
 
         extra_view_registry.add_view(pseudo_app, view_class)
 

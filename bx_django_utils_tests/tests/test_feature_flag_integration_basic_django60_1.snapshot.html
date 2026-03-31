@@ -1,0 +1,48 @@
+<div class="colM" id="content">
+ <h2 id="foo">
+  Foo - ENABLED
+  <a href="#foo">
+   ¶
+  </a>
+ </h2>
+ <pre>En-/disable example Feature flag `Foo`.
+Just for demonstrate.</pre>
+ <p>
+  (Initial default state: ENABLED)
+ </p>
+ <p>
+  Current state:
+  <strong>
+   ENABLED
+  </strong>
+ </p>
+ <form method="post">
+  MockedCsrfTokenNode
+  <input name="cache_key" type="hidden" value="feature-flags-foo"/>
+  <input name="new_value" type="hidden" value="0"/>
+  <input type="submit" value="Set 'Foo' to DISABLED"/>
+ </form>
+ <h2 id="bar">
+  Bar - DISABLED
+  <a href="#bar">
+   ¶
+  </a>
+ </h2>
+ <pre>En-/disable example Feature flag `Bar`.</pre>
+ <p>
+  (Initial default state: DISABLED)
+ </p>
+ <p>
+  Current state:
+  <strong>
+   DISABLED
+  </strong>
+ </p>
+ <form method="post">
+  MockedCsrfTokenNode
+  <input name="cache_key" type="hidden" value="feature-flags-bar"/>
+  <input name="new_value" type="hidden" value="1"/>
+  <input type="submit" value="Set 'Bar' to ENABLED"/>
+ </form>
+ <br class="clear"/>
+</div>

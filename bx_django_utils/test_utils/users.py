@@ -154,7 +154,7 @@ def assert_user_properties(user, properties: dict, raw_password: str | None = No
     """
     User = get_user_model()
     if not isinstance(user, User):
-        raise AssertionError(
+        raise TypeError(
             f'Given user object (type={type(user).__name__!r})'
             f' is not a {settings.AUTH_USER_MODEL!r} instance.'
         )

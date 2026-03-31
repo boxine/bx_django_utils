@@ -70,8 +70,8 @@ class ColorFieldTestModelAdmin(admin.ModelAdmin):
 
 @admin.register(TranslatedModel)
 class TranslatedModelAdmin(TranslationFieldAdmin):
-    list_display = ['translated', 'translated_multiline', 'not_translated']
-    list_display_links = ['translated', 'translated_multiline']
+    list_display = ('translated', 'translated_multiline', 'not_translated')
+    list_display_links = ('translated', 'translated_multiline')
 
 
 class TranslatedSlugTestModelForm(forms.ModelForm):
@@ -99,9 +99,9 @@ class TranslatedSlugTestModelForm(forms.ModelForm):
 @admin.register(TranslatedSlugTestModel)
 class TranslatedSlugTestModelAdmin(TranslationFieldAdmin):
     form = TranslatedSlugTestModelForm
-    list_display = ['translated', 'translated_slug']
+    list_display = ('translated', 'translated_slug')
 
 
 @admin.register(ValidateLengthTranslations)
 class ValidateLengthTranslationsModelAdmin(TranslationFieldAdmin):
-    list_display = ['translated', 'translated_slug']
+    list_display = ('translated', 'translated_slug')

@@ -21,11 +21,11 @@ classifiers = [
 license = {text = "MIT"}
 readme="README.md"
 
-requires-python = ">=3.11,<3.14" # TODO: Add v3.14 https://github.com/boxine/bx_django_utils/issues/202
+requires-python = ">=3.11,<3.15"
 
 dependencies = [
-    'django>=4.2,<6.0',  # TODO: Add v6.x https://github.com/boxine/bx_django_utils/issues/201
-    'bx_py_utils>=92',  # https://github.com/boxine/bx_py_utils
+    'django>=4.2',
+    'bx_py_utils',  # https://github.com/boxine/bx_py_utils
     'python-stdnum',  # https://arthurdejong.org/python-stdnum/
 ]
 [dependency-groups]
@@ -58,6 +58,17 @@ dev = [
     "ruff", # https://github.com/astral-sh/ruff
     'typeguard',  # https://github.com/agronholm/typeguard/
 ]
+
+
+[tool.uv]
+# Don't install bleed-edge versions of dependencies, to avoid undetected issues and supply chain attacks.
+exclude-newer = "1 week"
+
+# Exclude own packages from the "exclude-newer" rule and
+# add external packages temporarily to fix known issues or current CVEs
+# TODO: Remove requests - v2.33.0 fixed CVE-2026-25645
+exclude-newer-package = { requests = "2026-03-25T18:00:00Z", cryptography="2026-03-27T00:00:00Z" }
+
 
 [project.urls]
 Documentation = "https://github.com/boxine/bx_django_utils/"
@@ -92,11 +103,12 @@ path = "bx_django_utils/__init__.py"
 line-length = 120
 exclude = [
   ".*/",
-  "*/migration/*",
+  "*/migrations/*",
 ]
 
 
 [tool.ruff.lint]
+preview = true  # Needed for some of the rules
 extend-select = [
     "E", # pycodestyle: https://docs.astral.sh/ruff/rules/#error-e
     "I", # isort: https://docs.astral.sh/ruff/rules/#isort-i
@@ -104,6 +116,8 @@ extend-select = [
 ignore = [
     "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
     "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
+    "DTZ001", # datetime without a `tzinfo` argument
+    "RUF012", # Mutable default value for class attribute
 ]
 
 [tool.ruff.lint.isort]
@@ -152,6 +166,7 @@ cookiecutter_directory = "make-uv-python"
 applied_migrations = [
     "4662321", # 2025-04-22T20:40:34+02:00
     "af6dd62", # 2026-01-26T16:04:53+01:00
+    "69ee933", # 2026-03-28T10:01:57+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]

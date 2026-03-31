@@ -63,7 +63,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.site
 
-* [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L13) - An AdminSite object encapsulates an instance of the Django admin application, ready
+* [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L13) - An AdminSite object encapsulates an instance of the Django admin
 
 ##### bx_django_utils.admin_extra_views.tests.test_admin_extra_views
 
@@ -100,10 +100,10 @@ Helpers to build Admin URLs
 
 Helper functions around Django's admin LogEntry model.
 
-* [`create_log_entry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L25-L46) - Helper to create `LogEntry` entries for a model instance.
-* [`get_change_message_strings()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L49-L57) - Get `LogEntry` change messages as plain strings build by `LogEntry.get_change_message()`.
-* [`get_log_entry_qs()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L80-L103) - Get a QuerySet of LogEntry objects, with optional filtering by model, object ID, and action flag.
-* [`get_log_message_data()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L60-L77) - Get `LogEntry` change messages data structure as list.
+* [`create_log_entry()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L25-L47) - Helper to create `LogEntry` entries for a model instance.
+* [`get_change_message_strings()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L50-L58) - Get `LogEntry` change messages as plain strings build by `LogEntry.get_change_message()`.
+* [`get_log_entry_qs()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L81-L104) - Get a QuerySet of LogEntry objects, with optional filtering by model, object ID, and action flag.
+* [`get_log_message_data()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L61-L78) - Get `LogEntry` change messages data structure as list.
 * [`validate_action_flag()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/log_entry.py#L17-L22) - Validate that the action flag is one of the allowed values.
 
 ### bx_django_utils.approve_workflow
@@ -161,7 +161,7 @@ Feature flags: https://github.com/boxine/bx_django_utils/blob/master/bx_django_u
 
 #### bx_django_utils.feature_flags.admin_views
 
-* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L31-L105) - Base admin extra view to manage all existing feature flags in admin.
+* [`ManageFeatureFlagsBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/feature_flags/admin_views.py#L31-L106) - Base admin extra view to manage all existing feature flags in admin.
 
 #### bx_django_utils.feature_flags.data_classes
 

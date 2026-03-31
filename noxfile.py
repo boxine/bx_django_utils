@@ -6,8 +6,13 @@ import nox
 from nox.sessions import Session
 
 
-PYTHON_VERSIONS = ('3.13', '3.12', '3.11')  # TODO: Add v3.14 https://github.com/boxine/bx_django_utils/issues/202
-DJANGO_VERSIONS = ('5.2', '5.1', '4.2')  # TODO: Add v6.x https://github.com/boxine/bx_django_utils/issues/201
+PYTHON_VERSIONS = ('3.14', '3.13', '3.12')
+DJANGO_VERSIONS = ('6.0', '5.2', '4.2')
+
+EXCLUDED_COMBINATIONS = [
+    ('3.14', '4.2'),
+    ('3.13', '4.2'),
+]
 
 
 @nox.session(
@@ -17,6 +22,9 @@ DJANGO_VERSIONS = ('5.2', '5.1', '4.2')  # TODO: Add v6.x https://github.com/box
 )
 @nox.parametrize('django', DJANGO_VERSIONS)
 def tests(session: Session, django: str):
+    if (session.python, django) in EXCLUDED_COMBINATIONS:
+        session.skip(f'Python {session.python} needs Django {django}')
+
     session.install('uv')
     session.run(
         'uv',
@@ -34,9 +42,3 @@ def tests(session: Session, django: str):
         env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
     )
     session.run('python', '-m', 'coverage', 'run', '--context', f'py{session.python}-django{django}')
-
-
-@nox.session
-def lint(session: Session):
-    session.install('flake8', 'flake8-bugbear')
-    session.run('flake8', '.')
