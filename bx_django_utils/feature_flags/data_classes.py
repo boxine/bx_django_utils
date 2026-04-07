@@ -54,8 +54,8 @@ class FeatureFlag:
         if cache_duration:
             self._cache_duration: datetime.timedelta = cache_duration
             self._cache_time_func: Callable[[], float] = time.monotonic
-            self._cache_from: float = self._cache_time_func()
-            self._cache_value: State = self.initial_state
+            self._cache_from: float | None = None
+            self._cache_value: State | None = None
 
     def enable(self) -> bool:
         return self.set_state(new_state=State.ENABLED)
@@ -88,13 +88,13 @@ class FeatureFlag:
         if not hasattr(self, '_cache_duration'):  # caching is disabled
             return self._compute_is_enabled()
 
-        elapsed = self._cache_time_func() - self._cache_from
+        if self._cache_from is not None:
+            elapsed = self._cache_time_func() - self._cache_from
+            # cache is still valid
+            if elapsed <= self._cache_duration.total_seconds():
+                return bool(self._cache_value.value)
 
-        # cache is still valid
-        if elapsed <= self._cache_duration.total_seconds():
-            return bool(self._cache_value.value)
-
-        # cache is invalid -> recompute
+        # cache is empty or expired -> recompute
         state = self._compute_is_enabled()
         self._cache_from = self._cache_time_func()
         self._cache_value = State(state)

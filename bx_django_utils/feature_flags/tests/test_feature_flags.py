@@ -226,3 +226,28 @@ class IsolatedFeatureFlagsTestCase(FeatureFlagTestCaseMixin, TestCase):
         )
         self.assertEqual(str(flag), '<FeatureFlag be-wild>')
         self.assertEqual(repr(flag), "FeatureFlag(cache_key='be-wild', human_name='Be wild', initial_enabled=False)")
+
+    def test_cache_reads_db_on_first_access(self):
+        # Pre-populate DB with DISABLED state
+        FeatureFlagModel.objects.create(
+            cache_key='feature-flags-cache-initial-state',
+            state=State.DISABLED,  # <<< DB says disabled
+        )
+        # Construct flag with initial_enabled=True but DB says disabled
+        feature_flag = FeatureFlag(
+            cache_key='cache-initial-state',
+            human_name='Cache Initial State Test',
+            initial_enabled=True,  # <<< initial state says enabled
+            cache_duration=datetime.timedelta(seconds=60),
+        )
+
+        # Cache should be empty at this point:
+        self.assertIsNone(feature_flag._cache_from)
+        self.assertIsNone(feature_flag._cache_value)
+
+        # Must read from DB, not return initial_state=True
+        self.assertIs(feature_flag.is_enabled, False)
+
+        # Cache should now be filled with the DB value (False) and not the initial state (True)
+        self.assertIsNotNone(feature_flag._cache_from)
+        self.assertEqual(feature_flag._cache_value, State.DISABLED)
