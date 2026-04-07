@@ -33,12 +33,14 @@ def create_log_entry(
     Helper to create `LogEntry` entries for a model instance.
     Note: `call_full_clean` will result in additional database queries.
     """
+    if isinstance(change_message, list):
+        change_message = json.dumps(change_message)
     content_type = ContentType.objects.get_for_model(instance)
     log_entry = LogEntry(
         user_id=user.id,
         content_type_id=content_type.pk,
         object_id=instance.pk,
-        object_repr=str(instance),
+        object_repr=str(instance)[:200],
         action_flag=action_flag,
         change_message=change_message,
     )

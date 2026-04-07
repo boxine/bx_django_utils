@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -27,12 +29,15 @@ class LogEntryTestCase(TestCase):
         # Test create_log_entry():
         # Create some log entries with "change_message" values like in the Django admin:
         create_log_entry(user=user1, instance=user2, action_flag=ADDITION, change_message='[{"added": {}}]')
-        create_log_entry(
+        log_entry = create_log_entry(
             user=user1,
             instance=user2,
             action_flag=CHANGE,
-            change_message='[{"changed": {"fields": ["Staff status"]}}]',
+            change_message=[{"changed": {"fields": ["Staff status"]}}],
         )
+        # Lists will be converted to JSON string:
+        self.assertEqual(log_entry.change_message, '[{"changed": {"fields": ["Staff status"]}}]')
+
         create_log_entry(
             user=user1,
             instance=user2,
@@ -128,3 +133,13 @@ class LogEntryTestCase(TestCase):
                 action_flag='Bam!',
                 change_message='foo',
             )
+
+        # object_repr length will be truncated to 200 chars:
+        with patch.object(User, '__str__', return_value='x' * 201):
+            log_entry = create_log_entry(
+                user=user1,
+                instance=user2,
+                action_flag=CHANGE,
+                change_message='test',
+            )
+        self.assertEqual(log_entry.object_repr, 'x' * 200)
