@@ -35,13 +35,6 @@ class HumanizeTimeTestCase(SimpleTestCase):
         )
         self.assertEqual(result, '<span title="Jan. 1, 2000, noon">2.0\xa0seconds</span>')
 
-        with translation.override('de'):
-            result = human_duration(
-                parse_dt('2000-01-01T12:00:00+0000'),
-                parse_dt('2000-01-01T12:10:00+0000'),
-            )
-            self.assertEqual(result, '<span title="1. Januar 2000 12:00">10.0\xa0Minuten</span>')
-
         result = human_duration(
             parse_dt('2000-01-01T12:32:12+0000'),
             parse_dt('2000-01-01T12:20:10+0000'),
@@ -67,3 +60,11 @@ class HumanizeTimeTestCase(SimpleTestCase):
         # Check error handling:
         self.assertEqual(human_duration(None), '')
         self.assertEqual(human_duration(value=object), '')
+
+    @translation.override('de')
+    def test_basic_de(self):
+        result = human_duration(
+            parse_dt('2000-01-01T12:00:00+0000'),
+            parse_dt('2000-01-01T12:10:00+0000'),
+        )
+        self.assertEqual(result, '<span title="1. Januar 2000 12:00">10.0\xa0Minuten</span>')
