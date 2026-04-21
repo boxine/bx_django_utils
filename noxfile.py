@@ -7,12 +7,7 @@ from nox.sessions import Session
 
 
 PYTHON_VERSIONS = ('3.14', '3.13', '3.12')
-DJANGO_VERSIONS = ('6.0', '5.2', '4.2')
-
-EXCLUDED_COMBINATIONS = [
-    ('3.14', '4.2'),
-    ('3.13', '4.2'),
-]
+DJANGO_VERSIONS = ('6.0', '5.2')  # TODO: Add newer Django versions
 
 
 @nox.session(
@@ -22,9 +17,6 @@ EXCLUDED_COMBINATIONS = [
 )
 @nox.parametrize('django', DJANGO_VERSIONS)
 def tests(session: Session, django: str):
-    if (session.python, django) in EXCLUDED_COMBINATIONS:
-        session.skip(f'Python {session.python} needs Django {django}')
-
     session.install('uv')
     session.run(
         'uv',
