@@ -28,6 +28,7 @@ def create_log_entry(
     instance: models.Model,
     action_flag,
     change_message: str | list,
+    validate: bool = True,
 ) -> LogEntry:
     """
     Helper to create `LogEntry` entries for a model instance.
@@ -35,6 +36,13 @@ def create_log_entry(
     """
     if isinstance(change_message, list):
         change_message = json.dumps(change_message)
+    elif validate and change_message.startswith('['):
+        # Assume it's already a JSON string, but validate it:
+        try:
+            json.loads(change_message)
+        except json.JSONDecodeError as err:
+            raise ValidationError(f'change_message looks like a JSON string but is not valid JSON: {err}') from err
+
     content_type = ContentType.objects.get_for_model(instance)
     log_entry = LogEntry(
         user_id=user.id,

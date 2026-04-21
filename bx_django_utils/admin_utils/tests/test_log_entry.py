@@ -29,6 +29,7 @@ class LogEntryTestCase(TestCase):
         # Test create_log_entry():
         # Create some log entries with "change_message" values like in the Django admin:
         create_log_entry(user=user1, instance=user2, action_flag=ADDITION, change_message='[{"added": {}}]')
+        self.assertEqual(get_change_message_strings(), ['Added.'])
         log_entry = create_log_entry(
             user=user1,
             instance=user2,
@@ -37,6 +38,7 @@ class LogEntryTestCase(TestCase):
         )
         # Lists will be converted to JSON string:
         self.assertEqual(log_entry.change_message, '[{"changed": {"fields": ["Staff status"]}}]')
+        self.assertEqual(get_change_message_strings(), ['Added.', 'Changed Staff status.'])
 
         create_log_entry(
             user=user1,
@@ -45,6 +47,10 @@ class LogEntryTestCase(TestCase):
             # WTF: The DELETION "change_message" in Django admin is empty.
             # But the dLogEntry.get_change_message() used this data scheme:
             change_message='[{"deleted": {"name": "faked name", "object": "faked object"}}]',
+        )
+        self.assertEqual(
+            get_change_message_strings(),
+            ['Added.', 'Changed Staff status.', 'Deleted faked name “faked object”.'],
         )
 
         # Add a "own" log entry with unstructured "change_message" value:
@@ -143,3 +149,26 @@ class LogEntryTestCase(TestCase):
                 change_message='test',
             )
         self.assertEqual(log_entry.object_repr, 'x' * 200)
+
+        # Passing JSON as string will be validated:
+        with self.assertRaisesMessage(
+            ValidationError,
+            expected_message='change_message looks like a JSON string but is not valid JSON',
+        ):
+            create_log_entry(
+                user=user1,
+                instance=user2,
+                action_flag=CHANGE,
+                change_message='[{"added": {}}',  # Invalid JSON (missing closing bracket)
+            )
+
+        self.assertEqual(
+            get_change_message_strings(),
+            [
+                'Added.',
+                'Changed Staff status.',
+                'Deleted faked name “faked object”.',
+                'This is a test message.',
+                'test',
+            ],
+        )

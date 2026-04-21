@@ -1,2 +1,2 @@
 # See https://packaging.python.org/en/latest/specifications/version-specifiers/
-__version__ = '96'
+__version__ = '97'
