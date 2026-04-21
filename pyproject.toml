@@ -11,7 +11,6 @@ authors = [
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Topic :: Software Development :: Libraries :: Python Modules',
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
@@ -21,10 +20,10 @@ classifiers = [
 license = {text = "MIT"}
 readme="README.md"
 
-requires-python = ">=3.11,<3.15"
+requires-python = ">=3.12,<3.15"
 
 dependencies = [
-    'django>=4.2',
+    'django>=5.2',
     'bx_py_utils',  # https://github.com/boxine/bx_py_utils
     'python-stdnum',  # https://arthurdejong.org/python-stdnum/
 ]
@@ -64,10 +63,9 @@ dev = [
 # Don't install bleed-edge versions of dependencies, to avoid undetected issues and supply chain attacks.
 exclude-newer = "1 week"
 
-# Exclude own packages from the "exclude-newer" rule and
-# add external packages temporarily to fix known issues or current CVEs
-# TODO: Remove requests - v2.33.0 fixed CVE-2026-25645
-exclude-newer-package = { requests = "2026-03-25T18:00:00Z", cryptography="2026-03-27T00:00:00Z" }
+[tool.uv.exclude-newer-package]
+# Exclude packages temporarily from the "exclude-newer" rule to fix known issues or current CVEs
+cryptography = "2026-04-20T12:00:00Z"
 
 
 [project.urls]
