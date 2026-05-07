@@ -313,8 +313,8 @@ Utilities to manage text fixtures in JSON files.
 
 Use Playwright in Unittest + Fast Django user login
 
-* [`PlaywrightConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L13-L31) - PlaywrightTestCase config from environment (PWBROWSER, PWHEADLESS, PWSKIP, PWSLOWMO)
-* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L34-L91) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
+* [`PlaywrightConfig()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L15-L33) - PlaywrightTestCase config from environment (PWBROWSER, PWHEADLESS, PWSKIP, PWSLOWMO)
+* [`PlaywrightTestCase()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/test_utils/playwright.py#L36-L98) - StaticLiveServerTestCase with helpers for writing frontend tests using Playwright.
 
 #### bx_django_utils.test_utils.users
 
