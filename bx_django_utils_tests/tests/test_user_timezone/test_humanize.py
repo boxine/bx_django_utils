@@ -10,7 +10,7 @@ from bx_django_utils.user_timezone.humanize import human_timezone_datetime
 
 @override_settings(VISIBLE_TIMEZONES=['Europe/Berlin', 'America/Los_Angeles'])
 class HumanizeTestCase(SimpleTestCase):
-    def test_human_timezone_datetime(self):
+    def test_human_timezone_datetime_en(self):
         with timezone.override(zoneinfo.ZoneInfo('UTC')), translation.override('en'):
             html = human_timezone_datetime(dt=parse_dt('2000-01-01T00:00:00+0000'))
         self.assertIn('Europe/Berlin: Jan. 1, 2000, 1 a.m.', html)
@@ -19,6 +19,7 @@ class HumanizeTestCase(SimpleTestCase):
         self.assertInHTML('<small>(UTC)</small>', html)
         assert_html_snapshot(got=html, validate=True)
 
+    def test_human_timezone_datetime_de(self):
         with timezone.override(zoneinfo.ZoneInfo('Europe/Berlin')), translation.override('de-de'):
             html = human_timezone_datetime(dt=parse_dt('2000-01-01T00:00:00+0000'))
         self.assertIn('Europe/Berlin: 1. Januar 2000 01:00', html)

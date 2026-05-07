@@ -6,6 +6,8 @@ import os
 import warnings
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core.management import get_commands
+from django.core.management.commands.flush import Command as FlushCommand
 from django.test import tag
 from playwright.sync_api import Browser, BrowserType, Playwright, sync_playwright
 
@@ -56,6 +58,11 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
         """
         Launch Playwright browser init with config from environment.
         """
+        # Pre-load the flush command so call_command('flush') skips import_module() at teardown.
+        # Under --parallel, Python clears sys.modules during shutdown, causing a race condition
+        # where the lazy import in TransactionTestCase._fixture_teardown() raises ModuleNotFoundError.
+        get_commands()['flush'] = FlushCommand()
+
         super().setUpClass()
 
         cls.pw_config = PlaywrightConfig.from_env()
