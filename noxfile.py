@@ -13,6 +13,7 @@ DJANGO_VERSIONS = ('6.0', '5.2')  # TODO: Add newer Django versions
 @nox.session(
     python=PYTHON_VERSIONS,
     venv_backend='uv',
+    reuse_venv=True,
     download_python='auto',
 )
 @nox.parametrize('django', DJANGO_VERSIONS)
@@ -33,4 +34,12 @@ def tests(session: Session, django: str):
         f'django~={django}',
         env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
     )
+
+    # uv audit it fast, so run it every time:
+    session.run(
+        'uv',
+        'audit',
+        env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
+    )
+
     session.run('python', '-m', 'coverage', 'run', '--context', f'py{session.python}-django{django}')

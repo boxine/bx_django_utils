@@ -75,6 +75,7 @@ docker-test:  ## Run tests in docker
 
 .PHONY: pip-audit
 pip-audit:  ## Run https://github.com/pypa/pip-audit
+	uv audit  # uv audit it new: Run it in additional to pip-audit, for now
 	uv export --no-header --locked --no-emit-project > /tmp/temp_requirements.txt
 	uv run pip-audit --skip-editable --strict --require-hashes --disable-pip -r /tmp/temp_requirements.txt
 
