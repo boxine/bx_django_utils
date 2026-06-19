@@ -28,3 +28,5 @@ sdist/
 /publish.log
 /coverage.*
 
+# This is a library, not an application, so don't add the lock file into the repository:
+uv.lock
