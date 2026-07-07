@@ -11,6 +11,7 @@ from django.views.generic.base import TemplateView, View
 from bx_django_utils.admin_extra_views.base_view import AdminExtraViewMixin
 from bx_django_utils.admin_extra_views.datatypes import AdminExtraMeta, PseudoApp
 from bx_django_utils.admin_extra_views.registry import register_admin_view
+from bx_django_utils.db_table_info.admin_views import DatabaseTableInfoBaseView
 from bx_django_utils.feature_flags.admin_views import ManageFeatureFlagsBaseView
 from bx_django_utils.generic_model_filter.admin_views import GenericModelFilterBaseView
 from bx_django_utils_tests.test_app.feature_flags import bar_feature_flag, foo_feature_flag
@@ -99,4 +100,15 @@ generic_model_filter_app = PseudoApp(meta=AdminExtraMeta(name='Generic Model Fil
 
 @register_admin_view(pseudo_app=generic_model_filter_app)
 class GenericModelFilterAdminExtraView(GenericModelFilterBaseView):
+    pass
+
+
+#####################################################################################
+# DatabaseTableInfo DEMO
+
+db_table_info_app = PseudoApp(meta=AdminExtraMeta(name='DB Table Info'))
+
+
+@register_admin_view(pseudo_app=db_table_info_app)
+class DatabaseTableInfoAdminExtraView(DatabaseTableInfoBaseView):
     pass

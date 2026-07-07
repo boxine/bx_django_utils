@@ -146,6 +146,10 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 * [`GtinValidator()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/validators.py#L33-L52) - Validate GTIN number
 * [`validate_gtin()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/data_types/gtin/validators.py#L12-L30) - It's the same as stdnum.ean.validate() but also accept ISBN-10
 
+#### bx_django_utils.db_table_info.admin_views
+
+* [`DatabaseTableInfoBaseView()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/db_table_info/admin_views.py#L32-L128) - A base admin extra view to display database table information for PostgreSQL databases.
+
 #### bx_django_utils.dbperf.cursor
 
 * [`RecordingCursorWrapper()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/cursor.py#L17-L136) - An implementation of django.db.backends.utils.CursorWrapper.

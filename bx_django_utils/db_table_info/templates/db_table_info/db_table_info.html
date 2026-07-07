@@ -1,0 +1,69 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block content %}
+    <style>
+        span.legend.stale, tr.stale {
+            background-color: darkorange;
+        }
+        th.sticky {
+            position: sticky;
+            top: 0;
+        }
+    </style>
+
+    {% if skipped_dbs %}
+        <p>
+            <strong>Skipped databases (not PostgreSQL):</strong>
+            {% for alias, vendor in skipped_dbs.items %}
+                <code>{{ alias }}</code> ({{ vendor }}){% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    <p><span class="legend stale">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> = potentially stale<sup title="Table does not map to a registered Django model">?</sup> table</p>
+
+    {% for db_name, infos in table_infos.items %}
+        <h1>Database: {{ db_name }}</h1>
+        <table style="margin-bottom: 25px;">
+            <thead>
+            <tr>
+                <th class="sticky">Table Name</th>
+                <th class="sticky">Engine</th>
+                <th class="sticky">Rows <sup title="Number of rows estimated by query planner">?</sup></th>
+                <th class="sticky">Data Length <sup title="Disk space used">?</sup></th>
+                <th class="sticky">Index Length <sup title="Disk space used">?</sup></th>
+                <th class="sticky">Total Size Share <sup title="Share of this table in total disk space usage (data + indexes)">?</sup></th>
+                <th class="sticky">Live Tuples <sup title="Estimated number of live tuples">?</sup></th>
+                <th class="sticky">Dead Tuples <sup title="Estimated number of dead tuples">?</sup></th>
+                <th class="sticky">Dead Tuples Share<sup title="Share of dead tuples in all of this tables's tuples">?</sup></th>
+                <th class="sticky">Last ANALYZE <sup title="Last time at which this table was manually analyzed">?</sup></th>
+                <th class="sticky">Last AUTOANALYZE <sup title="Last time at which this table was analyzed by the autovacuum daemon">?</sup></th>
+                <th class="sticky">Last VACUUM <sup title="Last time at which this table was manually vacuumed (not counting VACUUM FULL)">?</sup></th>
+                <th class="sticky">Last AUTOVACUUM <sup title="Last time at which this table was vacuumed by the autovacuum daemon">?</sup></th>
+                <th class="sticky">Comment <sup title="As set by a COMMENT ON TABLE statement">?</sup></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for info in infos %}
+                <tr{% if info.stale %} class="stale"{% endif %}>
+                    <td>{{ info.name }}</td>
+                    <td>{{ info.engine }}</td>
+                    <td>{{ info.rows|intcomma }}</td>
+                    <td><span title="{{ info.data_length|filesizeformat }}">{{ info.data_length|intcomma }}</span></td>
+                    <td><span title="{{ info.index_length|filesizeformat }}">{{ info.index_length|intcomma }}</span></td>
+                    <td>{% if info.total_size_share %}{{ info.total_size_share|floatformat:1 }} %{% endif %}</td>
+                    <td>{{ info.live_tuples|intcomma }}</td>
+                    <td>{{ info.dead_tuples|intcomma }}</td>
+                    <td>{{ info.dead_tuples_pct|floatformat:1 }} %</td>
+                    <td><span title="{{ info.last_analyze|naturaltime }}">{{ info.last_analyze|default_if_none:"" }}</span></td>
+                    <td><span title="{{ info.last_autoanalyze|naturaltime }}">{{ info.last_autoanalyze|default_if_none:"" }}</span></td>
+                    <td><span title="{{ info.last_vacuum|naturaltime }}">{{ info.last_vacuum|default_if_none:"" }}</span></td>
+                    <td><span title="{{ info.last_autovacuum|naturaltime }}">{{ info.last_autovacuum|default_if_none:"" }}</span></td>
+                    <td>{{ info.comment|default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}
