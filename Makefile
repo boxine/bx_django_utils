@@ -91,11 +91,26 @@ makemessages: ## Make and compile locales message files
 
 .PHONY: start-dev-server
 start-dev-server: ## Start Django dev. server with the test project
+	$(MAKE) update-requirementsadd
 	./manage.sh run_testserver
 
+.PHONY: docker-up
+docker-up: ## Start Django dev. server via Docker Compose with PostgreSQL
+	$(MAKE) update-requirements
+	docker compose up --build
+
+.PHONY: docker-down
+docker-down: ## Stop and remove Docker Compose containers and volumes
+	docker compose down --volumes --remove-orphans
+
+.PHONY: docker-shell-web
+docker-shell-web: ## Open a shell in the running web container
+	docker compose exec web /bin/bash
+
 .PHONY: clean
-clean: ## Remove created files from the test project (e.g.: SQlite, static files)
+clean: ## Remove created files, Docker Compose volumes and build cache
 	git clean -dfX bx_django_utils_tests/
+	docker compose down --volumes --remove-orphans
 
 .PHONY: playwright-install
 playwright-install: ## Install test browser for Playwright tests

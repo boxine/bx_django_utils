@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: bx_django_utils
+      POSTGRES_USER: bx_django_utils
+      POSTGRES_PASSWORD: bx_django_utils
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bx_django_utils']
+      interval: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: ./manage.sh run_testserver
+    environment:
+      DJANGO_ALLOWED_HOSTS: localhost,0.0.0.0,127.0.0.1
+      DJANGO_RUNSERVER_ADDR: '0.0.0.0:8000'
+      DJANGO_SUPERUSER_PASSWORD: '123435678' # Auto generate "admin" user
+      DJANGO_DB_HOST: db
+      DJANGO_DB_NAME: bx_django_utils
+      DJANGO_DB_USER: bx_django_utils
+      DJANGO_DB_PASSWORD: bx_django_utils
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/app
+      - venv:/app/.venv
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  venv:

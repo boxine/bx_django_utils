@@ -13,6 +13,7 @@ class Command(BaseCommand):
     def verbose_call(self, command, *args, **kwargs):
         self.stderr.write("_" * 79)
         self.stdout.write(f"Call {command!r} with: {args!r} {kwargs!r}")
+        self.stdout.flush()
         call_command(command, *args, **kwargs)
 
     def handle(self, *args, **options):
@@ -33,6 +34,12 @@ class Command(BaseCommand):
             User = get_user_model()
             qs = User.objects.filter(is_active=True, is_superuser=True)
             if qs.count() == 0:
-                self.verbose_call("createsuperuser")
+                auto_password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+                if auto_password:
+                    user = User.objects.create_superuser(username='admin', password=auto_password)
+                    self.stdout.write(f'Superuser created: {user.username!r} / {auto_password!r}')
+                else:
+                    self.verbose_call("createsuperuser")
 
-        self.verbose_call("runserver", use_threading=False, use_reloader=True, verbosity=2)
+        addr = os.environ.get('DJANGO_RUNSERVER_ADDR', '127.0.0.1:8000')
+        self.verbose_call("runserver", addr, use_threading=False, use_reloader=True, verbosity=2)
