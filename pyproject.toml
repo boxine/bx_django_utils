@@ -65,7 +65,7 @@ exclude-newer = "1 week"
 
 [tool.uv.exclude-newer-package]
 # Exclude packages temporarily from the "exclude-newer" rule to fix known issues or current CVEs
-cryptography = "2026-04-20T12:00:00Z"
+cryptography = "2026-07-07T12:00:00Z"
 
 
 [project.urls]

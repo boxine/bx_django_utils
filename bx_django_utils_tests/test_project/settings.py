@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'debug_toolbar',
     #
     # Own Apps:
@@ -48,6 +49,9 @@ INSTALLED_APPS = [
     #
     # Generic Model Filter:
     'bx_django_utils.generic_model_filter.apps.GenericModelFilterAppConfig',
+    #
+    # DB Table Info:
+    'bx_django_utils.db_table_info',
 ]
 
 MIDDLEWARE = [
