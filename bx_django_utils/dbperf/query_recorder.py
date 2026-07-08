@@ -103,6 +103,19 @@ def _get_cursor_wrapper(*, cursor, connection, logger, collect_stacktrace, query
     )
 
 
+def _restore_cursor(connection, attr, saved):
+    """
+    Restore a cursor attribute saved before wrapping. If the saved value is the
+    class-level method (bound or unbound), remove our instance attribute so the
+    class method becomes visible again; otherwise reinstate the saved value.
+    """
+    cls_method = getattr(type(connection), attr)
+    if getattr(saved, '__func__', None) is cls_method or saved is cls_method:
+        delattr(connection, attr)
+    else:
+        setattr(connection, attr, saved)
+
+
 class SQLQueryRecorder:
     """
     A context manager that allows recording SQL queries executed during its lifetime.
@@ -150,18 +163,18 @@ class SQLQueryRecorder:
                 'connection': connection,
                 'logger': self.logger,
                 'collect_stacktrace': self.collect_stacktrace,
-                'query_explain': self.query_explain
+                'query_explain': self.query_explain,
             }
 
             connection.cursor = partial(
                 _get_cursor_wrapper,
                 cursor=connection._recording_cursor,
-                **common_kwargs
+                **common_kwargs,
             )
             connection.chunked_cursor = partial(
                 _get_cursor_wrapper,
                 cursor=connection._recording_chunked_cursor,
-                **common_kwargs
+                **common_kwargs,
             )
 
         self.running = True
@@ -169,14 +182,17 @@ class SQLQueryRecorder:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         for connection in self.databases:
-            assert hasattr(connection, '_recording_cursor'), \
+            assert hasattr(connection, '_recording_cursor'), (
                 'the connection has already been unwrapped, this should not have happened'
+            )
 
-            # undo the cursor wrapping so the connection is 'clean' again
+            saved_cursor = connection._recording_cursor
+            saved_chunked_cursor = connection._recording_chunked_cursor
             del connection._recording_cursor
             del connection._recording_chunked_cursor
-            del connection.cursor
-            del connection.chunked_cursor
+
+            _restore_cursor(connection, 'cursor', saved_cursor)
+            _restore_cursor(connection, 'chunked_cursor', saved_chunked_cursor)
 
         self.running = False
 

@@ -1,3 +1,6 @@
+from functools import partial
+from unittest.mock import sentinel
+
 from django.db import connections
 from django.db.backends.utils import CursorWrapper
 from django.test import TestCase
@@ -95,3 +98,44 @@ class SQLQueryRecorderTestCase(TestCase):
         self.assertEqual(res['queries_duplicated']['default'][(query, "('foo',)")], 2)
         self.assertNotIn((query, "('bar',)"), res['queries_duplicated']['default'])
         self.assertNotIn((query, "('baz',)"), res['queries_duplicated']['default'])
+
+    def test_exit_restores_preexisting_cursor_instance_attr(self):
+        # If something else (e.g. Django's _DatabaseFailure) set cursor as an
+        # instance attribute before we entered, __exit__ must restore that value
+        # instead of deleting the attribute entirely.
+        conn = connections['default']
+        fake_cursor = partial(lambda: sentinel.cursor)
+        conn.cursor = fake_cursor
+
+        try:
+            with SQLQueryRecorder(databases=['default']):
+                # Inside the context the cursor is wrapped
+                self.assertNotEqual(conn.cursor, fake_cursor)
+
+            # After exit, the pre-existing instance attribute is restored
+            self.assertIs(conn.cursor, fake_cursor)
+        finally:
+            del conn.cursor  # clean up so other tests see the class-level method
+
+    def test_exit_removes_instance_attr_when_class_method_was_original(self):
+        # If no instance-level cursor existed before entering, __exit__ must
+        # delete the instance attribute (not leave a stale partial behind).
+        # Temporarily remove any pre-existing instance cursor (e.g. set by
+        # Django Debug Toolbar) so we can test the class-method restore path.
+        conn = connections['default']
+        preexisting = conn.__dict__.pop('cursor', None)
+        preexisting_chunked = conn.__dict__.pop('chunked_cursor', None)
+        try:
+            self.assertNotIn('cursor', conn.__dict__)
+
+            with SQLQueryRecorder(databases=['default']):
+                self.assertIn('cursor', conn.__dict__)
+
+            # The instance attribute must be gone; the class method is accessible again
+            self.assertNotIn('cursor', conn.__dict__)
+            self.assertIsInstance(conn.cursor(), CursorWrapper)
+        finally:
+            if preexisting is not None:
+                conn.cursor = preexisting
+            if preexisting_chunked is not None:
+                conn.chunked_cursor = preexisting_chunked
