@@ -25,12 +25,7 @@ def tests(session: Session, django: str):
         '--all-extras',
         '--python',
         session.python,
-        env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
-    )
-    session.run(
-        'uv',
-        'pip',
-        'install',
+        '--upgrade-package',
         f'django~={django}',
         env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
     )
