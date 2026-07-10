@@ -16,7 +16,8 @@ install:  ## Install via "uv" (Used system installed "uv" tool, e.g.: "pipx inst
 .PHONY: update-requirements
 update-requirements:  ## Update requirements
 	uv lock --upgrade
-	uv sync
+	uv sync --all-extras
+	uv audit
 	$(MAKE) pip-audit
 
 .PHONY: lint
