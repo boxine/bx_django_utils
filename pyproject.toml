@@ -133,6 +133,7 @@ parallel = true
 concurrency = ["multiprocessing"]
 source_pkgs=['bx_django_utils']
 command_line = 'manage.py test --parallel --shuffle'
+data_file = ".coverage_data/.coverage"
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*','*/migrations/*']
