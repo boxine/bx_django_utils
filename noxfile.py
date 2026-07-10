@@ -2,6 +2,8 @@
 # https://github.com/wntrblm/nox/
 # Documentation: https://nox.thea.codes/
 #
+import os
+
 import nox
 from nox.sessions import Session
 
@@ -31,10 +33,11 @@ def tests(session: Session, django: str):
     )
 
     # uv audit it fast, so run it every time:
-    session.run(
-        'uv',
-        'audit',
-        env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
-    )
+    if 'CI' not in os.environ:  # ...but skip it in CI
+        session.run(
+            'uv',
+            'audit',
+            env={'UV_PROJECT_ENVIRONMENT': session.virtualenv.location},
+        )
 
     session.run('python', '-m', 'coverage', 'run', '--context', f'py{session.python}-django{django}')
