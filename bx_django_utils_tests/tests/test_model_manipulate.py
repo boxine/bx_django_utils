@@ -147,24 +147,30 @@ class ModelManipulateTestCase(TestCase):
 
     def test_non_valid(self):
         msg = str(validate_slug.message)
-        with self.assertRaisesMessage(ValidationError, msg):
+        with self.assertRaises(ValidationError) as cm:
             create_or_update2(
                 ModelClass=CreateOrUpdateTestModel,
                 lookup={'id': 1},
                 name='foo',
-                slug='this is no Slug !'
+                slug='this is no Slug !',
             )
+        err = cm.exception
+        self.assertEqual(err.message_dict, {'slug': [msg]})
+        self.assertEqual(err.__notes__, ["ModelClass='CreateOrUpdateTestModel' lookup=None"])
 
         # Update existing entry with non-valid values should also not work:
 
-        CreateOrUpdateTestModel(id=1, name='foo', slug='bar')
-        with self.assertRaisesMessage(ValidationError, msg):
+        CreateOrUpdateTestModel(id=1, name='foo', slug='bar').save()
+        with self.assertRaises(ValidationError) as cm:
             create_or_update2(
                 ModelClass=CreateOrUpdateTestModel,
                 lookup={'id': 1},
                 name='foo',
-                slug='this is no Slug !'
+                slug='this is no Slug !',
             )
+        err = cm.exception
+        self.assertEqual(err.message_dict, {'slug': [msg]})
+        self.assertEqual(err.__notes__, ["ModelClass='CreateOrUpdateTestModel' lookup={'id': 1}"])
 
     def test_disable_full_clean(self):
         # Create a new entry without "full_clean()" call:
