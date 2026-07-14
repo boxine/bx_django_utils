@@ -11,6 +11,7 @@ import warnings
 
 from django.core.exceptions import FieldDoesNotExist, ValidationError
 from django.db import models
+from django.db.models.options import Options
 
 
 STORE_BEHAVIOR_IGNORE = "i"  # Ignore the value completely
@@ -27,25 +28,25 @@ class InvalidStoreBehavior(FieldDoesNotExist):
 def full_clean(
     *,
     instance: models.Model,
-    ModelClass: type[models.Model],
     lookup: None | dict,
     validate_unique=False,
 ) -> None:
     try:
         instance.full_clean(validate_unique=validate_unique)
     except ValidationError as err:
-        err.add_note(f'ModelClass={ModelClass.__name__!r} {lookup=}')
+        opts: Options = instance._meta
+        err.add_note(f'model={opts.app_label}.{opts.object_name} {lookup=}')
         raise
 
 
-def create(*, ModelClass, call_full_clean=True, save_kwargs=None, validate_unique=False, **values):
+def create(*, ModelClass: type[models.Model], call_full_clean=True, save_kwargs=None, validate_unique=False, **values):
     """
     Create a new model instance with optional validate before create.
     """
     instance = ModelClass(**values)
     if call_full_clean:
         # Don't create non-valid instances
-        full_clean(instance=instance, ModelClass=ModelClass, lookup=None, validate_unique=validate_unique)
+        full_clean(instance=instance, lookup=None, validate_unique=validate_unique)
     if save_kwargs is None:
         save_kwargs = {}
     instance.save(force_insert=True, **save_kwargs)
@@ -250,7 +251,7 @@ def create_or_update2(
     if result.updated_fields:
         if call_full_clean:
             # Don't save new non-valid values
-            full_clean(instance=instance, ModelClass=ModelClass, lookup=lookup, validate_unique=validate_unique)
+            full_clean(instance=instance, lookup=lookup, validate_unique=validate_unique)
 
         instance.save(update_fields=result.updated_fields, **save_kwargs)
 

@@ -156,7 +156,7 @@ class ModelManipulateTestCase(TestCase):
             )
         err = cm.exception
         self.assertEqual(err.message_dict, {'slug': [msg]})
-        self.assertEqual(err.__notes__, ["ModelClass='CreateOrUpdateTestModel' lookup=None"])
+        self.assertEqual(err.__notes__, ['model=test_app.CreateOrUpdateTestModel lookup=None'])
 
         # Update existing entry with non-valid values should also not work:
 
@@ -170,7 +170,7 @@ class ModelManipulateTestCase(TestCase):
             )
         err = cm.exception
         self.assertEqual(err.message_dict, {'slug': [msg]})
-        self.assertEqual(err.__notes__, ["ModelClass='CreateOrUpdateTestModel' lookup={'id': 1}"])
+        self.assertEqual(err.__notes__, ["model=test_app.CreateOrUpdateTestModel lookup={'id': 1}"])
 
     def test_disable_full_clean(self):
         # Create a new entry without "full_clean()" call:
