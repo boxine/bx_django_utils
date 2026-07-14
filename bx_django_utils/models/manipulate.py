@@ -9,7 +9,7 @@ from typing import Any
 from uuid import UUID
 import warnings
 
-from django.core.exceptions import FieldDoesNotExist
+from django.core.exceptions import FieldDoesNotExist, ValidationError
 from django.db import models
 
 
@@ -24,13 +24,28 @@ class InvalidStoreBehavior(FieldDoesNotExist):
     """
 
 
+def full_clean(
+    *,
+    instance: models.Model,
+    ModelClass: type[models.Model],
+    lookup: None | dict,
+    validate_unique=False,
+) -> None:
+    try:
+        instance.full_clean(validate_unique=validate_unique)
+    except ValidationError as err:
+        err.add_note(f'ModelClass={ModelClass.__name__!r} {lookup=}')
+        raise
+
+
 def create(*, ModelClass, call_full_clean=True, save_kwargs=None, validate_unique=False, **values):
     """
     Create a new model instance with optional validate before create.
     """
     instance = ModelClass(**values)
     if call_full_clean:
-        instance.full_clean(validate_unique=validate_unique)  # Don't create non-valid instances
+        # Don't create non-valid instances
+        full_clean(instance=instance, ModelClass=ModelClass, lookup=None, validate_unique=validate_unique)
     if save_kwargs is None:
         save_kwargs = {}
     instance.save(force_insert=True, **save_kwargs)
@@ -57,7 +72,7 @@ class CreateOrUpdateResult:
         List of model field names that are: Updated / ignored / not overwritten
     """
     # Model instance object that was created or updated:
-    instance: type[models.Model] = None
+    instance: models.Model = None
 
     # If True: new instance was created else: existing was updated:
     created: bool = False
@@ -234,7 +249,9 @@ def create_or_update2(
 
     if result.updated_fields:
         if call_full_clean:
-            instance.full_clean(validate_unique=False)  # Don't save new non-valid values
+            # Don't save new non-valid values
+            full_clean(instance=instance, ModelClass=ModelClass, lookup=lookup, validate_unique=validate_unique)
+
         instance.save(update_fields=result.updated_fields, **save_kwargs)
 
     result.instance = instance

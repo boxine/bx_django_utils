@@ -223,13 +223,13 @@ Generic "AdminExtraView" view to filter accessible model by any field value.
 
 Utilities to manipulate objects in database via models:
 
-* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L51-L78) - Result object returned by create_or_update2() with all information about create/save a model.
-* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L40-L48) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
+* [`CreateOrUpdateResult()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L66-L93) - Result object returned by create_or_update2() with all information about create/save a model.
+* [`FieldUpdate()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L55-L63) - Information about updated model field values. Used for CreateOrUpdateResult.update_info
 * [`InvalidStoreBehavior()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L21-L24) - Exception used in create_or_update() if "store_behavior" contains not existing field names.
-* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L27-L37) - Create a new model instance with optional validate before create.
-* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L245-L269) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
-* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L99-L242) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
-* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L81-L96) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
+* [`create()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L41-L52) - Create a new model instance with optional validate before create.
+* [`create_or_update()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L262-L286) - Create a new model instance or update a existing one. Deprecated! Use: create_or_update2()
+* [`create_or_update2()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L114-L259) - Create a new model instance or update a existing one and returns CreateOrUpdateResult instance
+* [`update_model_field()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/manipulate.py#L96-L111) - Default callback for create_or_update2() to set a changed model field value and expand CreateOrUpdateResult
 
 #### bx_django_utils.models.meta
 
