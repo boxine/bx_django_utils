@@ -156,7 +156,7 @@ ModelField, FormField and validators for GTIN/UPC/EAN numbers
 
 #### bx_django_utils.dbperf.query_recorder
 
-* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L106-L185) - A context manager that allows recording SQL queries executed during its lifetime.
+* [`SQLQueryRecorder()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/dbperf/query_recorder.py#L119-L201) - A context manager that allows recording SQL queries executed during its lifetime.
 
 ### bx_django_utils.feature_flags
 
