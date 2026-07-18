@@ -1,0 +1,12 @@
+FROM python:3.13-slim
+
+WORKDIR /app
+
+RUN pip install uv
+
+COPY pyproject.toml uv.lock README.md ./
+COPY bx_django_utils/__init__.py bx_django_utils/__init__.py
+RUN uv sync --group dev --no-install-project
+
+COPY . .
+RUN uv sync --group dev

@@ -17,8 +17,8 @@ SECRET_KEY = 'Only a test project!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if os.environ.get('DJANGO_ALLOWED_HOSTS') else []
+INTERNAL_IPS = ALLOWED_HOSTS
 
 # Application definition
 
@@ -97,16 +97,34 @@ WSGI_APPLICATION = 'bx_django_utils_tests.test_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
-    },
-    'second': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db_second.sqlite3'),
+if os.environ.get('DJANGO_DB_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': os.environ['DJANGO_DB_HOST'],
+            'NAME': os.environ['DJANGO_DB_NAME'],
+            'USER': os.environ['DJANGO_DB_USER'],
+            'PASSWORD': os.environ['DJANGO_DB_PASSWORD'],
+        },
+        'second': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': os.environ['DJANGO_DB_HOST'],
+            'NAME': os.environ['DJANGO_DB_NAME'],
+            'USER': os.environ['DJANGO_DB_USER'],
+            'PASSWORD': os.environ['DJANGO_DB_PASSWORD'],
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3'),
+        },
+        'second': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db_second.sqlite3'),
+        },
+    }
 DATABASE_ROUTERS = ['bx_django_utils_tests.test_project.routers.MultiDBRouter']
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -133,10 +151,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -146,13 +160,16 @@ LOGGING = {
             'style': '{',
         },
     },
-    'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'verbose'}},
+    'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'verbose', 'level': 'DEBUG'}},
     'loggers': {
-        '': {'handlers': ['console'], 'level': 'WARNING', 'propagate': False},
-        'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        '': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
         'django.auth': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
         'django.request': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+        'django.template': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django.db': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django.utils': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
         'bx_django_utils': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
     },
 }

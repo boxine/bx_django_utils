@@ -56,8 +56,8 @@ dev = [
     #
     "ruff", # https://github.com/astral-sh/ruff
     'typeguard',  # https://github.com/agronholm/typeguard/
+    'psycopg[binary]',  # PostgreSQL driver (used by docker-compose dev setup)
 ]
-
 
 [tool.uv]
 # Don't install bleed-edge versions of dependencies, to avoid undetected issues and supply chain attacks.
