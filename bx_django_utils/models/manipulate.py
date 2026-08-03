@@ -35,7 +35,7 @@ def full_clean(
         instance.full_clean(validate_unique=validate_unique)
     except ValidationError as err:
         opts: Options = instance._meta
-        err.add_note(f'model={opts.app_label}.{opts.object_name} {lookup=}')
+        err.add_note(f'model={opts.app_label}.{opts.object_name} {lookup=} {instance.pk=}')
         raise
 
 

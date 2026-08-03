@@ -146,6 +146,7 @@ class ModelManipulateTestCase(TestCase):
         self.assertEqual(result.update_info, [])
 
     def test_non_valid(self):
+        # Try to create a instance with invalid slug:
         msg = str(validate_slug.message)
         with self.assertRaises(ValidationError) as cm:
             create_or_update2(
@@ -156,21 +157,33 @@ class ModelManipulateTestCase(TestCase):
             )
         err = cm.exception
         self.assertEqual(err.message_dict, {'slug': [msg]})
-        self.assertEqual(err.__notes__, ['model=test_app.CreateOrUpdateTestModel lookup=None'])
+        # lookup={'id': 1} was passed, but the row doesn't exist yet, so the create
+        # path runs and calls full_clean(lookup=None). The pk is still assigned (auto-field):
+        self.assertEqual(err.__notes__, ['model=test_app.CreateOrUpdateTestModel lookup=None instance.pk=1'])
 
         # Update existing entry with non-valid values should also not work:
-
         CreateOrUpdateTestModel(id=1, name='foo', slug='bar').save()
         with self.assertRaises(ValidationError) as cm:
             create_or_update2(
                 ModelClass=CreateOrUpdateTestModel,
                 lookup={'id': 1},
                 name='foo',
-                slug='this is no Slug !',
+                slug='this is no Slug 1',
             )
         err = cm.exception
         self.assertEqual(err.message_dict, {'slug': [msg]})
-        self.assertEqual(err.__notes__, ["model=test_app.CreateOrUpdateTestModel lookup={'id': 1}"])
+        self.assertEqual(err.__notes__, ["model=test_app.CreateOrUpdateTestModel lookup={'id': 1} instance.pk=1"])
+
+        # lookup and pk must not be the same! But we get both information in the error note:
+        with self.assertRaises(ValidationError) as cm:
+            create_or_update2(
+                ModelClass=CreateOrUpdateTestModel,
+                lookup={'name': 'foo'},
+                slug='this is no Slug 2',
+            )
+        err = cm.exception
+        self.assertEqual(err.message_dict, {'slug': [msg]})
+        self.assertEqual(err.__notes__, ["model=test_app.CreateOrUpdateTestModel lookup={'name': 'foo'} instance.pk=1"])
 
     def test_disable_full_clean(self):
         # Create a new entry without "full_clean()" call:

@@ -58,8 +58,8 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(
             items,
             [
-                '<td class="field-slug">'
-                '<a href="/admin/test_app/createorupdatetestmodel/2/change/">filled</a></td>'
+                ('<td class="field-slug">'
+                '<a href="/admin/test_app/createorupdatetestmodel/2/change/">filled</a></td>')
             ],
         )
 
@@ -81,9 +81,9 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(
             items,
             [
-                '<td class="field-slug">'
+                ('<td class="field-slug">'
                 '<a href="/admin/test_app/createorupdatetestmodel/1/change/'
-                '?_changelist_filters=blank_field%3Dno">empty</a></td>'
+                '?_changelist_filters=blank_field%3Dno">empty</a></td>')
             ],
         )
 
@@ -105,10 +105,10 @@ class NotAllSimpleListFilterTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(
             items,
             [
-                '<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/2/change/'
-                '?_changelist_filters=blank_field%3Dall">filled</a></td>',
-                '<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/1/change/'
-                '?_changelist_filters=blank_field%3Dall">empty</a></td>',
+                ('<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/2/change/'
+                '?_changelist_filters=blank_field%3Dall">filled</a></td>'),
+                ('<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/1/change/'
+                '?_changelist_filters=blank_field%3Dall">empty</a></td>'),
             ],
         )
 
@@ -208,10 +208,10 @@ class ExistingCountedListFilterTestCase(HtmlAssertionMixin, TestCase):
         self.assertEqual(
             items,
             [
-                '<td class="field-slug">'
+                ('<td class="field-slug">'
                 '<a href="/admin/test_app/createorupdatetestmodel/1/change/'
                 '?_changelist_filters=name%3D%25253Cfoo%25253E%252B%25252F%252B%25253Cbar%25253E">'
-                'foo-bar</a></td>'
+                'foo-bar</a></td>')
             ],
         )
 

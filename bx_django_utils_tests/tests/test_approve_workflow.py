@@ -39,8 +39,8 @@ class BaseApproveModelTestCase(TestCase):
 
         # Not set "ready_to_approve" generates only a warning:
         assert logs.output == [
-            "WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
-            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel"
+            ("WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
+            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel")
         ]
 
         # Set a 'title' and check missing fields:
@@ -62,8 +62,8 @@ class BaseApproveModelTestCase(TestCase):
             draft.approve()
         assert ApproveTestModel.objects.count() == 1  # only one draft exists
         assert logs.output == [
-            'DEBUG:bx_django_utils.approve_workflow.models:Approve <ApproveTestModel '
-            'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)>',
+            ('DEBUG:bx_django_utils.approve_workflow.models:Approve <ApproveTestModel '
+            'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)>'),
         ]
 
         # ready & not blocked -> approve will work:
@@ -72,8 +72,8 @@ class BaseApproveModelTestCase(TestCase):
             approved = draft.approve()
         assert isinstance(approved, ApproveTestModel)
         assert logs.output == [
-            "WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
-            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel"
+            ("WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
+            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel")
         ]
 
         # Now we have two entries: The draft and the approve one:
@@ -130,9 +130,9 @@ class BaseApproveModelTestCase(TestCase):
         with self.assertLogs('bx_django_utils', level=logging.INFO) as logs:
             approved = draft.approve()
         assert logs.output == [
-            'INFO:bx_django_utils.approve_workflow.models:<ApproveTestModel '
+            ('INFO:bx_django_utils.approve_workflow.models:<ApproveTestModel '
             'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)> was approved to '
-            f'<ApproveTestModel pk:{approved.pk} (approved)>',
+            f'<ApproveTestModel pk:{approved.pk} (approved)>'),
         ]
 
         assert tuple(
@@ -191,8 +191,8 @@ class BaseApproveModelTestCase(TestCase):
         ):
             draft.approve()
         assert logs.output == [
-            'WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:'
-            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel"
+            ('WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:'
+            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel")
         ]
 
         assert relation1_draft.approved is None
@@ -453,16 +453,16 @@ class BaseApproveModelAdminTestCase(HtmlAssertionMixin, TestCase):
         assert rel_draft.relation_title == rel_approved.relation_title == 'relation title now set'
 
         assert logs_output == [
-            "WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
-            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel",
+            ("WARNING:bx_django_utils.approve_workflow.models:Not ready to approve:"
+            " pk:UUID('00000000-0000-0000-0000-000000000001') model:ApproveTestModel"),
 
-            'INFO:bx_django_utils.approve_workflow.models:<RelatedApproveTestModel '
+            ('INFO:bx_django_utils.approve_workflow.models:<RelatedApproveTestModel '
             'pk:00000000-0000-0000-0000-000000000002 (draft)> was approved to '
-            f'<RelatedApproveTestModel pk:{rel_approved.pk} (approved)>',
+            f'<RelatedApproveTestModel pk:{rel_approved.pk} (approved)>'),
 
-            'INFO:bx_django_utils.approve_workflow.models:<ApproveTestModel '
+            ('INFO:bx_django_utils.approve_workflow.models:<ApproveTestModel '
             'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)> was approved to '
-            f'<ApproveTestModel pk:{approved.pk} (approved)>',
+            f'<ApproveTestModel pk:{approved.pk} (approved)>'),
         ]
 
         messages = [m.message for m in get_messages(response.wsgi_request)]
@@ -471,10 +471,10 @@ class BaseApproveModelAdminTestCase(HtmlAssertionMixin, TestCase):
         messages = [m.replace('“', '"').replace('”', '"') for m in messages]
 
         assert messages == [
-            'The approve test model "<a href="/admin/approve_workflow_test_app/approvetestmodel'
+            ('The approve test model "<a href="/admin/approve_workflow_test_app/approvetestmodel'
             '/00000000-0000-0000-0000-000000000001/change/">&lt;ApproveTestModel '
             'pk:00000000-0000-0000-0000-000000000001 (draft, not ready)&gt;</a>" was '
-            'changed successfully.',
+            'changed successfully.'),
 
             'Warning: "Ready to Approve" flag was not set!',
 
