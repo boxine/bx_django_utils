@@ -54,7 +54,7 @@ class UserTimezoneMiddlewareTestCase(SimpleTestCase):
         self.assertEqual(
             logs.output,
             [
-                "ERROR:bx_django_utils.user_timezone.middleware:"
-                "Unknown user time zone 'non/sense'"
+                ("ERROR:bx_django_utils.user_timezone.middleware:"
+                "Unknown user time zone 'non/sense'")
             ],
         )

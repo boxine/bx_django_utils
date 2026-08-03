@@ -351,15 +351,15 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
             self.assert_html_parts(
                 response,
                 parts=(
-                    f'<input'
+                    (f'<input'
                     f' id="id_{fieldname}__{code}"'
                     f' type="text"'
                     f' name="{fieldname}__{code}"'
-                    f' value="{getattr(obj, fieldname)[code]}">',
+                    f' value="{getattr(obj, fieldname)[code]}">'),
                 ),
             )
         self.assert_html_parts(
-            response, parts=(f'<input type="hidden" name="{fieldname}___meta"' ' value="{&quot;a&quot;: [123]}">',)
+            response, parts=((f'<input type="hidden" name="{fieldname}___meta"' ' value="{&quot;a&quot;: [123]}">'),)
         )
 
         fieldname = 'translated_multiline'
@@ -367,21 +367,21 @@ class TranslationAdminTestCase(HtmlAssertionMixin, TestCase):
             self.assert_html_parts(
                 response,
                 parts=(
-                    f'<textarea'
+                    (f'<textarea'
                     f' id="id_{fieldname}__{code}"'
                     f' name="{fieldname}__{code}">'
                     f'{getattr(obj, fieldname)[code]}'
-                    f'</textarea>',
+                    f'</textarea>'),
                 ),
             )
             self.assert_html_parts(
                 response,
                 parts=(
-                    f'<textarea'
+                    (f'<textarea'
                     f' id="id_{fieldname}__{code}"'
                     f' name="{fieldname}__{code}">'
                     f'{getattr(obj, fieldname)[code]}'
-                    f'</textarea>',
+                    f'</textarea>'),
                 ),
             )
         self.assert_html_parts(

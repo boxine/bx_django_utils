@@ -100,8 +100,8 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
         assert logs.output == [
-            "WARNING:bx_django_utils.admin_extra_views.base_view:"
-            "User (pk:None) did not pass 'only_staff_user' for 'DemoView1'"
+            ("WARNING:bx_django_utils.admin_extra_views.base_view:"
+            "User (pk:None) did not pass 'only_staff_user' for 'DemoView1'")
         ]
 
         # Non-staff users can also not access:
@@ -112,8 +112,8 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
         assert logs.output == [
-            "WARNING:bx_django_utils.admin_extra_views.base_view:"
-            f"User (pk:{self.non_staff_user.pk}) did not pass 'only_staff_user' for 'DemoView1'"
+            ("WARNING:bx_django_utils.admin_extra_views.base_view:"
+            f"User (pk:{self.non_staff_user.pk}) did not pass 'only_staff_user' for 'DemoView1'")
         ]
 
         # Staff user can use the view:
@@ -190,8 +190,8 @@ class AdminTestCase(HtmlAssertionMixin, TestCase):
             response = self.client.get('/admin/pseudo-app-2/demo-view-3/')
         self.assertEqual(response.status_code, 403)
         assert logs.output == [
-            "WARNING:bx_django_utils.admin_extra_views.base_view:"
-            f"User (pk:{self.staff_user.pk}) did not pass 'only_john_can_access' for 'DemoView3'"
+            ("WARNING:bx_django_utils.admin_extra_views.base_view:"
+            f"User (pk:{self.staff_user.pk}) did not pass 'only_john_can_access' for 'DemoView3'")
         ]
 
         ############################################################################
