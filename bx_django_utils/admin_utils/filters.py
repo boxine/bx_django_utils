@@ -3,6 +3,7 @@ from urllib.parse import quote_plus, unquote_plus
 
 from django.contrib import admin
 from django.core.exceptions import ImproperlyConfigured
+from django.db import models
 from django.db.models import Count, QuerySet
 from django.utils.translation import gettext_lazy as _
 
@@ -77,6 +78,27 @@ class YesNoListFilter(DecoratedSimpleListFilter):
     @register_list_filter('0', _('No'), order=2)
     def _filter_no(self, queryset):
         return self.filter_no(queryset)
+
+
+class SimpleYesNoListFilter(YesNoListFilter):
+    """
+    Base for Yes/No change list filters where:
+     * Yes=filter(yes_no_condition_q)
+     * No=exclude(yes_no_condition_q)
+    """
+
+    yes_no_condition_q = None
+
+    def __init__(self, *args, **kwargs):
+        if not isinstance(self.yes_no_condition_q, models.Q):
+            raise TypeError(f'{self.__class__.__name__}.yes_no_condition_q must be a Q object')
+        super().__init__(*args, **kwargs)
+
+    def filter_yes(self, queryset):
+        return queryset.filter(self.yes_no_condition_q)
+
+    def filter_no(self, queryset):
+        return queryset.exclude(self.yes_no_condition_q)
 
 
 class NotAllSimpleListFilter(admin.SimpleListFilter):

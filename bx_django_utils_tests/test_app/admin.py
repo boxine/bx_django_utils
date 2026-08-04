@@ -1,9 +1,11 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
+from django.db import models
 
 from bx_django_utils.admin_utils.filters import (
     ExistingCountedListFilter,
+    SimpleYesNoListFilter,
     YesNoListFilter,
 )
 from bx_django_utils.translation import (
@@ -38,6 +40,12 @@ class SlugListFilter(ExistingCountedListFilter):
     model_field_name = 'slug'
 
 
+class SimpleYesNoListFilterDemo(SimpleYesNoListFilter):
+    title = 'Has "null_field" set'
+    parameter_name = 'has_null_field'
+    yes_no_condition_q = models.Q(null_field__isnull=False)
+
+
 @admin.register(CreateOrUpdateTestModel)
 class CreateOrUpdateTestModelAdmin(admin.ModelAdmin):
     list_display = ('human_create_dt', 'human_update_dt', 'name', 'slug')
@@ -45,6 +53,7 @@ class CreateOrUpdateTestModelAdmin(admin.ModelAdmin):
     readonly_fields = ('create_dt', 'update_dt')
     prepopulated_fields = {'slug': ('name',)}
     list_filter = (
+        SimpleYesNoListFilterDemo,
         NotAllSimpleListFilterDemo,
         NameListFilter,
         SlugListFilter,
