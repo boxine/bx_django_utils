@@ -63,7 +63,7 @@ Activate "ExtraViewAdminSite" by set this as default admin site
 
 #### bx_django_utils.admin_extra_views.site
 
-* [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L13) - An AdminSite object encapsulates an instance of the Django admin
+* [`ExtraViewAdminSite()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_extra_views/site.py#L6-L15) - AdminSite that injects registered extra views into the admin app list.
 
 ##### bx_django_utils.admin_extra_views.tests.test_admin_extra_views
 
@@ -90,11 +90,12 @@ Helpers to build Admin URLs
 
 #### bx_django_utils.admin_utils.filters
 
-* [`DecoratedSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L27-L60) - Like SimpleListFilter but filters can be registered via register_list_filter() decorator.
-* [`ExistingCountedListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L100-L136) - Advanced SimpleListFilter that list only existing filter values with counts.
-* [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L82-L97) - Similar to SimpleListFilter, but don't add "All" choice.
-* [`YesNoListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L63-L79) - Quick way to create a Yes/No change list filter.
-* [`register_list_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L10-L24) - Decorator to register a filter method in a DecoratedSimpleListFilter.
+* [`DecoratedSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L28-L61) - Like SimpleListFilter but filters can be registered via register_list_filter() decorator.
+* [`ExistingCountedListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L122-L158) - Advanced SimpleListFilter that list only existing filter values with counts.
+* [`NotAllSimpleListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L104-L119) - Similar to SimpleListFilter, but don't add "All" choice.
+* [`SimpleYesNoListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L83-L101) - Base for Yes/No change list filters where:
+* [`YesNoListFilter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L64-L80) - Quick way to create a Yes/No change list filter.
+* [`register_list_filter()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/admin_utils/filters.py#L11-L25) - Decorator to register a filter method in a DecoratedSimpleListFilter.
 
 #### bx_django_utils.admin_utils.log_entry
 

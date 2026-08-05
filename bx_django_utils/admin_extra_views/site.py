@@ -4,6 +4,8 @@ from bx_django_utils.admin_extra_views.registry import extra_view_registry
 
 
 class ExtraViewAdminSite(admin.AdminSite):
+    """AdminSite that injects registered extra views into the admin app list."""
+
     def get_app_list(self, *args, **kwargs):
         app_list = super().get_app_list(*args, **kwargs)
 

@@ -339,3 +339,95 @@ class YesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
             self._get_changelist_items(response),
             ['<td class="field-required_color">#000002</td>'],
         )
+
+
+class SimpleYesNoListFilterTestCase(HtmlAssertionMixin, TestCase):
+    def test_happy_path(self):
+        def get_changelist_items(response):
+            results = response.context['results']
+            items = [items[-1] for items in results]
+            return items
+
+        self.client.force_login(make_test_user(is_superuser=True))
+        baker.make(
+            CreateOrUpdateTestModel,
+            pk=1,
+            name='without null_field',
+            slug='no-null',
+            blank_field='x',
+            null_field=None,
+        )
+        baker.make(
+            CreateOrUpdateTestModel,
+            pk=2,
+            name='with null_field',
+            slug='has-null',
+            blank_field='x',
+            null_field='set',
+        )
+
+        ###################################################################################
+        # no filter -> both items
+
+        response = self.client.get('/admin/test_app/createorupdatetestmodel/')
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<summary>By Has &quot;null_field&quot; set</summary>',
+                '<a href="?has_null_field=1">Yes</a>',
+                '<a href="?has_null_field=0">No</a>',
+            ),
+        )
+        self.assertEqual(
+            get_changelist_items(response),
+            [
+                '<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/2/change/">has-null</a></td>',
+                '<td class="field-slug"><a href="/admin/test_app/createorupdatetestmodel/1/change/">no-null</a></td>',
+            ],
+        )
+
+        ###################################################################################
+        # only items with null_field set
+
+        response = self.client.get('/admin/test_app/createorupdatetestmodel/?has_null_field=1')
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<summary>By Has &quot;null_field&quot; set</summary>',
+                '<li class="selected"><a href="?has_null_field=1">Yes</a></li>',
+                '<a href="?has_null_field=0">No</a>',
+            ),
+        )
+        self.assertEqual(
+            get_changelist_items(response),
+            [
+                (
+                    '<td class="field-slug">'
+                    '<a href="/admin/test_app/createorupdatetestmodel/2/change/'
+                    '?_changelist_filters=has_null_field%3D1">has-null</a></td>'
+                ),
+            ],
+        )
+
+        ###################################################################################
+        # only items without null_field set
+
+        response = self.client.get('/admin/test_app/createorupdatetestmodel/?has_null_field=0')
+        self.assert_html_parts(
+            response,
+            parts=(
+                '<summary>By Has &quot;null_field&quot; set</summary>',
+                '<a href="?has_null_field=1">Yes</a>',
+                '<li class="selected"><a href="?has_null_field=0">No</a></li>',
+            ),
+        )
+        self.assertEqual(
+            get_changelist_items(response),
+            [
+                (
+                    '<td class="field-slug">'
+                    '<a href="/admin/test_app/createorupdatetestmodel/1/change/'
+                    '?_changelist_filters=has_null_field%3D0">no-null</a></td>'
+                ),
+            ],
+        )
