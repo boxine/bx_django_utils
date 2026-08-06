@@ -122,7 +122,7 @@ Base model/admin/form classes to implement a model with draft/approve versions w
 
 #### bx_django_utils.approve_workflow.models
 
-* [`BaseApproveModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L14-L202) - Base model class for approve models *and* this relation models.
+* [`BaseApproveModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L15-L202) - Base model class for approve models *and* this relation models.
 * [`BaseApproveWorkflowModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/approve_workflow/models.py#L205-L255) - Base model for approve workflow models.
 
 ### bx_django_utils.cached_dataclasses
@@ -243,7 +243,7 @@ Utilities to manipulate objects in database via models:
 
 #### bx_django_utils.models.timetracking
 
-* [`TimetrackingBaseModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/timetracking.py#L8-L62) - Abstract base model that will automaticly set create/update Datetimes.
+* [`TimetrackingBaseModel()`](https://github.com/boxine/bx_django_utils/blob/master/bx_django_utils/models/timetracking.py#L9-L67) - Abstract base model that will automaticly set create/update Datetimes.
 
 ### bx_django_utils.stacktrace
 

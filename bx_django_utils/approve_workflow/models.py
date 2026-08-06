@@ -1,6 +1,7 @@
 import logging
 import uuid
 
+from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
@@ -52,13 +53,12 @@ class BaseApproveModel(TimetrackingBaseModel):
     # Fields are required for *approve* instances (should be used in forms):
     REQUIRED_FIELDS_PUBLIC = ()
 
+    @admin.display(description=_('Approved'), boolean=True)
     def is_approved(self):
         if not self.is_draft:
             # We are the "approved" instance
             return True
         return self.approved_id is not None
-    is_approved.short_description = _('Approved')
-    is_approved.boolean = True
 
     def get_missing_field_info(self, ignore_fields=None, extra_fields=None):
         needed_fields = set(self.REQUIRED_FIELDS_PUBLIC)
