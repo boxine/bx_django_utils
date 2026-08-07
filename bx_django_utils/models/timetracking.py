@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -25,15 +26,19 @@ class TimetrackingBaseModel(models.Model):
         help_text=_('ModelTimetrackingMixin.update_dt.help_text')
     )
 
+    @admin.display(
+        description=_('ModelTimetrackingMixin.create_dt.verbose_name'),
+        ordering='create_dt',
+    )
     def human_create_dt(self):
         return human_duration(self.create_dt)
-    human_create_dt.short_description = _('ModelTimetrackingMixin.create_dt.verbose_name')
-    human_create_dt.admin_order_field = 'create_dt'
 
+    @admin.display(
+        description=_('ModelTimetrackingMixin.update_dt.verbose_name'),
+        ordering='update_dt',
+    )
     def human_update_dt(self):
         return human_duration(self.update_dt)
-    human_update_dt.short_description = _('ModelTimetrackingMixin.update_dt.verbose_name')
-    human_update_dt.admin_order_field = 'update_dt'
 
     def save(self, update_dt=True, **kwargs):
         if update_dt:
